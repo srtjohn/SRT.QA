@@ -1,0 +1,34 @@
+name: Parallel Acceptance Tests
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '30 14 * * *'  # 2:30 PM EST
+jobs:
+  acceptance_tests:
+    runs-on: ubuntu-latest
+
+    env:
+      adminUsername: ${{ secrets.adminUsername }}
+      adminPassword: ${{ secrets.adminPassword }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4, 5]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Cypress acceptance tests in parallel
+        uses: cypress-io/github-action@v6
+        with:
+          record: true
+          parallel: true
+          command: npm run acceptance

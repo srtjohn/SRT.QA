@@ -1,0 +1,16 @@
+{
+    "typeButton": "[type='button']",
+    "roleCell": "[role='cell']",
+    "roleTab": "[role='tab']",
+    "labelSelector": ".MuiButton-label",
+    "closeModal": "[title='Close']",
+    "inputTypeCheckbox": "input[type=checkbox]",
+    "inputLabel": ".MuiInputLabel-formControl",
+    "roleButton":"[role='button']",
+    "roleOption":"[role='option']",
+    "close":"[aria-label='close']",
+    "roleListBox":"[role='listbox']",
+    "idText":"[id='Text']",
+    "roleMenu":"[role='menu']",
+    "typeText":"input[type='text']"
+}

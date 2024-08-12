@@ -1,0 +1,11 @@
+{
+    "input" : "input",
+    "div": "div",
+    "label": "label",
+    "span" : "span",
+    "button": "button",
+    "tableRow":"tr",
+    "tableData":"td",
+    "li":"li",
+    "p":"p"
+}

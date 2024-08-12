@@ -1,0 +1,15 @@
+{
+    "domainDropDown" : ".MuiTypography-body2",
+    "dashboardButtonLabel" : ".MuiButton-label",
+    "languageList" : "[role='menuitem']",
+    "dashBoardList" : ".MuiButtonBase-root",
+    "profileIcon" : "[aria-label='account of current user']",
+    "productInfoColName" :"[role='cell']",
+    "homeTabs" : "[role='tab']",
+    "gridRoot" : ".MuiGrid-root",
+    "dialog" : "[role='dialog']",
+    "fabLabel" : ".MuiFab-label",
+    "muiTypography": ".MuiTypography-root",
+    "registrationCodeField": "[id='Registration Code']",
+    "registrationValidationText":"[id='Registration Code-helper-text']" 
+}

@@ -1,0 +1,17 @@
+{  
+    "addButton": "[d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z']",
+    "parent": "div[role='presentation']",
+    "parentCell": ".MuiTableCell-root" ,  
+    "parentGroup":"body div.MuiDialog-root",
+    "homeDirOption1" : "[data-value='1']",
+    "homeDirOption2" : "[data-value='2']",
+    "parentUsers" : ".MuiListItemText-root",
+    "groupPageHeading": "MuiTypography-colorSecondary",
+    "groupNameInputContainer": ".MuiInputLabel-formControl",
+    "homeDirContainer" : "[container='GeneralParams']",
+    "dropDownOptions" : "[role='option']",
+    "groupDesc" : "[id='Group Description']",
+    "subDir" : "[id='Sub Directory']",
+    "homeDir" : "[role='button']",
+    "dropParent" : "[role='listbox']"
+}

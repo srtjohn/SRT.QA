@@ -1,0 +1,5 @@
+{
+    "modalHeader": ".MuiDialogTitle-root",
+    "modalContainer": ".MuiDialogContent-dividers",
+    "modalFooter": ".MuiDialogActions-spacing"
+}
