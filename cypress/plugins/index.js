@@ -46,8 +46,8 @@ module.exports = async (on, config) => {
       if (fs.existsSync(filePath)) {
         return '1GB file already exists at ' + filePath
       }
-      const fileSizeInMB = 1024
-      const fileSizeInBytes = fileSizeInMB * 1024
+      const fileSizeInMB = 1000
+      const fileSizeInBytes = fileSizeInMB * 1024 * 1024
       const buffer = Buffer.alloc(fileSizeInBytes, '0')
       fs.writeFileSync(filePath, buffer)
       return '1GB file created at ' + filePath
@@ -120,7 +120,7 @@ module.exports = async (on, config) => {
     sftpDownLoadFile (opts) {
       return sftp.connect(opts.configSFTP)
         .then(() => {
-          return sftp.fastGet(opts.newRemoteDir, opts.localPath2, true)
+          return sftp.fastGet(opts.newRemoteDir, opts.localPathForDownload, true)
         })
     }
   })
