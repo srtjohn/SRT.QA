@@ -34,7 +34,7 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
   const remoteDir = '/path/to/new/dir'
   const remoteDirFile = '/path/to/new/dir/file2.txt'
   const newRemoteDir = '/path/to/new/dir/newName.txt'
-  const localPath = './../fixtures/file2.txt'
+  const localPath = './../fixtures/1GB.txt'
   const localPathForDownload = './../fixtures'
   const remoteDirCopy = `/path/to/new/${Cypress.dayjs().format('ssmYY')}.txt`
   const remoteDirPath = '/path'
@@ -44,6 +44,7 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
   cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
   cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
   cy.get(navigationSelectors.textLabelSelector).contains(label.serverActivity).should('be.visible').click()
+
   // sftp operations
   console.log(configSFTP)
   cy.task('sftpCurrentWorkingDirectory', configSFTP).then(p => {
