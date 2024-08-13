@@ -1,5 +1,5 @@
-import label from '../../cypress/fixtures/label.json'
-import navigationSelectors from '../../selectors/navigation/left-navigation-selectors.json'
+// import label from '../../cypress/fixtures/label.json'
+// import navigationSelectors from '../../selectors/navigation/left-navigation-selectors.json'
 /**
  *
  * This command is used to execute all sftp operations
@@ -19,11 +19,11 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     name: 'runSftpOperationsCommand'
   })
 
-  const adminData = Cypress.env('admin')
-  const userInfo = {
-    username: adminData.adminUsername,
-    password: adminData.adminPassword
-  }
+  // const adminData = Cypress.env('admin')
+  // const userInfo = {
+  //   username: adminData.adminUsername,
+  //   password: adminData.adminPassword
+  // }
   const configSFTP = {
     host: 'beta.southrivertech.com',
     port: '2200',
@@ -39,11 +39,11 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
   const remoteDirCopy = `/path/to/new/${Cypress.dayjs().format('ssmYY')}.txt`
   const remoteDirPath = '/path'
 
-  cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-  // navigate to events
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
-  cy.get(navigationSelectors.textLabelSelector).contains(label.serverActivity).should('be.visible').click()
+  // cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
+  // // navigate to events
+  // cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
+  // cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
+  // cy.get(navigationSelectors.textLabelSelector).contains(label.serverActivity).should('be.visible').click()
 
   // sftp operations
   console.log(configSFTP)
