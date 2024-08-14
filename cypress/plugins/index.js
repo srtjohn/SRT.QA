@@ -46,8 +46,8 @@ module.exports = async (on, config) => {
       if (fs.existsSync(filePath)) {
         return '1GB file already exists at ' + filePath
       }
-      const fileSizeInMB = 1
-      const fileSizeInBytes = fileSizeInMB * 1024 * 1024
+      const fileSizeInMB = 100
+      const fileSizeInBytes = fileSizeInMB
       const buffer = Buffer.alloc(fileSizeInBytes, '0')
       fs.writeFileSync(filePath, buffer)
       return '1GB file created at ' + filePath
