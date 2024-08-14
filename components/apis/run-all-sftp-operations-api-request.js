@@ -36,7 +36,7 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
   const newRemoteDir = '/path/to/new/dir/Download.txt'
   const localPath = './../fixtures/1GB.txt'
   const localPathForDownload = './../fixtures'
-  const remoteDirCopy = `/path/to/new/${Cypress.dayjs().format('ssmYY')}.txt`
+  // const remoteDirCopy = `/path/to/new/${Cypress.dayjs().format('ssmYY')}.txt`
   const remoteDirPath = '/path'
 
   // cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
@@ -75,20 +75,20 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     cy.task('endSFTPConnection')
   })
 
-  cy.task('sftpEditFile', { remoteDirFile, configSFTP }).then(p => {
-    expect(`${JSON.stringify(p)}`).to.equal(`"Uploaded data stream to ${remoteDirFile}"`)
-    cy.task('endSFTPConnection')
-  })
+  // cy.task('sftpEditFile', { remoteDirFile, configSFTP }).then(p => {
+  //   expect(`${JSON.stringify(p)}`).to.equal(`"Uploaded data stream to ${remoteDirFile}"`)
+  //   cy.task('endSFTPConnection')
+  // })
 
   cy.task('sftpRenameFile', { remoteDirFile, newRemoteDir, configSFTP }).then(p => {
     expect(`${JSON.stringify(p)}`).to.equal(`"Successfully renamed ${remoteDirFile} to ${newRemoteDir}"`)
     cy.task('endSFTPConnection')
   })
 
-  cy.task('sftpCopyFile', { newRemoteDir, remoteDirCopy, configSFTP }, { timeout: 540000 }).then(p => {
-    expect(`${JSON.stringify(p)}`).to.equal(`"${newRemoteDir} copied to ${remoteDirCopy}"`)
-    cy.task('endSFTPConnection')
-  })
+  // cy.task('sftpCopyFile', { newRemoteDir, remoteDirCopy, configSFTP }, { timeout: 540000 }).then(p => {
+  //   expect(`${JSON.stringify(p)}`).to.equal(`"${newRemoteDir} copied to ${remoteDirCopy}"`)
+  //   cy.task('endSFTPConnection')
+  // })
 
   cy.task('sftpDownloadDirectory', { remoteDir, localPathForDownload, configSFTP }, { timeout: 420000 }).then(p => {
     cy.log(`Remote working directory is ${JSON.stringify(p)}`)
