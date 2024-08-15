@@ -70,7 +70,7 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     }
   })
 
-  cy.task('sftpUploadFile', { localPath, remoteDirFile, configSFTP }, { timeout: 540000 }).then(p => {
+  cy.task('sftpUploadFile', { localPath, remoteDirFile, configSFTP }, { timeout: 1800000 }).then(p => {
     expect(`${JSON.stringify(p)}`).to.equal(`"Uploaded data stream to ${remoteDirFile}"`)
     cy.task('endSFTPConnection')
   })
