@@ -108,9 +108,6 @@ module.exports = async (on, config) => {
                 {
                   concurrency: 16, // integer. Number of concurrent reads
                   chunkSize: 256000, // integer. Size of each read in bytes
-                  mode: 0o755, // mixed. Integer or string representing the file mode to set
-                  step: function(total_transferred, chunk, total) // function. Called every time
-                  // a part of a file was transferred
                 })
         })
     }
