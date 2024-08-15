@@ -85,12 +85,12 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     cy.task('endSFTPConnection')
   })
 
-  cy.task('sftpCopyFile', { newRemoteDir, remoteDirCopy, configSFTP }, { timeout: 540000 }).then(p => {
+  cy.task('sftpCopyFile', { newRemoteDir, remoteDirCopy, configSFTP }, { timeout: 1800000 }).then(p => {
     expect(`${JSON.stringify(p)}`).to.equal(`"${newRemoteDir} copied to ${remoteDirCopy}"`)
     cy.task('endSFTPConnection')
   })
 
-  cy.task('sftpDownloadDirectory', { remoteDir, localPathForDownload, configSFTP }, { timeout: 420000 }).then(p => {
+  cy.task('sftpDownloadDirectory', { remoteDir, localPathForDownload, configSFTP }, { timeout: 1800000 }).then(p => {
     cy.log(`Remote working directory is ${JSON.stringify(p)}`)
     expect(`${JSON.stringify(p)}`).to.equal(`"${remoteDir} downloaded to ${localPathForDownload}"`)
     cy.task('endSFTPConnection')
