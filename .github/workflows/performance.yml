@@ -30,7 +30,7 @@ jobs:
         
       - name: Get Public IP Address
         id: get_ip
-        run: echo "$(curl -s https://ifconfig.me)"
+        run: echo "$(curl -s https://ipinfo.io)"
 
       - name: Run Cypress performance tests in parallel
         uses: cypress-io/github-action@v6
