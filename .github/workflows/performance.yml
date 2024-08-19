@@ -30,13 +30,11 @@ jobs:
         
       - name: Get Public IP Address
         id: get_ip
-        run: echo "IP=$(curl -s https://ifconfig.me)" >> $GITHUB_ENV  
+        run: echo "$(curl -s https://ifconfig.me)"
 
       - name: Run Cypress performance tests in parallel
         uses: cypress-io/github-action@v6
         with:
           record: true
           parallel: true
-          command: npm run performance
-        env:
-          IP_ADDRESS: ${{ env.IP }}    
+          command: npm run performance  
