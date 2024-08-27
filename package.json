@@ -4,7 +4,7 @@
   "description": "next-gen tests",
   "scripts": {
     "cy:open:beta": "cypress open --config-file ./cypress/config/beta.config.js",
-    "performance": "CYPRESS_RECORD_KEY=addf7e90-b5a9-4eb3-a581-7f8f209e6b0b cypress run --record --parallel --tag beta-performance --group beta-performance --config-file ./cypress/config/beta.config.js --spec **/*performance.cy.js",
+    "performance": "CYPRESS_RECORD_KEY=addf7e90-b5a9-4eb3-a581-7f8f209e6b0b cypress run --record --parallel --tag beta-performance --group beta-performance --config-file ./cypress/config/beta.config.js --spec **/*performance.cy.js --env region=east",
     "acceptance": "CYPRESS_RECORD_KEY=addf7e90-b5a9-4eb3-a581-7f8f209e6b0b cypress run --record --parallel --tag beta-acceptance --group beta-acceptance --config-file ./cypress/config/beta.config.js --spec **/*acceptance.cy.js",
     "api": "CYPRESS_RECORD_KEY=addf7e90-b5a9-4eb3-a581-7f8f209e6b0b cypress run --record --parallel --tag beta-api --group beta-api --config-file ./cypress/config/beta.config.js --spec **/*api.cy.js",
     "beta:acceptance": "cypress run --tag beta-acceptance --group beta-acceptance --parallel --ci-build-id ${{github.run_number}} --config-file ./cypress/config/beta.config.js --spec 'cypress/e2e/sftp/**/*'",

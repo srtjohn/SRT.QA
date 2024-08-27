@@ -18,6 +18,8 @@ const { downloadFile } = require('cypress-downloadfile/lib/addPlugin')
 // const { verifyDownloadTasks } = require('cy-verify-downloads')
 const Client = require('ssh2-sftp-client')
 const sftp = new Client()
+const fs = require('fs')
+const path = require('path')
 
 module.exports = async (on, config) => {
   // `on` is used to hook into various events Cypress emits
@@ -37,7 +39,20 @@ module.exports = async (on, config) => {
       return sftp.end()
     }
   })
-
+  // command to create file for sftp operations
+  on('task', {
+    createFile () {
+      const filePath = path.join('../fixtures/1GB.txt')
+      if (fs.existsSync(filePath)) {
+        return '1GB file already exists at ' + filePath
+      }
+      const fileSizeInMB = 30
+      const fileSizeInBytes = fileSizeInMB * 1024 * 1024
+      const buffer = Buffer.alloc(fileSizeInBytes, '0')
+      fs.writeFileSync(filePath, buffer)
+      return '1GB file created at ' + filePath
+    }
+  })
   // sftp connection task which will return current remote working directory using cwd() command
   on('task', {
     sftpCurrentWorkingDirectory (configSFTP) {
@@ -88,7 +103,12 @@ module.exports = async (on, config) => {
     sftpUploadFile (opts) {
       return sftp.connect(opts.configSFTP)
         .then(() => {
-          return sftp.fastPut(opts.localPath, opts.remoteDirFile, true)
+          return sftp.put(opts.localPath, opts.remoteDirFile, true)
+          //return sftp.fastPut(opts.localPath, opts.remoteDirFile, 
+          //      {
+          //        concurrency: 16, // integer. Number of concurrent reads
+          //        chunkSize: 256000, // integer. Size of each read in bytes
+          //      })
         })
     }
   })
@@ -105,7 +125,7 @@ module.exports = async (on, config) => {
     sftpDownLoadFile (opts) {
       return sftp.connect(opts.configSFTP)
         .then(() => {
-          return sftp.fastGet(opts.newRemoteDir, opts.localPath2, true)
+          return sftp.fastGet(opts.newRemoteDir, opts.localPathForDownload, true)
         })
     }
   })

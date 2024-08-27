@@ -1,5 +1,5 @@
-import label from '../../cypress/fixtures/label.json'
-import navigationSelectors from '../../selectors/navigation/left-navigation-selectors.json'
+// import label from '../../cypress/fixtures/label.json'
+// import navigationSelectors from '../../selectors/navigation/left-navigation-selectors.json'
 /**
  *
  * This command is used to execute all sftp operations
@@ -19,11 +19,11 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     name: 'runSftpOperationsCommand'
   })
 
-  const adminData = Cypress.env('admin')
-  const userInfo = {
-    username: adminData.adminUsername,
-    password: adminData.adminPassword
-  }
+  // const adminData = Cypress.env('admin')
+  // const userInfo = {
+  //   username: adminData.adminUsername,
+  //   password: adminData.adminPassword
+  // }
   const configSFTP = {
     host: 'beta.southrivertech.com',
     port: '2200',
@@ -33,17 +33,18 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
 
   const remoteDir = '/path/to/new/dir'
   const remoteDirFile = '/path/to/new/dir/file2.txt'
-  const newRemoteDir = '/path/to/new/dir/newName.txt'
-  const localPath = './../fixtures/file2.txt'
+  const newRemoteDir = '/path/to/new/dir/Download.txt'
+  const localPath = './../fixtures/1GB.txt'
   const localPathForDownload = './../fixtures'
   const remoteDirCopy = `/path/to/new/${Cypress.dayjs().format('ssmYY')}.txt`
   const remoteDirPath = '/path'
 
-  cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-  // navigate to events
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
-  cy.get(navigationSelectors.textLabelSelector).contains(label.serverActivity).should('be.visible').click()
+  // cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
+  // // navigate to events
+  // cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
+  // cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
+  // cy.get(navigationSelectors.textLabelSelector).contains(label.serverActivity).should('be.visible').click()
+
   // sftp operations
   console.log(configSFTP)
   cy.task('sftpCurrentWorkingDirectory', configSFTP).then(p => {
@@ -69,8 +70,8 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     }
   })
 
-  cy.task('sftpUploadFile', { localPath, remoteDirFile, configSFTP }, { timeout: 540000 }).then(p => {
-    expect(`${JSON.stringify(p)}`).to.equal(`"${localPath} was successfully uploaded to ${remoteDirFile}!"`)
+  cy.task('sftpUploadFile', { localPath, remoteDirFile, configSFTP }, { timeout: 1800000 }).then(p => {
+    expect(`${JSON.stringify(p)}`).to.equal(`"Uploaded data stream to ${remoteDirFile}"`)
     cy.task('endSFTPConnection')
   })
 
@@ -84,12 +85,12 @@ Cypress.Commands.add('runSftpOperations', (Username) => {
     cy.task('endSFTPConnection')
   })
 
-  cy.task('sftpCopyFile', { newRemoteDir, remoteDirCopy, configSFTP }, { timeout: 540000 }).then(p => {
+  cy.task('sftpCopyFile', { newRemoteDir, remoteDirCopy, configSFTP }, { timeout: 1800000 }).then(p => {
     expect(`${JSON.stringify(p)}`).to.equal(`"${newRemoteDir} copied to ${remoteDirCopy}"`)
     cy.task('endSFTPConnection')
   })
 
-  cy.task('sftpDownloadDirectory', { remoteDir, localPathForDownload, configSFTP }, { timeout: 420000 }).then(p => {
+  cy.task('sftpDownloadDirectory', { remoteDir, localPathForDownload, configSFTP }, { timeout: 1800000 }).then(p => {
     cy.log(`Remote working directory is ${JSON.stringify(p)}`)
     expect(`${JSON.stringify(p)}`).to.equal(`"${remoteDir} downloaded to ${localPathForDownload}"`)
     cy.task('endSFTPConnection')

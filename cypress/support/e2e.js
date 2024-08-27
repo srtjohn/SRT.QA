@@ -151,3 +151,10 @@ Cypress.dayjs = dayjs
 require('cy-verify-downloads').addCustomCommand()
 
 require('cypress-plugin-api')
+const filePath = '../fixtures/1GB.txt'
+before(() => {
+  cy.task('createFile').then(($resp) => {
+    cy.log($resp)
+    expect($resp).to.contain(filePath)
+  })
+})

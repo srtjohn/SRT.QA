@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - testsftpAdd
+      - sftpFileCreate
   schedule:
     - cron: '0 12-16 * * *'  #every hour from 12AM to 4:59PM EST
 jobs:
@@ -18,7 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        containers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+
 
     steps:
       - name: Checkout repository
@@ -26,10 +27,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        
+      - name: Get Public IP Address
+        id: get_ip
+        run: echo "$(curl -s https://ipinfo.io)"
 
       - name: Run Cypress performance tests in parallel
         uses: cypress-io/github-action@v6
         with:
           record: true
           parallel: true
-          command: npm run performance
+          command: npm run performance  
