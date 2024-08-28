@@ -37,6 +37,7 @@
     "cypress-slow-down": "^1.2.1",
     "cypress-wait-until": "1.7.2",
     "dayjs": "^1.11.7",
+    "iconv-lite": "^0.6.3",
     "ssh2-sftp-client": "^10.0.3"
   }
 }

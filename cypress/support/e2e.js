@@ -37,6 +37,9 @@ import '../../components/ui/server/add-server-key-command'
 import '../../components/ui/server/delete-server-command'
 import '../../components/ui/users/create-virtual-directory-command'
 import '../../components/ui/users/delete-virtual-directory-command'
+import '../../components/ui/events/add-event-command'
+import '../../components/ui/events/add-action-command'
+import '../../components/ui/events/delete-event-command'
 import './commands'
 
 /** API REQUESTS COMMANDS */

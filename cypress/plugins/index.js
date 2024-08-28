@@ -17,6 +17,7 @@ const { verifyDownloadTasks } = require('cy-verify-downloads')
 const { downloadFile } = require('cypress-downloadfile/lib/addPlugin')
 // const { verifyDownloadTasks } = require('cy-verify-downloads')
 const Client = require('ssh2-sftp-client')
+const iconv = require('iconv-lite')
 const sftp = new Client()
 const fs = require('fs')
 const path = require('path')
@@ -104,7 +105,7 @@ module.exports = async (on, config) => {
       return sftp.connect(opts.configSFTP)
         .then(() => {
           return sftp.put(opts.localPath, opts.remoteDirFile, true)
-          //return sftp.fastPut(opts.localPath, opts.remoteDirFile, 
+          // return sftp.fastPut(opts.localPath, opts.remoteDirFile,
           //      {
           //        concurrency: 16, // integer. Number of concurrent reads
           //        chunkSize: 256000, // integer. Size of each read in bytes
@@ -212,6 +213,24 @@ module.exports = async (on, config) => {
         .then(() => {
           return sftp.chmod(opts.remoteFile, '0o644')
         })
+    }
+  })
+
+  on('task', {
+    sftpListFiles (opts) {
+      return sftp.connect(opts.configSFTP)
+        .then(() => sftp.list(opts.remoteDir))
+        .then(list => list.filter(item => item.type === '-'))
+        .finally(() => sftp.end())
+    }
+  })
+
+  on('task', {
+    sftpReadFile (opts) {
+      return sftp.connect(opts.configSFTP)
+        .then(() => sftp.get(opts.remoteDirFile))
+        .then(fileContent => iconv.decode(fileContent, 'utf16le'))
+        .finally(() => sftp.end())
     }
   })
 }
