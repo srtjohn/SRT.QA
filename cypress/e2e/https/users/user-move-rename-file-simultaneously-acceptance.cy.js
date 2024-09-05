@@ -14,14 +14,14 @@ import label from '../../../fixtures/label.json'
  * - user should have valid credentials
  */
 describe('Login > {existing server} > events > create new event', () => {
-//   const adminData = Cypress.env('admin')
-//   const userInfo = {
-//     username: adminData.adminUsername,
-//     password: adminData.adminPassword
-//   }
+  const adminData = Cypress.env('admin')
+  const userInfo = {
+    username: adminData.adminUsername,
+    password: adminData.adminPassword
+  }
   const createUserDetails = {
-    username: 'test123',
-    password: '123',
+    username: `qa-auto-move-rename-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+    password: '123456',
     serverName: label.autoServerName
   }
   const configSFTP = {
@@ -39,32 +39,19 @@ describe('Login > {existing server} > events > create new event', () => {
   const remoteDirFile = `./${remoteDirFileName}`
 
   beforeEach('login', () => {
-    // cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
-    //   createUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
-    // })
-    // cy.postCreateUserApiRequest(createUserDetails).then(($response) => {
-    //   expect($response.Response.Username).to.equal(createUserDetails.username)
-    // })
+    cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
+      createUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
+    })
+    cy.postCreateUserApiRequest(createUserDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(createUserDetails.username)
+    })
     cy.task('sftpUploadFile', { localPath, remoteDirFile, configSFTP }).then(p => {
       expect(`${JSON.stringify(p)}`).to.equal(`"Uploaded data stream to ${remoteDirFile}"`)
       cy.task('endSFTPConnection')
     })
     cy.task('sftpCreateDirectory', { remoteDir: newDir, configSFTP }).then(p => {
-      if (p === 'directory exists') {
-        cy.log('Directory already exists, proceeding to delete')
-        cy.task('sftpDeleteDirectory', { remoteDir: newDir, configSFTP }).then(p => {
-          expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${newDir}"`)
-          cy.task('endSFTPConnection')
-          cy.log('Directory deleted, creating again')
-          cy.task('sftpCreateDirectory', { remoteDir: newDir, configSFTP }).then(p => {
-            expect(`${JSON.stringify(p)}`).to.equal(`"${newDir} directory created"`)
-            cy.task('endSFTPConnection')
-          })
-        })
-      } else {
-        expect(`${JSON.stringify(p)}`).to.equal(`"${newDir} directory created"`)
-        cy.task('endSFTPConnection')
-      }
+      expect(`${JSON.stringify(p)}`).to.equal(`"${newDir} directory created"`)
+      cy.task('endSFTPConnection')
     })
     cy.waitForNetworkIdle(1000, { log: false })
   })
@@ -99,10 +86,10 @@ describe('Login > {existing server} > events > create new event', () => {
     cy.task('sftpDeleteDirectory', { remoteDir: newDir, configSFTP }).then(p => {
       expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${newDir}"`)
       cy.task('endSFTPConnection')
-    // deleting user
-    // cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
-    //   expect($response.Result.ErrorStr).to.eq('Success')
-    // })
+      // deleting user
+      cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
+        expect($response.Result.ErrorStr).to.eq('Success')
+      })
     })
   })
 })

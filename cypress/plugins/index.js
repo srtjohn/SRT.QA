@@ -215,7 +215,7 @@ module.exports = async (on, config) => {
         })
     }
   })
-
+  // sftp connection task which lists file on server using list command
   on('task', {
     sftpListFiles (opts) {
       return sftp.connect(opts.configSFTP)
@@ -224,12 +224,22 @@ module.exports = async (on, config) => {
         .finally(() => sftp.end())
     }
   })
-
+  // sftp connection task which reads file on server using get command
   on('task', {
     sftpReadFile (opts) {
       return sftp.connect(opts.configSFTP)
         .then(() => sftp.get(opts.remoteDirFile))
         .then(fileContent => iconv.decode(fileContent, 'utf16le'))
+        .finally(() => sftp.end())
+    }
+  })
+  // sftp connection task which lists directories on server using list command
+  on('task', {
+    sftpListDirs (opts) {
+      const sftp = new Client()
+      return sftp.connect(opts.configSFTP)
+        .then(() => sftp.list(opts.remoteDir))
+        .then(items => items.filter(item => item.type === 'd'))
         .finally(() => sftp.end())
     }
   })

@@ -23,7 +23,7 @@ import navigationSelectors from '../../../selectors/navigation/left-navigation-s
  * cy.createEvent(eventType, subEvent, finalEvent)
  */
 
-Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent) => {
+Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false) => {
   Cypress.log({
     name: 'createEventCommand'
   })
@@ -36,7 +36,9 @@ Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent) => {
   cy.get(userSelectors.btnLabel).contains(label.addEvent).click()
   cy.get(htmlSelectors.div).contains(eventType).parent().prev(htmlSelectors.div).click()
   cy.get(dashboardSelectors.muiTypography).contains(subEvent).click()
-  cy.get(htmlSelectors.div).contains(subEvent).parent().prev(htmlSelectors.div).click()
-  cy.get(dashboardSelectors.muiTypography).contains(finalEvent).click()
+  if (finalEvent) {
+    cy.get(htmlSelectors.div).contains(subEvent).parent().prev(htmlSelectors.div).click()
+    cy.get(dashboardSelectors.muiTypography).contains(finalEvent).click()
+  }
   cy.get(generalSelectors.labelSelector).contains(label.okayLabel).click()
 })
