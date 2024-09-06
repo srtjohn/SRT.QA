@@ -37,7 +37,7 @@ Cypress.Commands.add('createAction', (actionType, customText, filePath, eventNam
   cy.get(generalSelectors.labelSelector).contains(label.next).click()
   cy.get(dashboardSelectors.eventName).type(eventName)
   cy.get(dashboardSelectors.eventDescription).type(eventDescription)
-  cy.waitForNetworkIdle(3000, { log: false })
+  cy.waitForNetworkIdle(1000, { log: false })
   cy.get(generalSelectors.labelSelector).contains(label.next).click()
   cy.get(dashboardSelectors.dashboardButtonLabel).contains(label.create).click()
 })

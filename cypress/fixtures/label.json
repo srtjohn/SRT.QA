@@ -169,6 +169,8 @@
   "fileRename":"File rename",
   "renameSuccess":"Rename successful",
   "fileDelete":"File delete",
+  "fileAppend":"File append",
+  "appendSuccess":"Append successful",
   "deleteSuccess":"Delete successful",
   "userLoginAttemptSuccess":"User login attempt successful",
   "userLoginAttemptFailed":"User login attempt failed",

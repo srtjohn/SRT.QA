@@ -1,141 +1,110 @@
-import navigationSelectors from '../../../../../../../../selectors/navigation/left-navigation-selectors.json'
-import userSelectors from '../../../../../../../../selectors/user/user-selectors.json'
 import label from '../../../../../../../fixtures/label.json'
-import loginSelectors from '../../../../../../../../selectors/login-selectors.json'
-import { slowCypressDown } from 'cypress-slow-down'
-import htmlSelectors from '../../../../../../../../selectors/htlm-tag-selectors.json'
-import dashboardSelectors from '../../../../../../../../selectors/dashboard-selectors.json'
-import generalSelectors from '../../../../../../../../selectors/general-selectors.json'
 
 /**
  * @description
- * This spec file contains test to verify that admin can create an event when a user is deleted, another account's login is disabled
+ * This spec file contains test to verify that admin can create an event when a user is deleted , custom file with custom text is also created
  *
  * @breadcrumb
  * Login > {existing server} > events > create new event
  *
  * @assertions
- * To verify that admin can create an event when a user is deleted, another account's login is disabled
+ * To verify that admin can create an event when a user is deleted
  *
  *  @prerequisites
  * Pre-Requisite data:
  * - user should have valid credentials
  */
-
-slowCypressDown(100)
-
-// this test suite is skipped because it leads to disabling of all the users
-describe.skip('Login > {existing server} > events > create new event', () => {
+let homeDir = null
+describe('Login > {existing server} > events > create new event', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
     password: adminData.adminPassword
   }
-  const deleteUserDetails = {
-    username: `qa-auto-event-delete-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
-    password: 'testing123',
+  const firstUserDetails = {
+    username: `qa-auto-user-to-delete-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+    password: '123456',
     serverName: label.autoServerName
   }
-  const disableUserDetails = {
-    username: `qa-auto-event-disable-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
-    password: deleteUserDetails.password,
+  const secondUserDetails = {
+    username: `qa-auto-delete-user-event-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+    password: '123456',
     serverName: label.autoServerName
   }
-  const actionType = 'Disable user account'
-  const eventName = `qa-auto-event-${Cypress.dayjs().format('ssmmhhMMYY')}`
-  const errorMessage = 'Invalid username or password.'
+  const configSFTP = {
+    host: 'beta.southrivertech.com',
+    port: '2200',
+    username: secondUserDetails.username,
+    password: secondUserDetails.password
+  }
+  const remoteDir = '/'
+  const actionType = 'Write to custom log or file'
+  const eventName = `delete_user_event${Cypress.dayjs().format('ssmmhhMMYY')}`
+  const eventDescription = 'this event is used to write to a file when a user is deleted'
+  const customFileName = 'log.txt'
+  const customFilePath = `./${customFileName}`
+  const customText = `this file ${customFileName} was created when ${firstUserDetails.username} was deleted`
 
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
-      deleteUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
+      firstUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
     })
 
-    cy.postCreateUserApiRequest(deleteUserDetails).then(($response) => {
-      // Check if newly created user is present in response
-      expect($response.Response.Username).to.equal(deleteUserDetails.username)
-      disableUserDetails.bearerToken = deleteUserDetails.bearerToken
+    // creating two users
+    cy.postCreateUserApiRequest(firstUserDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(firstUserDetails.username)
+      secondUserDetails.bearerToken = firstUserDetails.bearerToken
     })
-    cy.postCreateUserApiRequest(disableUserDetails).then(($response) => {
-      // Check if newly created user is present in response
-      expect($response.Response.Username).to.equal(disableUserDetails.username)
+
+    cy.postCreateUserApiRequest(secondUserDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(secondUserDetails.username)
+      homeDir = $response.Response.General.HomeDir
+      firstUserDetails.bearerToken = secondUserDetails.bearerToken
     })
-    // check if disable user can login
-    cy.visit(Cypress.env('baseUrl'))
-    cy.get(loginSelectors.inputUsername).type(disableUserDetails.username)
-    cy.get(loginSelectors.inputPassword).type(disableUserDetails.password)
-    cy.get(loginSelectors.loginButton).contains(label.login).click()
-    cy.get(dashboardSelectors.muiTypography).contains(label.myFilesText).should('be.visible')
-    // login
+
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    // navigate to events
-    cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-    cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
-    cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
-    cy.waitForNetworkIdle(1000, { log: false })
   })
-  it('creating new event', () => {
-    cy.get(userSelectors.addButton).should('be.visible').click()
-    cy.get(userSelectors.btnLabel).contains(label.addEvent).click()
-    cy.get(htmlSelectors.div).contains(label.userEvents).parent().prev(htmlSelectors.div).click()
-    cy.get(dashboardSelectors.muiTypography).contains(label.userAccountDeleted).click()
-    cy.get(generalSelectors.labelSelector).contains(label.okayLabel).click()
-    // adding condition
-    cy.get(htmlSelectors.div).contains(label.userAccountDeleted).parent().prev(htmlSelectors.div).click()
-    cy.get(dashboardSelectors.muiTypography).contains(label.conditions).click()
-    cy.get(userSelectors.btnLabel).contains(label.addCondition).click()
-    cy.get(dashboardSelectors.muiTypography).contains(label.userNameLabel).click()
-    cy.waitForNetworkIdle(1000, { log: false })
-    cy.get(dashboardSelectors.matchContainer).within(() => {
-      cy.get(htmlSelectors.input).eq(0).click().clear().type(deleteUserDetails.username)
-    })
-    cy.get(dashboardSelectors.matchContainer).within(() => {
-      cy.get(userSelectors.addButton).click()
-    })
-    cy.get(htmlSelectors.tableRow).contains(deleteUserDetails.username).prev(htmlSelectors.tableData).should('be.visible').within(() => {
-      cy.get(generalSelectors.inputTypeCheckbox).click()
-    })
-    cy.get(generalSelectors.labelSelector).contains(label.okayLabel).click()
+
+  it('creating new event for user deleted', () => {
+    const filePath = `${homeDir}\\${customFileName}`
+    // adding event
+    cy.createEvent(label.userEvents, label.userAccountDeleted)
+
     // adding action
-    cy.get(dashboardSelectors.muiTypography).contains(label.actions).click()
-    cy.get(userSelectors.btnLabel).contains(label.addAction).click()
-    cy.get(htmlSelectors.div).contains(actionType).click()
-    cy.get(htmlSelectors.label).contains(label.usernameLabel).next(htmlSelectors.div).within(() => {
-      cy.get(htmlSelectors.input).click().clear().type(disableUserDetails.username)
-    })
-    cy.get(generalSelectors.labelSelector).contains(label.okayLabel).click()
-    cy.get(generalSelectors.labelSelector).contains(label.next).click()
-    cy.get(htmlSelectors.label).contains(label.nameLabel).next(htmlSelectors.div).should('be.visible').within(() => {
-      cy.get(htmlSelectors.input).click().clear().type(eventName)
-    })
-    cy.get(generalSelectors.labelSelector).contains(label.next).click()
-    cy.waitForNetworkIdle(3000, { log: false })
-
-    cy.get(dashboardSelectors.dashboardButtonLabel).contains(label.create).click()
-
-    // deleting user
-    cy.deleteUserApiRequest(deleteUserDetails.bearerToken, deleteUserDetails.serverName, deleteUserDetails.username).then(($response) => {
+    cy.createAction(actionType, customText, filePath, eventName, eventDescription)
+    // calling delete user function for first user
+    cy.deleteUserApiRequest(firstUserDetails.bearerToken, firstUserDetails.serverName, firstUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
       expect($response.Result.ErrorStr).to.eq('Success')
+      secondUserDetails.bearerToken = firstUserDetails.bearerToken
     })
-    cy.visit(Cypress.env('baseUrl'))
-    cy.get(loginSelectors.inputUsername).type(disableUserDetails.username)
-    cy.get(loginSelectors.inputPassword).type(disableUserDetails.password)
-    cy.get(loginSelectors.loginButton).contains(label.login).click()
-    cy.get(dashboardSelectors.muiTypography).should('contain', errorMessage)
+    // verify if log file is created
+    cy.task('sftpListFiles', { remoteDir, configSFTP }).then(files => {
+      const fileName = files.map(file => file.name)
+      expect(fileName).to.include(customFileName)
+      cy.task('endSFTPConnection')
+    })
+
+    // verify the content in the file
+    cy.task('sftpReadFile', { remoteDirFile: customFilePath, configSFTP }).then(p => {
+      expect(p).to.include(customText)
+      cy.task('endSFTPConnection')
+    })
   })
 
-  afterEach('deleting event and user', () => {
+  afterEach('deleting file,event and user', () => {
+    // deleting the file
+    cy.task('sftpDeleteFile', { newRemoteDir: customFilePath, configSFTP }).then(p => {
+      expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${customFilePath}"`)
+      cy.task('endSFTPConnection')
+    })
+
     // deleting the event
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-    cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
-    cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
-    cy.get(htmlSelectors.div).contains(eventName).should('be.visible').click()
-    cy.get(userSelectors.deleteButton).should('be.visible').click()
-    // verify if event is deleted or not
-    cy.get(htmlSelectors.div).contains(eventName).should('not.exist')
+    cy.deleteEvent(eventName, true)
+
     // calling delete user function
-    cy.deleteUserApiRequest(disableUserDetails.bearerToken, disableUserDetails.serverName, disableUserDetails.username).then(($response) => {
+    cy.deleteUserApiRequest(secondUserDetails.bearerToken, secondUserDetails.serverName, secondUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
       expect($response.Result.ErrorStr).to.eq('Success')
     })
