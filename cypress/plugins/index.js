@@ -72,11 +72,13 @@ module.exports = async (on, config) => {
         .then(() => sftp.exists(opts.remoteDir))
         .then((exists) => {
           if (exists) {
-            return 'directory exists' // Add this
+            return 'directory exists'
           }
           return sftp.mkdir(opts.remoteDir, true).then(() => `${opts.remoteDir} directory created`)
         })
-        .finally(() => sftp.end())
+        .catch((error) => {
+          return error.message
+        })
     }
     // ... other tasks ...
   })
@@ -111,6 +113,9 @@ module.exports = async (on, config) => {
           //        chunkSize: 256000, // integer. Size of each read in bytes
           //      })
         })
+        .catch((error) => {
+          return error.message
+        })
     }
   })
   // sftp connection task which will upload directory from remote location using fastGet() command
@@ -128,6 +133,9 @@ module.exports = async (on, config) => {
         .then(() => {
           return sftp.fastGet(opts.newRemoteDir, opts.localPathForDownload, true)
         })
+        .catch((error) => {
+          return error.message
+        })
     }
   })
 
@@ -137,6 +145,9 @@ module.exports = async (on, config) => {
       return sftp.connect(opts.configSFTP)
         .then(() => {
           return sftp.rename(opts.remoteDirFile, opts.newRemoteDir)
+        })
+        .catch((error) => {
+          return error.message
         })
     }
   })
@@ -192,6 +203,9 @@ module.exports = async (on, config) => {
       return sftp.connect(opts.configSFTP)
         .then(() => {
           return sftp.delete(opts.newRemoteDir)
+        })
+        .catch((error) => {
+          return error.message
         })
     }
   })
