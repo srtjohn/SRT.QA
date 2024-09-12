@@ -47,6 +47,7 @@ import './commands'
 /** Authentication */
 import '../../components/apis/requests/Authentication/post-authenticate-login-api-request'
 import '../../components/apis/requests/Authentication/post-authenticate-logout-api-request'
+import '../../components/apis/requests/Authentication/post-user-login-api-request'
 
 /** servers */
 import '../../components/apis/requests/servers/admin-get-server-list-api-request'

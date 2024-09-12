@@ -2,66 +2,64 @@ import label from '../../../../../../../fixtures/label.json'
 
 /**
  * @description
- * This spec file contains test to verify that admin can create an event when a user is deleted , custom file with custom text is also created
+ * This spec file contains test to verify that admin can create an event when user is deleted, custom file with custom text is also created
  *
  * @breadcrumb
  * Login > {existing server} > events > create new event
  *
  * @assertions
- * To verify that admin can create an event when a user is deleted
+ * To verify that admin can create an event when user is deleted
  *
  *  @prerequisites
  * Pre-Requisite data:
  * - user should have valid credentials
  */
 let homeDir = null
+const home = true
 describe('Login > {existing server} > events > create new event', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
     password: adminData.adminPassword
   }
-  const firstUserDetails = {
-    username: `qa-auto-user-to-delete-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+  const createUserDetails = {
+    username: `qa-auto-account-deleted-event-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: '123456',
     serverName: label.autoServerName
   }
-  const secondUserDetails = {
-    username: `qa-auto-delete-user-event-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+  const logFileUserDetails = {
+    username: `qa-auto-log-file-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: '123456',
     serverName: label.autoServerName
   }
   const configSFTP = {
     host: 'beta.southrivertech.com',
     port: '2200',
-    username: secondUserDetails.username,
-    password: secondUserDetails.password
+    username: logFileUserDetails.username,
+    password: logFileUserDetails.password
   }
   const remoteDir = '/'
-  const actionType = 'Write to custom log or file'
-  const eventName = `delete_user_event${Cypress.dayjs().format('ssmmhhMMYY')}`
-  const eventDescription = 'this event is used to write to a file when a user is deleted'
+  const actionType = label.writeToFile
+  const eventName = `user_bad_username_login_fail_event${Cypress.dayjs().format('ssmmhhMMYY')}`
+  const eventDescription = 'this event is used to write to a file when a user account is deleted'
   const customFileName = 'log.txt'
-  const customFilePath = `./${customFileName}`
-  const customText = `this file ${customFileName} was created when ${firstUserDetails.username} was deleted`
+  const customFilePath = './log.txt'
+  const customText = `this file ${customFileName} was created when ${createUserDetails.username} account was deleted`
 
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
-      firstUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
+      logFileUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
     })
 
-    // creating two users
-    cy.postCreateUserApiRequest(firstUserDetails).then(($response) => {
-      expect($response.Response.Username).to.equal(firstUserDetails.username)
-      secondUserDetails.bearerToken = firstUserDetails.bearerToken
-    })
-
-    cy.postCreateUserApiRequest(secondUserDetails).then(($response) => {
-      expect($response.Response.Username).to.equal(secondUserDetails.username)
+    cy.postCreateUserApiRequest(logFileUserDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(logFileUserDetails.username)
       homeDir = $response.Response.General.HomeDir
-      firstUserDetails.bearerToken = secondUserDetails.bearerToken
+      createUserDetails.bearerToken = logFileUserDetails.bearerToken
     })
-
+    // creating home directory
+    cy.postUserLoginApiRequest(logFileUserDetails).then(($response) => {
+      expect($response.auth.ErrorStr).to.eq('Success')
+    })
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
   })
 
@@ -72,12 +70,21 @@ describe('Login > {existing server} > events > create new event', () => {
 
     // adding action
     cy.createAction(actionType, customText, filePath, eventName, eventDescription)
-    // calling delete user function for first user
-    cy.deleteUserApiRequest(firstUserDetails.bearerToken, firstUserDetails.serverName, firstUserDetails.username).then(($response) => {
-      // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
-      secondUserDetails.bearerToken = firstUserDetails.bearerToken
+
+    cy.task('sftpListFiles', { remoteDir, configSFTP }).then(files => {
+      const fileName = files.map(file => file.name)
+      expect(fileName).to.not.include(customFileName)
+      cy.task('endSFTPConnection')
     })
+    cy.postCreateUserApiRequest(createUserDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(createUserDetails.username)
+    })
+
+    // calling delete user function
+    cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
+      expect($response.Result.ErrorStr).to.eq('Success')
+    })
+
     // verify if log file is created
     cy.task('sftpListFiles', { remoteDir, configSFTP }).then(files => {
       const fileName = files.map(file => file.name)
@@ -90,21 +97,19 @@ describe('Login > {existing server} > events > create new event', () => {
       expect(p).to.include(customText)
       cy.task('endSFTPConnection')
     })
-  })
-
-  afterEach('deleting file,event and user', () => {
     // deleting the file
     cy.task('sftpDeleteFile', { newRemoteDir: customFilePath, configSFTP }).then(p => {
       expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${customFilePath}"`)
       cy.task('endSFTPConnection')
     })
+  })
 
+  afterEach('deleting event and user', () => {
     // deleting the event
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    cy.deleteEvent(eventName, true)
+    cy.deleteEvent(eventName, home)
 
-    // calling delete user function
-    cy.deleteUserApiRequest(secondUserDetails.bearerToken, secondUserDetails.serverName, secondUserDetails.username).then(($response) => {
+    cy.deleteUserApiRequest(createUserDetails.bearerToken, logFileUserDetails.serverName, logFileUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
       expect($response.Result.ErrorStr).to.eq('Success')
     })

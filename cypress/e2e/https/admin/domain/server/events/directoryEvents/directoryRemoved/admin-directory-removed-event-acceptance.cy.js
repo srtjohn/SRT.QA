@@ -35,7 +35,7 @@ describe('Login > {existing server} > events > create new event', () => {
   const remoteDir = '/'
   const newDirName = 'Sub'
   const newDir = `/${newDirName}`
-  const actionType = 'Write to custom log or file'
+  const actionType = label.writeToFile
   const eventName = `directory_removed_event${Cypress.dayjs().format('ssmmhhMMYY')}`
   const eventDescription = 'this event is used to write to a file when a directory is removed'
   const customFileName = 'log.txt'
@@ -103,12 +103,6 @@ describe('Login > {existing server} > events > create new event', () => {
   })
 
   afterEach('deleting event and user', () => {
-    // deleting the file
-    cy.task('sftpDeleteFile', { newRemoteDir: customFilePath, configSFTP }).then(p => {
-      expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${customFilePath}"`)
-      cy.task('endSFTPConnection')
-    })
-
     // deleting the event
     cy.deleteEvent(eventName)
 

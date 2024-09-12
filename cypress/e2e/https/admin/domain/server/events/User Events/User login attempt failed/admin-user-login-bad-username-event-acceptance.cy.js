@@ -2,13 +2,13 @@ import label from '../../../../../../../../fixtures/label.json'
 
 /**
  * @description
- * This spec file contains test to verify that admin can create an event when directory contents are listed, custom file with custom text is also created
+ * This spec file contains test to verify that admin can create an event when user tries bad username, custom file with custom text is also created
  *
  * @breadcrumb
  * Login > {existing server} > events > create new event
  *
  * @assertions
- * To verify that admin can create an event when directory contents are listed
+ * To verify that admin can create an event when user tries bad username
  *
  *  @prerequisites
  * Pre-Requisite data:
@@ -22,7 +22,7 @@ describe('Login > {existing server} > events > create new event', () => {
     password: adminData.adminPassword
   }
   const createUserDetails = {
-    username: `qa-auto-directory-contents-listed-event-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+    username: `qa-auto-bad-username-event-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: '123456',
     serverName: label.autoServerName
   }
@@ -32,18 +32,14 @@ describe('Login > {existing server} > events > create new event', () => {
     username: createUserDetails.username,
     password: createUserDetails.password
   }
+  const wrongUsername = `qa-auto-bad-username-event-use-${Cypress.dayjs().format('ssmmhhMMYY')}`
   const remoteDir = '/'
-  const newDirName = 'Sub'
-  const newDir = `/${newDirName}`
-  const localPath = '../fixtures/local.txt'
-  const remoteDirFileName = 'file.txt'
-  const remoteDirFile = `${newDir}/${remoteDirFileName}`
   const actionType = label.writeToFile
-  const eventName = `directory_contents_listed_event${Cypress.dayjs().format('ssmmhhMMYY')}`
-  const eventDescription = 'this event is used to write to a file when a directory is listed'
+  const eventName = `user_bad_username_login_fail_event${Cypress.dayjs().format('ssmmhhMMYY')}`
+  const eventDescription = 'this event is used to write to a file when a user tries to login with bad username'
   const customFileName = 'log.txt'
-  const customFilePath = `./${customFileName}`
-  const customText = `this file ${customFileName} was created when contents of ${newDir} was listed`
+  const customFilePath = './log.txt'
+  const customText = `this file ${customFileName} was created when ${createUserDetails.username} tried to log in with bad username`
 
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
@@ -55,41 +51,30 @@ describe('Login > {existing server} > events > create new event', () => {
       homeDir = $response.Response.General.HomeDir
     })
 
-    cy.task('sftpCreateDirectory', { remoteDir: newDir, configSFTP }).then(p => {
-      expect(`${JSON.stringify(p)}`).to.equal(`"${newDir} directory created"`)
-      cy.task('endSFTPConnection')
-    })
-
-    cy.task('sftpUploadFile', { localPath, remoteDirFile, configSFTP }).then(p => {
-      expect(`${JSON.stringify(p)}`).to.equal(`"Uploaded data stream to ${remoteDirFile}"`)
-      cy.task('endSFTPConnection')
-    })
-
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
   })
 
-  it('creating new event for directory contents listed', () => {
+  it('creating new event when user login with bad username', () => {
     const filePath = `${homeDir}\\${customFileName}`
     // adding event
-    cy.createEvent(label.directoryEvents, label.directoryContentsListed, label.directoryListedSuccess)
+    cy.createEvent(label.userEvents, label.userLoginAttemptFailed, label.badUsername)
 
     // adding action
     cy.createAction(actionType, customText, filePath, eventName, eventDescription)
 
-    // verify directory is present
-    cy.task('sftpListDirs', { remoteDir, configSFTP }).then(p => {
-      const dirName = p.map(dir => dir.name)
-      expect(dirName).to.include(newDirName)
-      cy.task('endSFTPConnection')
-    })
-
-    // verify file upload in new directory
-    cy.task('sftpListFiles', { remoteDir: newDir, configSFTP }).then(files => {
+    // verify if log file is created
+    cy.task('sftpListFiles', { remoteDir, configSFTP }).then(files => {
       const fileName = files.map(file => file.name)
-      expect(fileName).to.include(remoteDirFileName)
+      expect(fileName).to.not.include(customFileName)
       cy.task('endSFTPConnection')
     })
 
+    cy.postUserLoginApiRequest({
+      username: wrongUsername,
+      password: createUserDetails.password
+    }).then(($response) => {
+      expect($response.auth.ErrorStr).to.eq('Invalid username or password.')
+    })
     // verify if log file is created
     cy.task('sftpListFiles', { remoteDir, configSFTP }).then(files => {
       const fileName = files.map(file => file.name)
@@ -102,9 +87,14 @@ describe('Login > {existing server} > events > create new event', () => {
       expect(p).to.include(customText)
       cy.task('endSFTPConnection')
     })
+    // deleting the file
+    cy.task('sftpDeleteFile', { newRemoteDir: customFilePath, configSFTP }).then(p => {
+      expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${customFilePath}"`)
+      cy.task('endSFTPConnection')
+    })
   })
 
-  afterEach('deleting file,directory,event and user', () => {
+  afterEach('deleting event and user', () => {
     // deleting the event
     cy.deleteEvent(eventName)
 

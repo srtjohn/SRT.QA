@@ -33,7 +33,7 @@ describe.skip('Login > {existing server} > events > create new event', () => {
     password: createUserDetails.password
   }
   const remoteDir = '/'
-  const actionType = 'Write to custom log or file'
+  const actionType = label.writeToFile
   const eventName = `server_startup_event${Cypress.dayjs().format('ssmmhhMMYY')}`
   const eventDescription = 'this event is used to write to a file when a server startup is successful'
   const customFileName = 'log.txt'

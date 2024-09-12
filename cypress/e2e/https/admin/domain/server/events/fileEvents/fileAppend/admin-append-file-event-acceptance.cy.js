@@ -35,7 +35,7 @@ describe('Login > {existing server} > events > create new event', () => {
   const remoteDir = '/'
   const localPath = '../fixtures/local.txt'
   const remoteDirFile = './file2.txt'
-  const actionType = 'Write to custom log or file'
+  const actionType = label.writeToFile
   const eventName = `file_append_event${Cypress.dayjs().format('ssmmhhMMYY')}`
   const eventDescription = 'this event is used to write to a file when a file append happens'
   const customFileName = 'log.txt'
@@ -95,12 +95,6 @@ describe('Login > {existing server} > events > create new event', () => {
   })
 
   afterEach('deleting file, event and user', () => {
-    // deleting the file
-    cy.task('sftpDeleteFile', { newRemoteDir: customFilePath, configSFTP }).then(p => {
-      expect(`${JSON.stringify(p)}`).to.equal(`"Successfully deleted ${customFilePath}"`)
-      cy.task('endSFTPConnection')
-    })
-
     // deleting the event
     cy.deleteEvent(eventName)
 

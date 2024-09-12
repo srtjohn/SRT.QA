@@ -29,13 +29,13 @@ describe('Login > {existing server} > events > create new event', () => {
   const configSFTP = {
     host: 'beta.southrivertech.com',
     port: '2200',
-    username: `qa-auto-file-delete-event-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
-    password: '123456'
+    username: createUserDetails.username,
+    password: createUserDetails.password
   }
   const remoteDir = '/'
   const localPath = '../fixtures/local.txt'
   const remoteDirFile = './file2.txt'
-  const actionType = 'Write to custom log or file'
+  const actionType = label.writeToFile
   const eventName = `file_delete_event${Cypress.dayjs().format('ssmmhhMMYY')}`
   const eventDescription = 'this event is used to write to a file when a file delete happens'
   const customFileName = 'log.txt'
