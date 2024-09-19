@@ -15,5 +15,13 @@
     "fileLogText": "#Message",
     "filePath":"#FilePath",
     "eventName": "#Name",
-    "eventDescription":"#Desc"
+    "eventDescription":"#Desc",
+    "tabWrapper":".MuiTab-wrapper",
+    "muiSelect":".MuiSelect-root",
+    "dateChange" : "[aria-label='change date']",
+    "dateContainer":".MuiPickersBasePicker-container",
+    "muiToolbar":".MuiToolbar-root",
+    "yearPicker":".MuiPickersYear-root",
+    "datePicker":".MuiPickersBasePicker-pickerView",
+    "calenderWeek":".MuiPickersCalendar-week"
 }

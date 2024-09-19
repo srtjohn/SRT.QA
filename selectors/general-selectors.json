@@ -12,5 +12,6 @@
     "roleListBox":"[role='listbox']",
     "idText":"[id='Text']",
     "roleMenu":"[role='menu']",
-    "typeText":"input[type='text']"
+    "typeText":"input[type='text']",
+    "labelRoot":".MuiFormLabel-root"
 }
