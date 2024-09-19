@@ -55,6 +55,11 @@ describe('Login > {existing server} > create new user > create virtual directory
     // creating a new user
     cy.createUser(userDetails)
     cy.get(userSelectors.successMessage).should('be.visible')
+    cy.get(htmlTagSelectors.div).then(resp => {
+      if (!resp.text().includes(userDetails.userName)) {
+        cy.get(dashboardSelectors.usersPage).eq(1).scrollTo('bottom')
+      }
+    })
     cy.get(userSelectors.parentCell).contains(userDetails.userName).scrollIntoView().should('be.visible')
   })
 

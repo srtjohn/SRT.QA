@@ -1,5 +1,7 @@
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
+import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
+import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
 import label from '../../../../../../fixtures/label.json'
 import { slowCypressDown } from 'cypress-slow-down'
 
@@ -49,6 +51,11 @@ describe('Login > {existing server} > users > add new user', () => {
   it('verify that admin can create a user without assigning a group', () => {
     cy.createUser(userDetails)
     cy.get(userSelectors.successMessage).should('be.visible')
+    cy.get(htmlTagSelectors.div).then(resp => {
+      if (!resp.text().includes(userDetails.userName)) {
+        cy.get(dashboardSelectors.usersPage).eq(1).scrollTo('bottom')
+      }
+    })
     cy.get(userSelectors.parentCell).contains(userDetails.userName).scrollIntoView().should('be.visible')
   })
 
