@@ -32,20 +32,20 @@ describe('login', () => {
     password: adminData.adminPassword
   }
   const createUserDetails = {
-    username: `qtest${Cypress.dayjs().format('ssmmhhMMYY')}`,
+    username: `qa-auto-user${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: 'testing123',
     serverName: label.autoServerName
   }
 
   const year = Math.floor(Math.random() * (2024 - 2000 + 1)) + 2000
   const day = Math.floor(Math.random() * (30 - 1 + 1)) + 1
-
-  const date = `12/${day.toString().padStart(2, '0')}/${year}`
+  const monthNum = Math.floor(Math.random() * (9 - 1 + 1)) + 1
+  const date = `${monthNum.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`
 
   function navigateToAdvancedTab () {
     cy.get(htmlSelectors.div).then(resp => {
       if (!resp.text().includes(createUserDetails.username)) {
-        cy.get('[role="grid"]').eq(1).scrollTo('bottom')
+        cy.get(dashboardSelectors.usersPage).eq(1).scrollTo('bottom')
       }
     })
     cy.contains(htmlSelectors.div, createUserDetails.username).scrollIntoView().parents()
@@ -91,6 +91,7 @@ describe('login', () => {
     cy.get(generalSelectors.labelRoot).contains(label.interval).next().click()
     cy.get(dashboardSelectors.dashBoardList).contains(label.date).click()
 
+    cy.get(dashboardSelectors.dateChange).parent().prev().clear().type(monthNum)
     cy.get(dashboardSelectors.dateChange).click()
     // select date
     cy.get(dashboardSelectors.dateContainer).within(() => {

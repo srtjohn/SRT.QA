@@ -6,6 +6,7 @@
     "profileIcon" : "[aria-label='account of current user']",
     "productInfoColName" :"[role='cell']",
     "homeTabs" : "[role='tab']",
+    "usersPage":"[role='grid']",
     "gridRoot" : ".MuiGrid-root",
     "dialog" : "[role='dialog']",
     "fabLabel" : ".MuiFab-label",

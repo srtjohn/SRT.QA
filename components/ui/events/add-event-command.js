@@ -29,7 +29,7 @@ Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false) =>
   })
   // navigate to events
   cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-  cy.waitForNetworkIdle(1000, { log: false })
+  cy.waitForNetworkIdle(3000, { log: false })
   cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
   cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
   cy.waitForNetworkIdle(1000, { log: false })
