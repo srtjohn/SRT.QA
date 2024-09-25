@@ -14,7 +14,7 @@ import userDirSelectors from '../../../../selectors/user-dir-selectors.json'
  * User Login > check permissions
  *
  * @assertions
- * To verify that allowed permissions of a virtual directory are working or not
+ * To verify that options for a virtual directory are not visible
  *
  *  @prerequisites
  * Pre-Requisite data:

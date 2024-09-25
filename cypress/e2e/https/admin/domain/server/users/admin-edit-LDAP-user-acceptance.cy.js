@@ -14,7 +14,7 @@ import { slowCypressDown } from 'cypress-slow-down'
  * Login > {existing server} > users
  *
  * @assertions
- * To verify that ADSI users can be edited successfully
+ * To verify that LDAP users can be edited successfully
  *
  * @prerequisites
  * Pre-Requisite data:

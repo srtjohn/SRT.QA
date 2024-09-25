@@ -3,7 +3,7 @@
  * This spec file contains test to ensure admin can get list of cloud folders at server through API
  *
  * @assertions
- * To verify that admin can get list of cloud folders through API
+ * To verify that admin can create a server report through API
  *
  *  @prerequisites
  * valid user credentials

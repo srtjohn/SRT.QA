@@ -8,7 +8,7 @@ import label from '../../../../../../../fixtures/label.json'
  * Login > {existing server} > events > create new event
  *
  * @assertions
- * To verify that admin can create an event when user uploads a file
+ * To verify that admin can create an event when user login successful
  *
  *  @prerequisites
  * Pre-Requisite data:

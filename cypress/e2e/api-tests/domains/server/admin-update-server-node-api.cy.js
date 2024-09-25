@@ -5,7 +5,7 @@ import label from '../../../../fixtures/label.json'
  * This spec file contains test to ensure admin can update a server node name through API
  *
  * @assertions
- * To verify that admin can get update a server node name through API
+ * To verify that admin can update a server node name through API
  *
  *  @prerequisites
  * valid user credentials

@@ -3,7 +3,7 @@
  * This spec file contains test to ensure admin can create a server event through API
  *
  * @assertions
- * To verify that admin can get list of directory access through API
+ * To verify that admin can get list of server events through API
  *
  *  @prerequisites
  * valid user credentials

@@ -3,7 +3,7 @@
  * This spec file contains test to ensure admin can get server events condition meta through API
  *
  * @assertions
- * To verify that admin can get server events condition tree through API
+ * To verify that admin can get server events condition meta through API
  *
  *  @prerequisites
  * valid user credentials

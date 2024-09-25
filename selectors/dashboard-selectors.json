@@ -24,5 +24,6 @@
     "muiToolbar":".MuiToolbar-root",
     "yearPicker":".MuiPickersYear-root",
     "datePicker":".MuiPickersBasePicker-pickerView",
-    "calenderWeek":".MuiPickersCalendar-week"
+    "calenderWeek":".MuiPickersCalendar-week",
+    "search":"[placeholder='Filter...']"
 }

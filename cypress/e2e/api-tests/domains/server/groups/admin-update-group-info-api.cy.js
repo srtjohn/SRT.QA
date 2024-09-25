@@ -4,7 +4,7 @@ import label from '../../../../../fixtures/label.json'
  * This spec file contains test to verify if new group exists in group list through Api
  *
  * @assertions
- * To verify that admin can get group list through API
+ * To verify that admin can update group through API
  *
  *  @prerequisites
  * valid user credentials
