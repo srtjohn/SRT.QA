@@ -4,6 +4,8 @@ import label from '../../../../../fixtures/label.json'
  * @description
  * This spec file contains test to ensure admin cannot create a user with whitespace in username through API
  *
+ * @issueID - NX-I1287
+ *
  * @assertions
  * To verify that admin cannot create a user with a space in username through API
  * To verify that admin cannot create a user with an empty username through API

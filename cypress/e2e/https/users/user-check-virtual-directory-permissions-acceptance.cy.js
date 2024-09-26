@@ -7,6 +7,8 @@ import userDirSelectors from '../../../../selectors/user-dir-selectors.json'
  * @description
  * This spec file contains test to verify that virtual directory root folder permissions are not visible
  *
+ * @IssueID - NX-I1305
+ *
  * @file
  * cypress/e2e/admin/server/users/admin-check-virtual-directory-permissions-acceptance.cy.js
  *
