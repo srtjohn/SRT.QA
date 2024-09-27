@@ -187,5 +187,10 @@
   "userLoginAttemptFailed":"User login attempt failed",
   "userAccountCreated":"User Account Created",
   "userEvents":"User events",
-  "NTSAM":"NTSAM"
+  "NTSAM":"NTSAM",
+  "beforeUpload":"Before upload/write",
+  "beforeRename":"Before rename",
+  "beforeDownload":"Before download/read",
+  "beforeDelete":"Before delete",
+  "beforeAppend":"Before append"
 }
