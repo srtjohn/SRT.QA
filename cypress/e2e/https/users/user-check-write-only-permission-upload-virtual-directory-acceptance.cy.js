@@ -33,8 +33,8 @@ describe('login', () => {
   const virtualDirectoryDetails = {
     ActualPath: 'C://customefolder//dkjbfvdfkg',
     Path: `qa-auto-virtual-directory-${Cypress.dayjs().format('ssmmhhMMYY')}`,
-    AllowAce: 'RW-DNMVLIGSXU',
-    DenyAce: '--A----------'
+    AllowAce: '-W-D---LI----',
+    DenyAce: '--A--------XU'
   }
   const configSFTP = {
     host: 'beta.southrivertech.com',
