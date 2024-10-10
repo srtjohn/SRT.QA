@@ -192,5 +192,6 @@
   "beforeRename":"Before rename",
   "beforeDownload":"Before download/read",
   "beforeDelete":"Before delete",
-  "beforeAppend":"Before append"
+  "beforeAppend":"Before append",
+  "ipAccessBans":"IP Access Bans"
 }

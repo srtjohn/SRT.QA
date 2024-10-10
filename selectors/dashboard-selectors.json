@@ -5,6 +5,7 @@
     "dashBoardList" : ".MuiButtonBase-root",
     "profileIcon" : "[aria-label='account of current user']",
     "productInfoColName" :"[role='cell']",
+    "rowGroup" :"[role='rowgroup']",
     "homeTabs" : "[role='tab']",
     "usersPage":"[role='grid']",
     "gridRoot" : ".MuiGrid-root",
@@ -25,5 +26,6 @@
     "yearPicker":".MuiPickersYear-root",
     "datePicker":".MuiPickersBasePicker-pickerView",
     "calenderWeek":".MuiPickersCalendar-week",
-    "search":"[placeholder='Filter...']"
+    "search":"[placeholder='Filter...']",
+    "ipAccessInput":"[id='IP Address']"
 }
