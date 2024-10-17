@@ -5,7 +5,7 @@ import label from '../../../../fixtures/label.json'
  * This spec file contains test to ensure admin can create a server node through API
  *
  * @assertions
- * To verify that admin can get create a server node through API
+ * To verify that admin can get a server node through API
  *
  *  @prerequisites
  * valid user credentials

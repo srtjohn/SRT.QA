@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - fileEvent
   schedule:
     - cron: '30 14 * * *'  # 2:30 PM EST
 jobs:

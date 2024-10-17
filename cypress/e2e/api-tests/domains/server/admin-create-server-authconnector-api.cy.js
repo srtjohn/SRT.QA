@@ -4,7 +4,7 @@ import label from '../../../../fixtures/label.json'
  * This spec file contains test to ensure admin can create a server auth connector through api
  *
  * @assertions
- * To verify that admin can create server through API
+ * To verify that admin can create server auth connector through API
  *
  *  @prerequisites
  * valid user credentials

@@ -4,7 +4,7 @@ import label from '../../../../fixtures/label.json'
  * This spec file contains test to update virtual directory information
  *
  * @assertions
- * To verify that admin can update virtual directory details
+ * To verify that admin can update server level virtual directory
  *
  *  @prerequisites
  * valid user credentials

@@ -17,6 +17,7 @@ const { verifyDownloadTasks } = require('cy-verify-downloads')
 const { downloadFile } = require('cypress-downloadfile/lib/addPlugin')
 // const { verifyDownloadTasks } = require('cy-verify-downloads')
 const Client = require('ssh2-sftp-client')
+const iconv = require('iconv-lite')
 const sftp = new Client()
 const fs = require('fs')
 const path = require('path')
@@ -71,11 +72,13 @@ module.exports = async (on, config) => {
         .then(() => sftp.exists(opts.remoteDir))
         .then((exists) => {
           if (exists) {
-            return 'directory exists' // Add this
+            return 'directory exists'
           }
           return sftp.mkdir(opts.remoteDir, true).then(() => `${opts.remoteDir} directory created`)
         })
-        .finally(() => sftp.end())
+        .catch((error) => {
+          return error.message
+        })
     }
     // ... other tasks ...
   })
@@ -104,11 +107,14 @@ module.exports = async (on, config) => {
       return sftp.connect(opts.configSFTP)
         .then(() => {
           return sftp.put(opts.localPath, opts.remoteDirFile, true)
-          //return sftp.fastPut(opts.localPath, opts.remoteDirFile, 
+          // return sftp.fastPut(opts.localPath, opts.remoteDirFile,
           //      {
           //        concurrency: 16, // integer. Number of concurrent reads
           //        chunkSize: 256000, // integer. Size of each read in bytes
           //      })
+        })
+        .catch((error) => {
+          return error.message
         })
     }
   })
@@ -127,6 +133,9 @@ module.exports = async (on, config) => {
         .then(() => {
           return sftp.fastGet(opts.newRemoteDir, opts.localPathForDownload, true)
         })
+        .catch((error) => {
+          return error.message
+        })
     }
   })
 
@@ -136,6 +145,9 @@ module.exports = async (on, config) => {
       return sftp.connect(opts.configSFTP)
         .then(() => {
           return sftp.rename(opts.remoteDirFile, opts.newRemoteDir)
+        })
+        .catch((error) => {
+          return error.message
         })
     }
   })
@@ -192,6 +204,9 @@ module.exports = async (on, config) => {
         .then(() => {
           return sftp.delete(opts.newRemoteDir)
         })
+        .catch((error) => {
+          return error.message
+        })
     }
   })
 
@@ -212,6 +227,34 @@ module.exports = async (on, config) => {
         .then(() => {
           return sftp.chmod(opts.remoteFile, '0o644')
         })
+    }
+  })
+  // sftp connection task which lists file on server using list command
+  on('task', {
+    sftpListFiles (opts) {
+      return sftp.connect(opts.configSFTP)
+        .then(() => sftp.list(opts.remoteDir))
+        .then(list => list.filter(item => item.type === '-'))
+        .finally(() => sftp.end())
+    }
+  })
+  // sftp connection task which reads file on server using get command
+  on('task', {
+    sftpReadFile (opts) {
+      return sftp.connect(opts.configSFTP)
+        .then(() => sftp.get(opts.remoteDirFile))
+        .then(fileContent => iconv.decode(fileContent, 'utf16le'))
+        .finally(() => sftp.end())
+    }
+  })
+  // sftp connection task which lists directories on server using list command
+  on('task', {
+    sftpListDirs (opts) {
+      const sftp = new Client()
+      return sftp.connect(opts.configSFTP)
+        .then(() => sftp.list(opts.remoteDir))
+        .then(items => items.filter(item => item.type === 'd'))
+        .finally(() => sftp.end())
     }
   })
 }

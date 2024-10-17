@@ -3,7 +3,7 @@
  * This spec file contains test to update server events through API
  *
  * @assertions
- * To verify that admin can get list of directory access through API
+ * To verify that admin can update server event handler through API
  *
  *  @prerequisites
  * valid user credentials

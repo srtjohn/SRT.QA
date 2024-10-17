@@ -5,7 +5,7 @@ import label from '../../../../fixtures/label.json'
  * This spec file contains test to ensure admin can get list of servers through API
  *
  * @assertions
- * To verify that admin can get the list of servers through API
+ * To verify that admin can get the list of server node through API
  *
  *  @prerequisites
  * valid user credentials
