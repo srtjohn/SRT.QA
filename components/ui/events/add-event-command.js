@@ -23,15 +23,17 @@ import navigationSelectors from '../../../selectors/navigation/left-navigation-s
  * cy.createEvent(eventType, subEvent, finalEvent)
  */
 
-Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false) => {
+Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false, home = false) => {
   Cypress.log({
     name: 'createEventCommand'
   })
   // navigate to events
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-  cy.waitForNetworkIdle(1000, { log: false })
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
-  cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
+  if (!home) {
+    cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
+    cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
+  }
   cy.waitForNetworkIdle(1000, { log: false })
   cy.get(userSelectors.addButton).should('be.visible').click()
   cy.get(userSelectors.btnLabel).contains(label.addEvent).click()
