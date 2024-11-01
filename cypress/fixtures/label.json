@@ -193,5 +193,7 @@
   "beforeDownload":"Before download/read",
   "beforeDelete":"Before delete",
   "beforeAppend":"Before append",
-  "ipAccessBans":"IP Access Bans"
+  "ipAccessBans":"IP Access Bans",
+  "primaryGroup":"Primary Group",
+  "inheritFromGroup":"Inherit home directory from group"
 }
