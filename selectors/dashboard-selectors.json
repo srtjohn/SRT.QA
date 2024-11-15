@@ -27,5 +27,6 @@
     "datePicker":".MuiPickersBasePicker-pickerView",
     "calenderWeek":".MuiPickersCalendar-week",
     "search":"[placeholder='Filter...']",
+    "permissionsTable": "[aria-label='permissions table']",
     "ipAccessInput":"[id='IP Address']"
 }
