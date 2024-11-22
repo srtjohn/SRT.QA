@@ -188,6 +188,7 @@
   "userAccountCreated":"User Account Created",
   "userEvents":"User events",
   "NTSAM":"NTSAM",
+  "quitMessage":"QuitMsg",
   "beforeUpload":"Before upload/write",
   "beforeRename":"Before rename",
   "beforeDownload":"Before download/read",

@@ -78,7 +78,7 @@ describe('create new user', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(createUserDetails.bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(label.quitMessage)
     })
   })
 })

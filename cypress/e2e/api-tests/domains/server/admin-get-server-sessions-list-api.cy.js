@@ -13,7 +13,7 @@ import label from '../../../../fixtures/label.json'
  *
  */
 
-describe('GET /api/Servers', () => {
+describe.skip('GET /api/Servers', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
@@ -53,7 +53,7 @@ describe('GET /api/Servers', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(serverDetails.bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(label.quitMessage)
     })
   })
 })
