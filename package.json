@@ -11,7 +11,7 @@
     "linter": "eslint ./ --fix",
     "linter:ci": "eslint ./"
   },
-  "author": "",
+  "author": " ",
   "license": "ISC",
   "devDependencies": {
     "cy-verify-downloads": "^0.2.0",
