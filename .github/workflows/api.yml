@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - blazerMaster
   schedule:
     - cron: '0 13 * * *'  # 1PM EST
 jobs:

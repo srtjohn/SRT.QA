@@ -13,5 +13,8 @@
     "idText":"[id='Text']",
     "roleMenu":"[role='menu']",
     "typeText":"input[type='text']",
-    "labelRoot":".MuiFormLabel-root"
+    "labelRoot":".MuiFormLabel-root",
+    "button":".dxbl-btn",
+    "textSelector":".dxbl-text",
+    "modalSelector":".dxbl-modal-body"
 }

@@ -18,7 +18,7 @@
 import 'cypress-network-idle'
 import 'cypress-file-upload'
 import 'cypress-wait-until'
-
+import 'cypress-real-events'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 

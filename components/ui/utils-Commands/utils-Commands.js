@@ -72,5 +72,5 @@ Cypress.Commands.add('delete', (inputName) => {
 */
 
 Cypress.Commands.add('selectLanguage', (language) => {
-  cy.get(dashboardSelectors.languageList).contains(language).click()
+  cy.get(dashboardSelectors.languageDropdown).contains(language).click()
 })

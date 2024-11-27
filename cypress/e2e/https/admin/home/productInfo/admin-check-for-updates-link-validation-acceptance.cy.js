@@ -1,6 +1,7 @@
 import label from '../../../../../fixtures/label.json'
 import dashboardSelectors from '../../../../../../selectors/dashboard-selectors.json'
 import navigationSelectors from '../../../../../../selectors/navigation/left-navigation-selectors.json'
+import htmlSelectors from '../../../../../../selectors/htlm-tag-selectors.json'
 
 /**
  * @description
@@ -33,9 +34,12 @@ describe('Login > home > product info tab > check for updates', () => {
 
   it('verify link validation for check for updates', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.home).click()
+    cy.waitForNetworkIdle(1000, { log: false })
     cy.get(dashboardSelectors.homeTabs).contains(label.productInfo).click()
-    cy.get(dashboardSelectors.fabLabel).eq(0).click()
-    cy.get(dashboardSelectors.muiTypography).contains(label.RelaseNotes).should('have.attr', 'href').and('eq', label.ReleaseNotesURL)
-    cy.get(dashboardSelectors.muiTypography).contains(label.download).should('have.attr', 'href').and('eq', label.downloadURL)
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(htmlSelectors.tableBody).eq(2).within(() => {
+      cy.get(htmlSelectors.tableData).eq(4).contains(label.download).should('have.attr', 'href').and('eq', label.ReleaseNotesURL)
+      cy.get(htmlSelectors.tableData).eq(5).contains(label.download).should('have.attr', 'href').and('eq', label.downloadURL)
+    })
   })
 })

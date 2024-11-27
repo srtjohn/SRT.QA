@@ -1,3 +1,4 @@
 {
-    "textLabelSelector": "p.MuiTypography-root"
+    "textLabelSelector": ".dxbl-text",
+    "navbarTextSelector":".dxbl-treeview-item-text"
 }
