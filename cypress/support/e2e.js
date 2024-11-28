@@ -58,6 +58,7 @@ import '../../components/apis/requests/servers/admin-get-server-variables-api-re
 
 /** ipBans */
 import '../../components/apis/requests/ipBans/admin-get-server-ipBan-list-api-request'
+import '../../components/apis/requests/ipBans/admin-update-ipBan-list-api-request'
 
 /** licenses */
 import '../../components/apis/requests/Licenses/admin-get-licenses-api-request'
@@ -75,6 +76,8 @@ import '../../components/apis/requests/groups/admin-get-filtered-group-info-api-
 import '../../components/apis/requests/domain/admin-get-domain-info-api-request'
 import '../../components/apis/requests/domain/admin-get-domain-list-api-request'
 import '../../components/apis/requests/domain/admin-get-domain-settings-api-request'
+import '../../components/apis/requests/domain/admin-get-domain-filtered-settings-api-request'
+import '../../components/apis/requests/domain/admin-get-domain-ip-address-list-api-request'
 
 /** sessions */
 import '../../components/apis/requests/sessions/admin-get-server-sessions-list-api-request'

@@ -18,5 +18,9 @@
     "homeDirInputField" : "[id='Custom Home Directory']",
     "btnLabel" : ".MuiButton-label",
     "roleBtn" : "[role='button']",
-    "dataValue2" : "[data-value='2']"
+    "dataValue2" : "[data-value='2']",
+    "usernameField" : "#User\\ Full\\ Name",
+    "userInfoDialog" : "[aria-labelledby='User-dialog-title']",
+    "selectGroupOptionsDialog" : ".MuiStep-root"
+    
 }
