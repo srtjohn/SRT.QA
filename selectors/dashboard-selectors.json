@@ -31,5 +31,6 @@
     "calenderWeek":".MuiPickersCalendar-week",
     "search":"[placeholder='Filter...']",
     "permissionsTable": "[aria-label='permissions table']",
+    "rowSelect":".dxbl-row",
     "ipAccessInput":"[id='IP Address']"
 }
