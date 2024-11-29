@@ -44,7 +44,7 @@ describe('Login > Add New > Server > Database > Server Info', () => {
 
   it('verify that server information is removed when user navigates back from services to database during server creation', () => {
     cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
-    cy.waitForNetworkIdle(2000, { log: false })
+    cy.waitForNetworkIdle(2500, { log: false })
     cy.get(serverSelectors.titleAddNew).click()
 
     cy.get(generalSelectors.button).contains(label.next).realClick()

@@ -19,7 +19,7 @@
     "serverDeleteButton": "button[title='Delete Server']",
     "serverPageHeading": ".dxbl-group-header",
     "parent" : ".MuiTableCell-root",
-    "listbox":"dxbl-scroll-viewer-content",
+    "listbox":".dxbl-scroll-viewer-content",
     "serverNameReqMessage" : ".validation-message",
     "titleAddNew":"[title='Add New']",
     "serverDataDirReqMessage" : "[id='Data Directory-helper-text']",

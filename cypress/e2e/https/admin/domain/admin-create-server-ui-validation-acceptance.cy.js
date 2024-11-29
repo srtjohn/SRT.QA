@@ -37,7 +37,7 @@ describe('login > add new server ', () => {
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
     cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
     cy.waitForNetworkIdle(2000, { log: false })
-    cy.get(serverSelectors.titleAddNew).click()
+    cy.get(serverSelectors.titleAddNew).first().click()
     cy.get(generalSelectors.button).contains(label.next).realClick()
     cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
     cy.get(generalSelectors.button).contains(label.next).realClick()

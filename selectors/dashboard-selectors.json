@@ -7,6 +7,7 @@
     "productInfoColName" :"[role='cell']",
     "rowGroup" :"[role='rowgroup']",
     "dashboardButton":".dxbl-btn",
+    "addNew":"[title='Add New']",
     "homeTabs" : "[role='tab']",
     "usersPage":"[role='grid']",
     "gridRoot" : ".MuiGrid-root",
@@ -32,5 +33,6 @@
     "search":"[placeholder='Filter...']",
     "permissionsTable": "[aria-label='permissions table']",
     "rowSelect":".dxbl-row",
-    "ipAccessInput":"[id='IP Address']"
+    "ipAccessInput":"[id='IP Address']",
+    "messageBox":".dxbl-v-resize"
 }

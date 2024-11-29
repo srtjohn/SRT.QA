@@ -20,19 +20,18 @@ import htmlTagSelectors from '../../../../../selectors/htlm-tag-selectors.json'
  * - user should have valid credentials
  */
 
-// skip due to an existing bug NX-I1134
 describe('Login > Add New > Server > Database > Server Info > > FTPS Configuration', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
     password: adminData.adminPassword
   }
-  const serverName = `qa-auto server ${Cypress.dayjs().format('ssmmhhMMYY')}`
+  let serverName = `qa-auto server ${Cypress.dayjs().format('ssmmhhMMYY')}`
 
   function checkBoxSelector (optionText) {
     cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
     cy.waitForNetworkIdle(1000, { log: false })
-    cy.get(serverSelectors.titleAddNew).click()
+    cy.get(serverSelectors.titleAddNew).first().click()
 
     cy.get(generalSelectors.button).contains(label.next).realClick()
     cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
@@ -66,6 +65,7 @@ describe('Login > Add New > Server > Database > Server Info > > FTPS Configurati
 
   it('verify that admin user can Enable Explicit SSL/TLS Access checkboxes on (Setup FTPS Access for this Server) page after disabling it', () => {
     checkBoxSelector(label.enableExSSLTLSAccess)
+    serverName = `qa-auto-server-${Cypress.dayjs().format('ssmmhhMMYY')}`
   })
 
   it('verify that admin user can Enable Implicit SSL/TLS Access checkboxes on (Setup FTPS Access for this Server) page after disabling it', () => {

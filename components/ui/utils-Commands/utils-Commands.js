@@ -1,6 +1,5 @@
 import userSelectors from '../../../selectors/user/user-selectors.json'
 import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
-import serverSelectors from '../../../selectors/server-selectors.json'
 import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
 
 /**
@@ -32,7 +31,7 @@ Cypress.Commands.add('enterText', (inputField, inputText) => {
  */
 
 Cypress.Commands.add('clickButton', (buttonText) => {
-  cy.get(serverSelectors.nextButtonContainer).contains(buttonText).click()
+  cy.get(dashboardSelectors.dashboardButton).contains(buttonText).click()
 })
 
 /**

@@ -77,10 +77,10 @@ Cypress.Commands.add('createServer', (serverDetails) => {
   Cypress.log({
     name: 'createServerCommand'
   })
-  cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
-  cy.waitForNetworkIdle(2000, { log: false })
+  // cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
+  // cy.waitForNetworkIdle(3000, { log: false })
 
-  cy.get(serverSelectors.titleAddNew).click()
+  cy.get(serverSelectors.titleAddNew).first().click()
   cy.get(serverSelectors.serviceCheckboxContainer).contains(serverDetails.serverType).prev().within(() => {
     cy.get(htmlTagSelectors.input).realClick()
   })

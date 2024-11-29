@@ -37,7 +37,7 @@ Cypress.Commands.add('login', (baseUrl, username, password) => {
   }
   // Visit the URL
   cy.visit(loginURL)
-  cy.waitForNetworkIdle(2000, { log: false })
+  cy.waitForNetworkIdle(3000, { log: false })
   // Find and fill in the username and password fields
   cy.get(loginSelectors.inputUsername).type(username, { scrollBehavior: false })
   cy.get(loginSelectors.inputPassword).type(password, { scrollBehavior: false })

@@ -23,6 +23,8 @@
   "adsiAuth":"ADSI Authentication",
   "newPath":"Virtual Folder Name",
   "okay"      : "Okay",
+  "hostKeyname":"Host Key Name",
+  "groupDescription":"Group Description",
   "finish"    : "Finish",
   "users"     : "Users",
   "addNew"    : "Add New",
