@@ -1,5 +1,6 @@
 import label from '../../../cypress/fixtures/label.json'
 import groupSelectors from '../../../selectors/groups/groups-selectors.json'
+import generalSelectors from '../../../selectors/general-selectors.json'
 /**
  * group creation command
  *
@@ -12,8 +13,8 @@ import groupSelectors from '../../../selectors/groups/groups-selectors.json'
  *
  * @params
  * parameters on enter group information page
- * @param {required} groupName  // A variable containing user full name
- * @param {optional} groupDescription  // A variable containing user name
+ * @param {required} groupName  // A variable containing group name
+ * @param {optional} groupDescription  // A variable containing group description
  *
  * @example
  * cy.createGroup(groupDetails)
@@ -23,10 +24,10 @@ Cypress.Commands.add('createGroup', (groupDetails) => {
   Cypress.log({
     name: 'createGroupCommand'
   })
-  cy.get(groupSelectors.parentGroup).eq(1).within(() => {
-    cy.enterText(label.groupName, groupDetails.groupName)
+  cy.get(groupSelectors.parentGroup).eq(2).within(() => {
+    cy.get(generalSelectors.textSelector).contains(label.groupName).next().type(groupDetails.groupName)
     if (groupDetails.groupDescription) {
-      cy.get(groupSelectors.groupDesc).type(groupDetails.groupDescription)
+      cy.get(generalSelectors.textSelector).contains(label.groupDescription).next().type(groupDetails.groupDescription)
     }
   })
   if (groupDetails.groupDirectoryOption) {
@@ -36,7 +37,7 @@ Cypress.Commands.add('createGroup', (groupDetails) => {
     cy.get(groupSelectors.dropDownOptions).contains(groupDetails.groupDirectoryOption).click({ force: true })
     cy.get(groupSelectors.subDir).eq(1).type(groupDetails.groupDirPath.replace(/\//g, '\\'))
   }
-  cy.get(groupSelectors.parentGroup).eq(1).within(() => {
+  cy.get(groupSelectors.parentGroup).eq(2).within(() => {
     cy.clickButton(label.next)
     cy.clickButton(label.finish)
   })

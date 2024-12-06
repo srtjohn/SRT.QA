@@ -51,7 +51,7 @@ describe('GET /api/Servers', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(label.quitMessage)
     })
   })
 })

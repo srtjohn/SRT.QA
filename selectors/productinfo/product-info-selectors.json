@@ -10,6 +10,6 @@
     "dialog" : "[role='dialog']",
     "fabLabel" : ".MuiFab-label",
     "muiTypography": ".MuiTypography-root",
-    "registrationCodeField": "[id='Registration Code']",
+    "registrationCodeField": ".dxbl-text-edit-input",
     "registrationValidationText":"[id='Registration Code-helper-text']" 
 }

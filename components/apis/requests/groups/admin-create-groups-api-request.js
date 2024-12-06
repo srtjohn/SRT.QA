@@ -19,21 +19,12 @@ Cypress.Commands.add('postCreateGroupApiRequest', (opts, serverDetails, groupDir
   Cypress.log({
     name: 'postCreateGroupApiRequest'
   })
-  const requestBody = {
-    groupName: opts.groupName
-  }
-
-  if (groupDirectory === true && opts.groupHomeDirPath) {
-    requestBody.General = {
-      GroupHomeDirEnabled: 1,
-      GroupHomeDir: opts.groupHomeDirPath
-    }
-  }
-
   cy.api({
     method: 'POST',
     url: `${Cypress.env('apiBaseUrl')}/api/servers/${serverDetails.serverName}/AuthConnectors/native/Groups`,
-    body: requestBody,
+    body: {
+      GroupName: opts.groupName
+    },
     headers: {
       Authorization: `Bearer ${opts.bearerToken}`
     }

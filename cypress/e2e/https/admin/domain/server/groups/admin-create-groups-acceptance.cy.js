@@ -1,5 +1,6 @@
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import groupSelectors from '../../../../../../../selectors/groups/groups-selectors.json'
+import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
 import label from '../../../../../../fixtures/label.json'
 import { slowCypressDown } from 'cypress-slow-down'
 /**
@@ -43,13 +44,18 @@ describe('Login > {existing server} > group', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.groups).should('be.visible').click()
-    cy.get(groupSelectors.addButton).should('be.visible').click()
+    cy.get(groupSelectors.addButton).first().should('be.visible').click()
     cy.createGroup(groupDetails)
-    cy.get(groupSelectors.parentCell).contains(groupDetails.groupName).should('be.visible')
+    cy.get(htmlSelectors.tableData).contains(groupDetails.groupName).should('be.visible')
   })
 
   afterEach('Verify user can delete a group', () => {
-    cy.delete(groupDetails.groupName)
-    cy.get(groupSelectors.parentCell).contains(groupDetails.groupName).should('not.exist')
+    cy.get(htmlSelectors.tableData).contains(groupDetails.groupName).next().next().within(() => {
+      cy.get(htmlSelectors.div).within(() => {
+        cy.get(groupSelectors.button).eq(1).click({ force: true })
+      })
+    })
+    cy.get(groupSelectors.button).contains(label.confirm).click()
+    cy.get(htmlSelectors.tableData).contains(groupDetails.groupName).should('not.exist')
   })
 })

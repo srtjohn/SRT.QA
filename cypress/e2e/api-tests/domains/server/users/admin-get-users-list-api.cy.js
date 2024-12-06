@@ -54,7 +54,7 @@ describe('GET /api/Servers/{serverName}/AuthConnectors/native/Users', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(listUsersData.bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(label.quitMessage)
     })
   })
 })

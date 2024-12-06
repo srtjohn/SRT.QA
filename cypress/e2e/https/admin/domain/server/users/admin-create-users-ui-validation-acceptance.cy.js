@@ -40,28 +40,28 @@ describe('Login > {existing server} > users > add new user', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
-    cy.get(userSelectors.addButton).should('be.visible').click()
+    cy.get(userSelectors.addButton).eq(0).should('be.visible').click()
   })
 
   it('Verify that Error Message is displayed when User didn\'t enter Username', () => {
     cy.enterText(label.password, userDetails.password)
     cy.enterText(label.confirmPassword, userDetails.userName)
     cy.clickButton(label.next)
-    cy.get(userSelectors.usernameRequiredMessage).should('have.text', label.required)
+    cy.get(userSelectors.validationMessage).should('contain.text', label.userNameReq)
   })
 
   it('Verify that Error Message is displayed when User didn\'t enter Password', () => {
     cy.enterText(label.userName, userDetails.userName)
     cy.enterText(label.confirmPassword, userDetails.userName)
     cy.clickButton(label.next)
-    cy.get(userSelectors.passwordRequiredMessage).should('have.text', label.required)
+    cy.get(userSelectors.validationMessage).should('contain.text', label.passwordReq)
   })
 
   it('Verify that Error Message is displayed when User didn\'t enter Confirm Password', () => {
     cy.enterText(label.userName, userDetails.userName)
     cy.enterText(label.password, userDetails.password)
     cy.clickButton(label.next)
-    cy.get(userSelectors.confirmPasswordRequiredMessage).should('have.text', label.required)
+    cy.get(userSelectors.validationMessage).should('contain.text', label.confirmPasswordReq)
   })
 
   it('Verify that Error Message is displayed when Confirm Password doesn\'t match with Password', () => {
@@ -69,6 +69,6 @@ describe('Login > {existing server} > users > add new user', () => {
     cy.enterText(label.password, userDetails.password)
     cy.enterText(label.confirmPassword, userDetails.userName)
     cy.clickButton(label.next)
-    cy.get(userSelectors.confirmPasswordRequiredMessage).should('have.text', label.passwordsDoNotMatch)
+    cy.get(userSelectors.validationMessage).should('contain.text', label.passwordMatch)
   })
 })
