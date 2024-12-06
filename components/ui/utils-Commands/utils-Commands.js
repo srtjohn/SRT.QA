@@ -1,6 +1,6 @@
 import userSelectors from '../../../selectors/user/user-selectors.json'
-import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
 import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
+import generalSelectors from '../../../selectors/general-selectors.json'
 
 /**
  * Common Utils Commands
@@ -15,10 +15,8 @@ import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
  * cy.enterText('User Name', userDetails.userName)
  */
 
-Cypress.Commands.add('enterText', (inputField, inputText) => {
-  cy.get(userSelectors.requiredLabel).contains(inputField).parent(htmlTagSelectors.div).within(() => {
-    cy.get(htmlTagSelectors.input).type(inputText)
-  })
+Cypress.Commands.add('enterText', (label, inputText) => {
+  cy.get(generalSelectors.textSelector).contains(label).next().type(inputText)
 })
 
 /**
