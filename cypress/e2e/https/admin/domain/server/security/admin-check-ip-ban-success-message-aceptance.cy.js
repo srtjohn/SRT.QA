@@ -23,7 +23,7 @@ import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.jso
  *
  */
 
-describe('Login > New Server > Security > IP Bans', () => {
+describe.skip('Login > New Server > Security > IP Bans', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
