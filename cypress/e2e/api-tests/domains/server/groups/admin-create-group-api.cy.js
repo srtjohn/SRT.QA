@@ -20,7 +20,7 @@ describe('create new group', () => {
     serverName: `qa auto server ${Cypress.dayjs().format('ssmmhhMMYY')}`
   }
   const groupDetails = {
-    GroupName: 'TestAPIGroup'
+    groupName: 'TestAPIGroup'
   }
 
   beforeEach('login through api', () => {

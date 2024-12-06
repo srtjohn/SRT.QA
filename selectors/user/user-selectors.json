@@ -12,7 +12,7 @@
     "addButtonAssign"  : "#add",
     "parentUsers" : ".MuiListItemText-root",
     "assignedGroupParent" : ".ReactVirtualized__Grid__innerScrollContainer",
-    "successMessage"  : "#client-snackbar",
+    "successMessage"  : ".toast",
     "userPageHeading": ".MuiTypography-colorSecondary",
     "emailAddressField" : "[id='Email Address']",
     "homeDirInputField" : "[id='Custom Home Directory']",

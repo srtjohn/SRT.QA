@@ -4,14 +4,18 @@
     "roleTab": "[role='tab']",
     "labelSelector": ".MuiButton-label",
     "closeModal": "[title='Close']",
+    "titleEdit": "[title='Edit']",
     "inputTypeCheckbox": "input[type=checkbox]",
     "inputLabel": ".MuiInputLabel-formControl",
     "roleButton":"[role='button']",
     "roleOption":"[role='option']",
-    "close":"[aria-label='close']",
+    "close":"[aria-label='Close']",
     "roleListBox":"[role='listbox']",
     "idText":"[id='Text']",
     "roleMenu":"[role='menu']",
     "typeText":"input[type='text']",
-    "labelRoot":".MuiFormLabel-root"
+    "labelRoot":".MuiFormLabel-root",
+    "button":".dxbl-btn",
+    "textSelector":".dxbl-text",
+    "modalSelector":".dxbl-modal-body"
 }

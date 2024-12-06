@@ -3,7 +3,6 @@ import label from '../../../../fixtures/label.json'
 import generalSelectors from '../../../../../selectors/general-selectors.json'
 import htmlSelectors from '../../../../../selectors/htlm-tag-selectors.json'
 import dashboardSelectors from '../../../../../selectors/dashboard-selectors.json'
-import serverSelectors from '../../../../../selectors/server-selectors.json'
 
 /**
  * @description
@@ -58,14 +57,18 @@ describe('Login > {existing server} > files/Directories', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.ApiTestingAutomation).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.filesDirectories).should('be.visible').click()
     cy.get(generalSelectors.roleTab).contains(label.virtualDirectoryAccess).should('be.visible').click()
-    cy.get(generalSelectors.roleCell).contains(allowedPermissions).should('be.visible').parents(htmlSelectors.div).eq(1).next().next().click()
-    cy.get(dashboardSelectors.permissionsTable).within(() => {
-      cy.get(serverSelectors.parent).contains(label.checkAll).should('be.visible').next(serverSelectors.parent).next(serverSelectors.parent).within(() => {
-        cy.get(htmlSelectors.span).eq(1).click().wait(2000).click()
+    cy.get(htmlSelectors.tableBody).contains(virtualDirectoryDetails.Path).should('be.visible').next(htmlSelectors.tableData).should('contain.text', allowedPermissions)
+      .next(htmlSelectors.tableData, { scrollBehavior: false }).next(htmlSelectors.tableData, { scrollBehavior: false }).within(() => {
+        cy.get(generalSelectors.titleEdit).click({ scrollBehavior: false })
+      })
+    cy.get(dashboardSelectors.rowSelect).eq(1).within(() => {
+      cy.get(htmlSelectors.tableData).contains(label.checkAll).should('be.visible').next(htmlSelectors.tableData).next(htmlSelectors.tableData).within(() => {
+        cy.get(htmlSelectors.div).click()
       })
     })
-    cy.get(dashboardSelectors.dashBoardList).contains(label.edit).click()
-    cy.get(generalSelectors.roleCell).contains(deniedPermissions).should('be.visible')
+    cy.get(generalSelectors.button).contains(label.save).click()
+    cy.waitForNetworkIdle(1500, { log: false })
+    cy.get(htmlSelectors.tableBody).contains(virtualDirectoryDetails.Path).should('be.visible').next(htmlSelectors.tableData).should('contain.text', deniedPermissions)
   })
 
   afterEach('delete virtual directory through API', () => {

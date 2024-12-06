@@ -6,11 +6,15 @@
     "profileIcon" : "[aria-label='account of current user']",
     "productInfoColName" :"[role='cell']",
     "rowGroup" :"[role='rowgroup']",
+    "dashboardButton":".dxbl-btn",
+    "addNew":"[title='Add New']",
     "homeTabs" : "[role='tab']",
     "usersPage":"[role='grid']",
     "gridRoot" : ".MuiGrid-root",
     "dialog" : "[role='dialog']",
     "fabLabel" : ".MuiFab-label",
+    "languageDropdown":".dxbl-dropdown-body",
+    "contentHeader":".dxbl-grid-header-content",
     "muiTypography": ".MuiTypography-root",
     "muiDialogPaperWidthXs":".MuiDialog-paperWidthXs",
     "matchContainer":"[id='Match Any of the Following']",
@@ -28,5 +32,7 @@
     "calenderWeek":".MuiPickersCalendar-week",
     "search":"[placeholder='Filter...']",
     "permissionsTable": "[aria-label='permissions table']",
-    "ipAccessInput":"[id='IP Address']"
+    "rowSelect":".dxbl-row",
+    "ipAccessInput":"[id='IP Address']",
+    "messageBox":".dxbl-v-resize"
 }

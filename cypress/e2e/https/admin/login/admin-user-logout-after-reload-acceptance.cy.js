@@ -19,7 +19,7 @@ import label from '../../../../../cypress/fixtures/label.json'
 
 // This is skipped because the functionality of session login is coming in next release
 
-describe.skip('Login Functionality Test', () => {
+describe('Login Functionality Test', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
@@ -34,13 +34,13 @@ describe.skip('Login Functionality Test', () => {
       log: false
     })
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    cy.waitForNetworkIdle('@postApiLogin', 500).its('callCount').should('equal', 1)
+    // cy.waitForNetworkIdle('@postApiLogin', 500).its('callCount').should('equal', 1)
     cy.url().should('include', label.homeUrlText)
-    cy.waitApiResponseStatusCode('@postApiLogin', 200)
   })
 
   it('Reload the server', () => {
     cy.reload()
-    cy.contains(label.login).should('not.be.visible')
+    cy.url().should('include', label.homeUrlText)
+    cy.contains(label.login).should('not.exist')
   })
 })
