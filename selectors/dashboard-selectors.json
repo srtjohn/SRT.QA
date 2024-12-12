@@ -21,6 +21,7 @@
     "fileLogText": "#Message",
     "filePath":"#FilePath",
     "eventName": "#Name",
+    "textInput":".dxbl-text-edit-input",
     "eventDescription":"#Desc",
     "tabWrapper":".MuiTab-wrapper",
     "muiSelect":".MuiSelect-root",
@@ -34,5 +35,7 @@
     "permissionsTable": "[aria-label='permissions table']",
     "rowSelect":".dxbl-row",
     "ipAccessInput":"[id='IP Address']",
-    "messageBox":".dxbl-v-resize"
+    "messageBox":".dxbl-v-resize",
+    "contentModal":".dxbl-modal-content",
+    "eventSelector":"[role='treeitem']"
 }

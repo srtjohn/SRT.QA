@@ -61,7 +61,7 @@ describe('Login > {existing server} > files/Directories', () => {
       .next(htmlSelectors.tableData, { scrollBehavior: false }).next(htmlSelectors.tableData, { scrollBehavior: false }).within(() => {
         cy.get(generalSelectors.titleEdit).click({ scrollBehavior: false })
       })
-    cy.get(dashboardSelectors.rowSelect).eq(1).within(() => {
+    cy.get(htmlSelectors.tableBody).within(() => {
       cy.get(htmlSelectors.tableData).contains(label.checkAll).should('be.visible').next(htmlSelectors.tableData).next(htmlSelectors.tableData).within(() => {
         cy.get(htmlSelectors.div).click()
       })
@@ -74,7 +74,7 @@ describe('Login > {existing server} > files/Directories', () => {
   afterEach('delete virtual directory through API', () => {
     // calling delete function
     cy.deleteUpdatedVirtualDirectoryApiRequest(virtualDirectoryDetails, serverDetails).then(($response) => {
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

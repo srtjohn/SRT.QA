@@ -1,6 +1,8 @@
 import label from '../../../cypress/fixtures/label.json'
 import groupSelectors from '../../../selectors/groups/groups-selectors.json'
 import generalSelectors from '../../../selectors/general-selectors.json'
+import userDirSelectors from '../../../selectors/user-dir-selectors.json'
+
 /**
  * group creation command
  *
@@ -31,11 +33,11 @@ Cypress.Commands.add('createGroup', (groupDetails) => {
     }
   })
   if (groupDetails.groupDirectoryOption) {
-    cy.get(groupSelectors.parentGroup).eq(1).within(() => {
-      cy.get(groupSelectors.homeDir).click({ force: true })
-    })
+    cy.get(userDirSelectors.toField).realClick()
     cy.get(groupSelectors.dropDownOptions).contains(groupDetails.groupDirectoryOption).click({ force: true })
-    cy.get(groupSelectors.subDir).eq(1).type(groupDetails.groupDirPath.replace(/\//g, '\\'))
+    cy.get(generalSelectors.textSelector).contains(label.subDir).next().within(()=>{
+      cy.get(generalSelectors.textEdit).type(groupDetails.groupDirPath.replace(/\//g, '\\'))
+     })
   }
   cy.get(groupSelectors.parentGroup).eq(2).within(() => {
     cy.clickButton(label.next)

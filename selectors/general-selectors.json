@@ -17,5 +17,6 @@
     "labelRoot":".MuiFormLabel-root",
     "button":".dxbl-btn",
     "textSelector":".dxbl-text",
-    "modalSelector":".dxbl-modal-body"
+    "modalSelector":".dxbl-modal-body",
+    "textEdit":".dxbl-text-edit"
 }

@@ -35,13 +35,31 @@ Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false, ho
     cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
   }
   cy.waitForNetworkIdle(1000, { log: false })
-  cy.get(userSelectors.addButton).should('be.visible').click()
-  cy.get(userSelectors.btnLabel).contains(label.addEvent).click()
-  cy.get(htmlSelectors.div).contains(eventType).parent().prev(htmlSelectors.div).click()
-  cy.get(dashboardSelectors.muiTypography).contains(subEvent).click()
-  if (finalEvent) {
-    cy.get(htmlSelectors.div).contains(subEvent).parent().prev(htmlSelectors.div).click()
-    cy.get(dashboardSelectors.muiTypography).contains(finalEvent).click()
-  }
-  cy.get(generalSelectors.labelSelector).contains(label.okayLabel).click()
+  cy.get(userSelectors.addButton).eq(0).should('be.visible').click()
+  cy.get(dashboardSelectors.contentModal).within(()=>{
+    cy.get(navigationSelectors.textLabelSelector).contains(label.events).realClick()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(dashboardSelectors.dashboardButton).contains(label.addEvent).realClick({force : true})
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(htmlSelectors.span).then((resp)=>{
+      console.log(resp.text())
+      if(!resp.text().includes(label.addEvent)){
+        cy.get(dashboardSelectors.dashboardButton).contains(label.addEvent).realClick({force : true})
+      }
+      else{
+        cy.log('open')
+      }
+    })
+    cy.get(navigationSelectors.textContainer).contains(eventType).realClick().parent(htmlSelectors.div).parent().prev().realClick()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(navigationSelectors.navbarTextSelector).contains(subEvent).click()
+    if (finalEvent) {
+      cy.get(navigationSelectors.navbarTextSelector).contains(subEvent).realClick().parent(htmlSelectors.div).parent().prev().realClick()
+      cy.get(navigationSelectors.textLabelSelector).contains(finalEvent).click()
+    }
+    cy.get(generalSelectors.button).contains(label.okay).click()
+  })
+  
+  
+  
 })

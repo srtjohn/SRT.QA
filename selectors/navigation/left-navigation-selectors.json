@@ -1,4 +1,5 @@
 {
     "textLabelSelector": ".dxbl-text",
-    "navbarTextSelector":".dxbl-treeview-item-text"
+    "navbarTextSelector":".dxbl-treeview-item-text",
+    "textContainer":".dxbl-treeview-item-text-container"
 }

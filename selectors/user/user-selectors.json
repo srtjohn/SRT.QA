@@ -1,7 +1,7 @@
 {
     "fieldSelector": ".MuiOutlinedInput-notchedOutline",
     "requiredLabel": "label.Mui-required",
-    "addButton": "[title='Add']",
+    "addButton": "[title='Add New']",
     "usernameRequiredMessage" :"p[id='User Name-helper-text']",
     "passwordRequiredMessage" : "p[id='Password-helper-text']",
     "confirmPasswordRequiredMessage" : "p[id='Confirm Password-helper-text']",
@@ -22,6 +22,7 @@
     "usernameField" : "#User\\ Full\\ Name",
     "userInfoDialog" : "[aria-labelledby='User-dialog-title']",
     "selectGroupOptionsDialog" : ".MuiStep-root",
-    "validationMessage":".validation-message"
+    "validationMessage":".validation-message",
+    "titleDelete":"[title='Delete']"
     
 }
