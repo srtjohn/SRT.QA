@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+      - migration
+  schedule:
+    - cron: '0 13 * * *'  # 1PM EST
 jobs:
   acceptance_tests:
     runs-on: ubuntu-latest

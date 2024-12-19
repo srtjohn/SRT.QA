@@ -33,37 +33,33 @@ describe('Login > Add New > Server > Database > Server Info > Add New', () => {
   })
 
   it('Verify that the user cannot navigate to the next page, until he/she configures directories manually', () => {
-    cy.get(serverSelectors.addButtonContainer).contains(label.addNew).click()
+    cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(serverSelectors.titleAddNew).first().click()
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
+    cy.get(generalSelectors.button).contains(label.next).realClick()
 
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
+    cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).type(serverName)
 
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
-      cy.get(htmlTagSelectors.input).type(serverName)
+    cy.get(serverSelectors.serviceCheckboxContainer).eq(1).within(() => {
+      cy.get(htmlTagSelectors.div).realClick()
     })
 
-    cy.contains(htmlTagSelectors.span, label.StartServerAutomatically)
-      .prev(htmlTagSelectors.span).click()
-
-    cy.get(generalSelectors.inputTypeCheckbox).eq(1).click()
-
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-
-    cy.get(serverSelectors.gridContainerXS10).each(($outerContainer) => {
-      cy.wrap($outerContainer).within(() => {
-        cy.get(serverSelectors.textFieldRootContainer).within(() => {
-          cy.get(serverSelectors.inputBaseContainer).within(() => {
-            cy.get(serverSelectors.inputContainer).clear()
-          })
-        })
-      })
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.wait(2000)
+    cy.get(serverSelectors.serverTypeDropdown).each(($outerContainer) => {
+      cy.wrap($outerContainer).clear()
     })
 
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(serverSelectors.serverNameReqMessage).each($el => {
+      cy.wrap($el).should('contain.text', label.required)
+    })
 
-    cy.get(serverSelectors.gridContainerXS10)
-      .find(serverSelectors.inputBaseContainer)
-      .get(serverSelectors.inputContainer).should('exist')
-    cy.get(generalSelectors.closeModal).click()
+    cy.get(serverSelectors.serverTypeDropdown).each(($outerContainer) => {
+      cy.wrap($outerContainer).should('exist')
+    })
+    cy.get(generalSelectors.close).click()
   })
 })

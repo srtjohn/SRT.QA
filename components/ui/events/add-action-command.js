@@ -1,6 +1,5 @@
 import label from '../../../cypress/fixtures/label.json'
-import userSelectors from '../../../selectors/user/user-selectors.json'
-import htmlSelectors from '../../../selectors/htlm-tag-selectors.json'
+import navigationSelectors from '../../../selectors/navigation/left-navigation-selectors.json'
 import generalSelectors from '../../../selectors/general-selectors.json'
 import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
 
@@ -28,16 +27,19 @@ Cypress.Commands.add('createAction', (actionType, customText, filePath, eventNam
   Cypress.log({
     name: 'createActionCommand'
   })
-  cy.get(dashboardSelectors.muiTypography).contains(label.actions).click()
-  cy.get(userSelectors.btnLabel).contains(label.addAction).click()
-  cy.get(htmlSelectors.div).contains(actionType).click()
-  cy.get(dashboardSelectors.fileLogText).type(customText)
-  cy.get(dashboardSelectors.filePath).type(filePath)
-  cy.get(generalSelectors.labelSelector).contains(label.okayLabel).click()
-  cy.get(generalSelectors.labelSelector).contains(label.next).click()
-  cy.get(dashboardSelectors.eventName).type(eventName)
-  cy.get(dashboardSelectors.eventDescription).type(eventDescription)
+  cy.get(generalSelectors.textSelector).contains(label.actions).click({force : true})
+  cy.waitForNetworkIdle(3000, { log: false })
+  cy.get(dashboardSelectors.dashboardButton).contains(label.addAction).click({force : true}).wait(2000).realClick({force : true})
+  cy.get(navigationSelectors.textContainer).contains(actionType).realClick()
+  cy.get(dashboardSelectors.messageBox).type(customText)
+  cy.get(dashboardSelectors.textInput).type(filePath)
+  cy.get(generalSelectors.textSelector).contains(label.okay).realClick()
+  cy.get(generalSelectors.textSelector).contains(label.next).realClick()
+  cy.get(generalSelectors.textSelector).contains(label.nameLabel).should('be.visible')
+  cy.get(dashboardSelectors.textInput).eq(1).type(eventName)
+  cy.get(dashboardSelectors.eventDescription).eq(2).type(eventDescription)
   cy.waitForNetworkIdle(1000, { log: false })
-  cy.get(generalSelectors.labelSelector).contains(label.next).click()
-  cy.get(dashboardSelectors.dashboardButtonLabel).contains(label.create).click()
+  cy.get(generalSelectors.button).contains(label.next).realClick()
+  cy.get(dashboardSelectors.button).contains(label.create).realClick()
 })
+

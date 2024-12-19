@@ -2,6 +2,8 @@ import label from '../../../../../fixtures/label.json'
 import dashboardSelectors from '../../../../../../selectors/dashboard-selectors.json'
 import navigationSelectors from '../../../../../../selectors/navigation/left-navigation-selectors.json'
 import productInfoSelectors from '../../../../../../selectors/productinfo/product-info-selectors.json'
+import userSelectors from '../../../../../../selectors/user/user-selectors.json'
+import generalSelectors from '../../../../../../selectors/general-selectors.json'
 
 /**
  * @description
@@ -35,16 +37,12 @@ describe('Login > home > product info tab', () => {
   it('verify that user can not enter invalid registration code', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.home).click()
     cy.get(dashboardSelectors.homeTabs).contains(label.productInfo).click()
-    cy.get(productInfoSelectors.fabLabel).eq(1).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(generalSelectors.button).contains(label.addLicense).click()
     cy.get(productInfoSelectors.registrationCodeField).type(label.helpEnglish)
-    cy.get(productInfoSelectors.dashboardButtonLabel).contains(label.add).click()
-    cy.checkTextVisibility(productInfoSelectors.registrationValidationText, label.regCodeValidationTextFormat)
-    cy.get(productInfoSelectors.registrationValidationText).invoke('text').then((text) => {
-      const splitText = text.split(':')
-      cy.get(productInfoSelectors.registrationCodeField).clear()
-      cy.get(productInfoSelectors.registrationCodeField).type(splitText[1].trim())
-      cy.get(productInfoSelectors.dashboardButtonLabel).contains(label.add).click()
-      cy.checkTextVisibility(productInfoSelectors.registrationValidationText, label.regCodeValidationTextLength)
+    cy.get(generalSelectors.modalSelector).within(() => {
+      cy.get(generalSelectors.button).contains(label.save).realClick({ force: true })
     })
+    cy.get(userSelectors.successMessage).should('be.visible')
   })
 })

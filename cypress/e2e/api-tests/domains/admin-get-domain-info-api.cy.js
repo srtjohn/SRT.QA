@@ -1,3 +1,4 @@
+import label from '../../../fixtures/label.json'
 /**
  * @description
  * This spec file contains test to ensure admin can get domain information through API
@@ -50,7 +51,7 @@ describe('GET /api/Domain/{domainGUID}/info', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(label.quitMessage)
     })
   })
 })
