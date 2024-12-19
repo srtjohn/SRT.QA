@@ -18,5 +18,6 @@
     "button":".dxbl-btn",
     "textSelector":".dxbl-text",
     "modalSelector":".dxbl-modal-body",
-    "textEdit":".dxbl-text-edit"
+    "textEdit":".dxbl-text-edit",
+    "checkbox":".dxbl-checkbox-check-element"
 }

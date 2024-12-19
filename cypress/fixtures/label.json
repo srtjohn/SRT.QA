@@ -53,6 +53,7 @@
   "testActions":"Test Action(s)",
   "okayLabel":"OKAY",
   "create":"Create",
+  "passwordExpiration":"Password Expiration",
   "serverNameText": "Server Name",
   "serverDescription" : "automation server",
   "serverDescriptionText" : "Server Description",

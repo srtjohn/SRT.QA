@@ -8,6 +8,7 @@
     "rowGroup" :"[role='rowgroup']",
     "dashboardButton":".dxbl-btn",
     "addNew":"[title='Add New']",
+    "titleApply":"[title='Apply']",
     "homeTabs" : "[role='tab']",
     "usersPage":"[role='grid']",
     "gridRoot" : ".MuiGrid-root",
@@ -37,5 +38,6 @@
     "ipAccessInput":"[id='IP Address']",
     "messageBox":".dxbl-v-resize",
     "contentModal":".dxbl-modal-content",
-    "eventSelector":"[role='treeitem']"
+    "eventSelector":"[role='treeitem']",
+    "filterBox":".srt-filter-text"
 }
