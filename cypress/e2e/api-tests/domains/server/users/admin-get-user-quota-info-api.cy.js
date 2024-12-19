@@ -28,7 +28,7 @@ describe('get User information', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -55,7 +55,7 @@ describe('get User information', () => {
       // Check if response type is Api Quota Info
       expect($response.ResponseType).to.equal('ApiQuotaInfo')
       // Check if new user  exist in Everyone User or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // current usage FMT for a new user is 0 bytes
       expect($response.Response.CurrentUsageFMT).to.equal('0 Bytes')
     })
@@ -65,7 +65,7 @@ describe('get User information', () => {
     // calling delete user function
     cy.deleteUserApiRequest(userDetails.bearerToken, userDetails.serverName, userDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

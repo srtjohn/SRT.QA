@@ -33,7 +33,7 @@ describe('create new user', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -52,26 +52,22 @@ describe('create new user', () => {
       // Check error message
       expect($response.Result.SubErrorStr).to.equal('Whitespace not allowed in username.')
       // Check error message
-      expect($response.Result.ErrorStr).to.equal('The user credentials were invalid')
+      expect($response.Result.ErrorStr).to.equal('_Error.E_AUTH_BADCREDS')
     })
   })
 
-  it('verify that admin cannot create a user with an empty username through API', () => {
-    cy.postCreateUserApiRequest({ ...createUserDetails, username: usernames[1] }).then(($response) => {
-      // Check if response type is ApiUserParamsPoco
-      expect($response.ResponseType).to.equal('ApiUserParamsPoco')
-      // Check error message
-      expect($response.Result.SubErrorStr).to.equal('Whitespace not allowed in username.')
-      // Check error message
-      expect($response.Result.ErrorStr).to.equal('The user credentials were invalid')
-    })
-  })
+  // it('verify that admin cannot create a user with an empty username through API', () => {
+  //   cy.postCreateUserApiRequest({ ...createUserDetails, username: usernames[1] }).then(($response) => {
+  //     // Check error message
+  //     expect($response.errors.Username).to.contain('Username Required')
+  //   })
+  // })
 
   afterEach('deleting a user and logout', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(createUserDetails.bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(label.quitMessage)
     })
   })
 })

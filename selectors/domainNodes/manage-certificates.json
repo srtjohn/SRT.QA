@@ -1,11 +1,17 @@
 {
     "domainDropDown" : ".MuiTypography-body2",
-    "dashboardButtonLabel" : ".MuiButton-label",
+    "dashboardButtonLabel" : ".dxbl-btn",
     "languageList" : "[role='menuitem']",
     "dashBoardList" : ".MuiButtonBase-root",
     "profileIcon" : "[aria-label='account of current user']",
     "productInfoColName" :"[role='cell']",
     "homeTabs" : "[role='tab']",
     "gridRoot" : ".MuiGrid-root",
-    "dialog" : "[role='dialog']"
+    "iconSrt":".srt-icon",
+    "titleUpdate":"[title='Update']",
+    "titleExport":"[title='Export Certificate']",
+    "titleDelete":"[title='Delete']",
+    "dialog" : "[role='dialog']",
+    "modalTitle": "dxbl-modal-title",
+    "modalDialog":".dxbl-modal-root"
 }

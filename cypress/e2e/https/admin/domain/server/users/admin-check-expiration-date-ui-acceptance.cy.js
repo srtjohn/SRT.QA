@@ -1,7 +1,7 @@
 import label from '../../../../../../fixtures/label.json'
 import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
-import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
+import userDirSelectors from '../../../../../../../selectors/user-dir-selectors.json'
 import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
 import generalSelectors from '../../../../../../../selectors/general-selectors.json'
 import { slowCypressDown } from 'cypress-slow-down'
@@ -34,31 +34,23 @@ describe('login', () => {
   const createUserDetails = {
     username: `qa-auto-user${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: 'testing123',
-    serverName: label.autoServerName
+    serverName: label.ApiTestingAutomation
   }
 
-  const year = Math.floor(Math.random() * (2024 - 2000 + 1)) + 2000
-  const day = Math.floor(Math.random() * (30 - 1 + 1)) + 1
-  const monthNum = Math.floor(Math.random() * (9 - 1 + 1)) + 1
-  const date = `${monthNum.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`
+  const date = Cypress.dayjs().add(Math.floor(Math.random() * 30), 'days').format('MM/DD/YYYY')
 
   function navigateToAdvancedTab () {
-    cy.get(htmlSelectors.div).then(resp => {
-      if (!resp.text().includes(createUserDetails.username)) {
-        cy.get(dashboardSelectors.usersPage).eq(1).scrollTo('bottom')
-      }
-    })
-    cy.contains(htmlSelectors.div, createUserDetails.username).scrollIntoView().parents()
-      .next(htmlSelectors.div).should('exist')
-      .next(htmlSelectors.div).should('exist')
-      .next(htmlSelectors.div).should('exist')
-      .next(htmlSelectors.div).should('exist')
-      .next(htmlSelectors.div).within(() => {
-        cy.get(htmlSelectors.button).click({ force: true })
+      cy.contains(htmlSelectors.tableData, createUserDetails.username)
+      .next(htmlSelectors.tableData).should('exist')
+      .next(htmlSelectors.tableData).should('exist')
+      .next(htmlSelectors.tableData).should('exist')
+      .next(htmlSelectors.tableData).should('exist')
+      .next(htmlSelectors.tableData).within(() => {
+        cy.get(dashboardSelectors.dashboardButton).eq(0).click({ force: true })
       })
 
-    cy.get(userSelectors.parentUsers).contains(label.editUserConnections).click()
-    cy.get(dashboardSelectors.tabWrapper).contains(label.advanced).click()
+    cy.get(dashboardSelectors.languageDropdown).contains(label.editUserConnections).click()
+    cy.get(generalSelectors.roleTab).contains(label.advanced).click()
   }
 
   beforeEach('login', () => {
@@ -77,54 +69,34 @@ describe('login', () => {
   it('verify that user account expiration date is changed', () => {
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
-    cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
+    cy.get(navigationSelectors.textLabelSelector).contains(label.ApiTestingAutomation).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
+    cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(createUserDetails.username)
     navigateToAdvancedTab()
-    cy.get(dashboardSelectors.muiTypography).contains(label.userAccountExpire).prev(htmlSelectors.span).click().wait(1000).click()
-      .then($resp => {
-        if (!$resp.hasClass('Mui-checked')) {
-          cy.get(dashboardSelectors.muiTypography).contains(label.userAccountExpire).prev(htmlSelectors.span).click()
-        }
-        cy.wrap($resp).should('have.class', 'Mui-checked')
-      })
+    cy.get(navigationSelectors.textLabelSelector).contains(label.passwordExpiration).should('be.visible')
+    .prev(htmlSelectors.div).click()
+    cy.waitForNetworkIdle(1000, { log: false })
     // selecting interval as date
-    cy.get(generalSelectors.labelRoot).contains(label.interval).next().click()
-    cy.get(dashboardSelectors.dashBoardList).contains(label.date).click()
+    cy.get(userDirSelectors.toField).realClick()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(generalSelectors.roleOption).contains(label.date).click()
 
-    cy.get(dashboardSelectors.dateChange).parent().prev().clear().type(monthNum)
-    cy.get(dashboardSelectors.dateChange).click()
+    cy.get(htmlSelectors.label).should('contain.text', label.expireDate)
+    cy.get(dashboardSelectors.textInput).eq(2).clear().wait(2000).type(date)
     // select date
-    cy.get(dashboardSelectors.dateContainer).within(() => {
-      cy.get(dashboardSelectors.muiToolbar).within(() => {
-        cy.get(htmlSelectors.button).eq(0).click()
-      })
-      cy.get(dashboardSelectors.yearPicker).contains(year).click()
-      cy.get(dashboardSelectors.datePicker).within(() => {
-        cy.get(dashboardSelectors.calenderWeek).each(($week) => {
-          const dayFound = $week.find(htmlSelectors.button).toArray().some((el) => {
-            return Cypress.$(el).text().trim() === day.toString()
-          })
-          if (dayFound) {
-            cy.wrap($week).contains(dashboardSelectors.muiTypography, day).click({ force: true })
-            return false
-          }
-        })
-      })
-    })
-    cy.get(dashboardSelectors.dashBoardList).contains(label.ok).click()
-    cy.get(dashboardSelectors.dashBoardList).contains(label.apply).click()
-    cy.waitForNetworkIdle(3000, { log: false })
+    cy.get(dashboardSelectors.titleApply).eq(0).click()
     cy.get(generalSelectors.close).click()
+    cy.waitForNetworkIdle(3000, { log: false })
     navigateToAdvancedTab()
-    cy.get(htmlSelectors.label).contains(label.expireDate).next(htmlSelectors.div).within(() => {
-      cy.get(htmlSelectors.input).should('have.attr', 'value', date)
-    })
+    cy.get(htmlSelectors.label).should('contain.text', label.expireDate)
+    cy.get(dashboardSelectors.textInput).eq(2).should('have.value', date)
+    
   })
-  afterEach('deleting new folder and user', () => {
+  afterEach('deleting user', () => {
     // calling delete user function
     cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

@@ -38,18 +38,30 @@ describe('Login > home > domain nodes > manage certificate', () => {
   it('verify manage certificates dialogs', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.home).click()
     cy.get(dashboardSelectors.homeTabs).contains(label.domainNodes).click()
-    cy.get(dashboardSelectors.dashBoardList).contains(label.manageCert).click()
+    cy.get(dashboardSelectors.dashboardButton).contains(label.manageCert).click()
 
-    cy.get(manageCertificate.gridRoot).contains(label.update).click()
+    cy.get(manageCertificate.titleUpdate).eq(0).within(() => {
+      cy.get(manageCertificate.iconSrt).realClick({ force: true })
+    })
     cy.checkTextVisibility(manageCertificate.dialog, label.updateHeading)
-    cy.get(manageCertificate.dashboardButtonLabel).contains(label.cancel).click()
+    cy.get(manageCertificate.modalDialog).eq(1).within(() => {
+      cy.get(manageCertificate.dashboardButtonLabel).contains(label.closeText).realClick()
+    })
 
-    cy.get(manageCertificate.gridRoot).contains(label.export).click()
+    cy.get(manageCertificate.titleExport).eq(0).within(() => {
+      cy.get(manageCertificate.iconSrt).realClick({ force: true })
+    })
     cy.checkTextVisibility(manageCertificate.dialog, label.exportHeading)
-    cy.get(manageCertificate.dashboardButtonLabel).contains(label.cancel).click()
+    cy.get(manageCertificate.modalDialog).eq(1).within(() => {
+      cy.get(manageCertificate.dashboardButtonLabel).contains(label.closeText).realClick()
+    })
 
-    cy.get(manageCertificate.gridRoot).contains(label.delete).click()
+    cy.get(manageCertificate.titleDelete).eq(0).within(() => {
+      cy.get(manageCertificate.iconSrt).realClick({ force: true })
+    })
     cy.checkTextVisibility(manageCertificate.dialog, label.deleteHeading)
-    cy.get(manageCertificate.dashboardButtonLabel).contains(label.cancel).click()
+    cy.get(manageCertificate.modalDialog).eq(1).within(() => {
+      cy.get(manageCertificate.dashboardButtonLabel).contains(label.no).realClick()
+    })
   })
 })

@@ -56,7 +56,7 @@ describe('login > add new virtual directory ', () => {
     cy.postCreateUserVirtualDirectoryApiRequest(CreateUserDetails, virtualDirectoryDetails).then(($response) => {
       expect($response.Response.UserGroupGUID).to.equal(CreateUserDetails.AuthGUID)
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 
@@ -109,7 +109,7 @@ describe('login > add new virtual directory ', () => {
     // calling delete user function
     cy.deleteUserApiRequest(CreateUserDetails.bearerToken, CreateUserDetails.serverName, CreateUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

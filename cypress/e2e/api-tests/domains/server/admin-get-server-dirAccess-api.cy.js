@@ -34,7 +34,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -49,7 +49,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is Api DirAccess Poco
       expect($response.ResponseType).to.equal('ApiDirAccessPoco')
       // Check if Errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // initializing directory parameters
       DirectoryDetails.DirectoryId = $response.Response.Id
     })
@@ -60,7 +60,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is Api DirAccess Response
       expect($response.ResponseType).to.equal('ApiDirAccessResponse')
       // Check if ErrorStr is equal to success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // check if directory Id is present or not
       const DirectoryId = $response.Response.DirAccessList.map(directory => directory.Id)
       expect(DirectoryId).to.include(DirectoryDetails.DirectoryId)
@@ -77,7 +77,7 @@ describe('GET /api/Servers', () => {
     // calling delete function
     cy.deleteServerLevelDirAccessApiRequest(serverDetails, DirectoryDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

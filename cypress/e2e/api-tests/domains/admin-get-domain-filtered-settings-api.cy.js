@@ -1,4 +1,4 @@
-import { autoDomainName } from '../../../fixtures/label.json'
+import { autoDomainName, quitMessage } from '../../../fixtures/label.json'
 
 /**
  * @description
@@ -27,7 +27,7 @@ describe('GET /api/Domain/{domainGUID}/Filtered', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -48,7 +48,7 @@ describe('GET /api/Domain/{domainGUID}/Filtered', () => {
       // verify domain name
       expect($response.Response.Poco.DomainName).to.equal(autoDomainName)
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 
@@ -56,7 +56,7 @@ describe('GET /api/Domain/{domainGUID}/Filtered', () => {
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(bearerToken).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response).to.have.key(quitMessage)
     })
   })
 })
