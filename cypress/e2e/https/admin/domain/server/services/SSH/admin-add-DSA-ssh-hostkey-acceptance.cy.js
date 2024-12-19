@@ -62,6 +62,8 @@ describe('login > create new server > services > SSH > Add DSA Key', () => {
 
   afterEach('deleting a server', () => {
     // deleting the created server
-    cy.deleteServerApiRequest(serverDetails)
+    cy.deleteServerApiRequest(serverDetails).then(($response) => {
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
+    })
   })
 })

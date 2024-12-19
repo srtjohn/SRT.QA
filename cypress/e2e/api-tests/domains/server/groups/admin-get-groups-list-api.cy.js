@@ -28,7 +28,7 @@ describe('get groups list', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -42,7 +42,7 @@ describe('get groups list', () => {
       // Check if response type is api server list response
       expect($response.ResponseType).to.equal('ApiServerListResponse')
       // Check if errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       groupDetails.bearerToken = serverDetails.bearerToken
     })
 
@@ -62,7 +62,7 @@ describe('get groups list', () => {
       // Check if response type is Api Group List
       expect($response.ResponseType).to.equal('ApiGroupList')
       // Check if ErrorStr is success or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // check if new group exists in group list or not
       const groupName = $response.Response.GroupList.map(group => group.GroupName)
       expect(groupName).to.include(groupDetails.groupName)
@@ -79,7 +79,7 @@ describe('get groups list', () => {
     // calling delete function
     cy.deleteGroupApiRequest(groupDetails, serverDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

@@ -93,7 +93,7 @@ describe('Login > {existing server} > users > edit', () => {
   afterEach('delete user', () => {
     cy.deleteUserApiRequest(userDetails.bearerToken, userDetails.serverName, userDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

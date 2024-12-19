@@ -3,6 +3,7 @@
     "dashboardButtonLabel" : ".MuiButton-label",
     "languageList" : "[role='menuitem']",
     "dashBoardList" : ".MuiButtonBase-root",
+    "helpIcon":".srt-icon-mui-help",
     "profileIcon" : "[aria-label='account of current user']",
     "productInfoColName" :"[role='cell']",
     "rowGroup" :"[role='rowgroup']",

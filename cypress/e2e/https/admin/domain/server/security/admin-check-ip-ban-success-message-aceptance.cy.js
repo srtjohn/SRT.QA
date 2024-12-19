@@ -39,7 +39,7 @@ describe.skip('Login > New Server > Security > IP Bans', () => {
       serverDetails.bearerToken = $response.Response.SessionInfo.BearerToken
     })
     cy.postCreateServerApiRequest(serverDetails).then(($response) => {
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
     cy.get(serverSelectors.serverName).contains(serverDetails.serverName).should('be.visible')
@@ -70,7 +70,7 @@ describe.skip('Login > New Server > Security > IP Bans', () => {
     // calling delete function
     cy.deleteServerApiRequest(serverDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

@@ -72,6 +72,8 @@ describe('login > create new server > services > RSA > Add RSA Key', () => {
   })
 
   afterEach('deleting a server', () => {
-    cy.deleteServerApiRequest(serverDetails)
+    cy.deleteServerApiRequest(serverDetails).then(($response) => {
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
+    })
   })
 })

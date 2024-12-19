@@ -30,24 +30,24 @@ describe('Login > Add New > Server > Database > Server Info > > FTPS Configurati
 
   function checkBoxSelector (optionText) {
     cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
-    cy.waitForNetworkIdle(1000, { log: false })
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.get(serverSelectors.titleAddNew).first().click()
-
     cy.get(generalSelectors.button).contains(label.next).realClick()
     cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
     cy.get(generalSelectors.button).contains(label.next).realClick()
-
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).type(serverName)
     cy.get(serverSelectors.serviceCheckboxContainer).first().within(() => {
       cy.get(htmlTagSelectors.div).realClick()
     })
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.get(generalSelectors.button).contains(label.next).realClick()
-    cy.waitForNetworkIdle(1000, { log: false })
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.get(serverSelectors.serviceRootContainer)
       .find(serverSelectors.serviceCheckboxContainer)
       .get(generalSelectors.inputTypeCheckbox).eq(0).realClick()
       .get(generalSelectors.inputTypeCheckbox).eq(1).realClick()
-
+      cy.waitForNetworkIdle(2000, { log: false })
     cy.get(generalSelectors.button).contains(label.next).realClick()
     cy.get(generalSelectors.button).contains(label.next).realClick()
 

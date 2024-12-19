@@ -74,7 +74,7 @@ describe('login > create new server > services > ECDSA > Add ECDSA Key', () => {
   afterEach('deleting a server', () => {
     // deleting the created server
     cy.deleteServerApiRequest(serverDetails).then(($response) => {
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

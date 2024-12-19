@@ -74,7 +74,7 @@ describe('login', () => {
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       firstUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
     })
     cy.postCreateUserApiRequest(firstUserDetails).then(($response) => {
@@ -115,11 +115,11 @@ describe('login', () => {
     // calling delete user function
     cy.deleteUserApiRequest(secondUserDetails.bearerToken, firstUserDetails.serverName, firstUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
     cy.deleteUserApiRequest(secondUserDetails.bearerToken, secondUserDetails.serverName, secondUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

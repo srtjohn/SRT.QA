@@ -28,7 +28,7 @@ describe.skip('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -45,7 +45,7 @@ describe.skip('GET /api/Servers', () => {
       // Check if response type is api server list response
       expect($response.ResponseType).to.equal('ApiSessionParamsPoco')
       // Check if ErrorStr is equal to success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 

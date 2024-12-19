@@ -32,7 +32,7 @@ describe('get filtered user information', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -58,7 +58,7 @@ describe('get filtered user information', () => {
       // Check if response type is Api User Params Filtered
       expect($response.ResponseType).to.equal('ApiUserParamsFiltered')
       // check if errorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if username is present in response
       expect($response.Response.Poco.Username).to.equal(createUserDetails.username)
     })
@@ -68,7 +68,7 @@ describe('get filtered user information', () => {
     // calling delete user function
     cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
     // calling logout function
     cy.postLogoutAuthenticateApiRequest(createUserDetails.bearerToken).then(($response) => {

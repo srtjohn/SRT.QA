@@ -30,7 +30,7 @@ describe('get filtered group information', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -44,7 +44,7 @@ describe('get filtered group information', () => {
       // Check if response type is api server list response
       expect($response.ResponseType).to.equal('ApiServerListResponse')
       // Check if error str is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       groupDetails.bearerToken = serverDetails.bearerToken
     })
     // create group
@@ -52,7 +52,7 @@ describe('get filtered group information', () => {
       // Check if response type is api groups params poco
       expect($response.ResponseType).to.equal('ApiGroupParamsPoco')
       // Check if Error str is Success or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       groupDetails.groupGUID = $response.Response.GroupGUID
     })
   })
@@ -62,7 +62,7 @@ describe('get filtered group information', () => {
       // Check if response type is ApiGroupParamsPoco
       expect($response.ResponseType).to.equal('ApiGroupParamsFiltered')
       // Check if ErrorStr is success or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // assertion on group name
       expect($response.Response.Poco.GroupName).to.equal(groupDetails.groupName)
       // assertion on group GUID
@@ -75,7 +75,7 @@ describe('get filtered group information', () => {
   // calling delete group function
     cy.deleteServerApiRequest(serverDetails).then(($response) => {
     // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

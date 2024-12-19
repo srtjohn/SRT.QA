@@ -27,7 +27,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -44,7 +44,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api ip ban info
       expect($response.ResponseType).to.equal('ApiIPBanInfo')
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IPbans list exist  or not
       expect($response.Response).to.have.keys(label.IPBans)
     })
