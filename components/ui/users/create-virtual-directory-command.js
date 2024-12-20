@@ -1,5 +1,3 @@
-import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
-import generalSelectors from '../../../selectors/general-selectors.json'
 import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
 import label from '../../../cypress/fixtures/label.json'
 
@@ -18,8 +16,8 @@ Cypress.Commands.add('createVirtualDirectory', (virtualDirectoryDetails) => {
   cy.log({
     name: 'createVirtualDirectory'
   })
-  cy.get(generalSelectors.inputLabel).contains(label.actualPath).parent(htmlTagSelectors.div).type(virtualDirectoryDetails.actualPath)
-  cy.get(generalSelectors.inputLabel).contains(label.newPath).parent(htmlTagSelectors.div).type(virtualDirectoryDetails.virtualFolderName)
+  cy.get(dashboardSelectors.textInput).eq(1).type(virtualDirectoryDetails.actualPath, { scrollBehavior: false })
+  cy.get(dashboardSelectors.textInput).eq(2).type(virtualDirectoryDetails.virtualFolderName, { scrollBehavior: false })
   // adding virtual directory
-  cy.get(dashboardSelectors.dashboardButtonLabel).contains(label.add).click()
+  cy.get(dashboardSelectors.dashboardButton).contains(label.save).click({ scrollBehavior: false })
 })

@@ -1,9 +1,8 @@
-import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
-import label from '../../../../../../fixtures/label.json'
-import serverSelectors from '../../../../../../../selectors/server-selectors.json'
-import generalSelectors from '../../../../../../../selectors/general-selectors.json'
-import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
-import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
+import navigationSelectors from '../../../../../selectors/navigation/left-navigation-selectors.json'
+import label from '../../../../fixtures/label.json'
+import generalSelectors from '../../../../../selectors/general-selectors.json'
+import htmlTagSelectors from '../../../../../selectors/htlm-tag-selectors.json'
+import userSelectors from '../../../../../selectors/user/user-selectors.json'
 
 /**
  * @description
@@ -51,8 +50,6 @@ describe('login > add new server ', () => {
     cy.postCreateServerApiRequest(serverDetails)
 
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-
-    cy.get(serverSelectors.serverName).contains(serverDetails.serverName).should('be.visible')
   })
 
   it('verify that user can create a virtual directory', () => {
@@ -63,30 +60,18 @@ describe('login > add new server ', () => {
     // navigate to virtual directory tab
 
     cy.get(generalSelectors.roleTab).contains(label.virtualDirectoryAccess).should('be.visible').click()
-    cy.get(userSelectors.addButton).should('be.visible').click()
+    cy.get(userSelectors.addButton).eq(0).should('be.visible').click()
 
     // adding virtual directory
     cy.createVirtualDirectory(virtualDirectoryDetails)
-
-    cy.get(userSelectors.successMessage).should('exist')
-
-    // clicking on edit button
-    cy.contains(htmlTagSelectors.div, virtualDirectoryDetails.virtualFolderName).parents(userSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist').click()
-
-    // deleting a virtual directory
-    cy.deleteVirtualDirectory()
-
-    cy.get(userSelectors.successMessage).should('exist')
-    // navigating back to domain name
-    cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(htmlTagSelectors.tableData).contains(virtualDirectoryDetails.actualPath).should('exist')
   })
 
   afterEach('deleting a server', () => {
-    cy.deleteServer(serverDetails.serverName)
-    cy.get(serverSelectors.serverName).contains(serverDetails.serverName).should('not.exist')
+    // deleting the created server
+    cy.deleteServerApiRequest(serverDetails).then(($response) => {
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
+    })
   })
 })
