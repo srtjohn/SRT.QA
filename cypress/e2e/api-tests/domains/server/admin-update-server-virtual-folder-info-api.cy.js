@@ -33,7 +33,7 @@ describe('update virtual directory', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -49,7 +49,7 @@ describe('update virtual directory', () => {
     // Check if response type is Api Virtual Folder Poco
       expect($response.ResponseType).to.equal('ApiVirtualFolderPoco')
       // Check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       virtualDirectoryDetails.Id = $response.Response.Id
       virtualDirectoryDetails.LinkId = $response.Response.LinkId
     })
@@ -60,7 +60,7 @@ describe('update virtual directory', () => {
     // Check if response type is Api Virtual Folder Poco
       expect($response.ResponseType).to.equal('ApiVirtualFolderPoco')
       // Check if ErrorStr is success or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // check updated path
       expect($response.Response.Path).to.equal(virtualDirectoryDetails.newPath)
     })
@@ -70,7 +70,7 @@ describe('update virtual directory', () => {
     // calling delete function
     cy.deleteUpdatedVirtualDirectoryApiRequest(virtualDirectoryDetails, serverDetails).then(($response) => {
     // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

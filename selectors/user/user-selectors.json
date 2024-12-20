@@ -1,7 +1,7 @@
 {
     "fieldSelector": ".MuiOutlinedInput-notchedOutline",
     "requiredLabel": "label.Mui-required",
-    "addButton": "[d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z']",
+    "addButton": "[title='Add New']",
     "usernameRequiredMessage" :"p[id='User Name-helper-text']",
     "passwordRequiredMessage" : "p[id='Password-helper-text']",
     "confirmPasswordRequiredMessage" : "p[id='Confirm Password-helper-text']",
@@ -12,7 +12,7 @@
     "addButtonAssign"  : "#add",
     "parentUsers" : ".MuiListItemText-root",
     "assignedGroupParent" : ".ReactVirtualized__Grid__innerScrollContainer",
-    "successMessage"  : "#client-snackbar",
+    "successMessage"  : ".toast",
     "userPageHeading": ".MuiTypography-colorSecondary",
     "emailAddressField" : "[id='Email Address']",
     "homeDirInputField" : "[id='Custom Home Directory']",
@@ -21,6 +21,8 @@
     "dataValue2" : "[data-value='2']",
     "usernameField" : "#User\\ Full\\ Name",
     "userInfoDialog" : "[aria-labelledby='User-dialog-title']",
-    "selectGroupOptionsDialog" : ".MuiStep-root"
-    
+    "selectGroupOptionsDialog" : ".MuiStep-root",
+    "validationMessage":".validation-message",
+    "titleDelete":"[title='Delete']",
+    "button":".dxbl-btn"
 }

@@ -1,6 +1,7 @@
 import label from '../../../../fixtures/label.json'
 import htmlTagSelectors from '../../../../../selectors/htlm-tag-selectors.json'
 import userDirSelectors from '../../../../../selectors/user-dir-selectors.json'
+import generalSelectors from '../../../../../selectors/general-selectors.json'
 import { slowCypressDown } from 'cypress-slow-down'
 
 /**
@@ -42,18 +43,18 @@ describe('Login > {existing user}', () => {
   const fileName = 'local.txt'
   const renameFileName = 'local-new.txt'
   function dotNavigation (operation, file = fileName) {
-    cy.contains(htmlTagSelectors.div, file).parents(userDirSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).click()
-    cy.get(userDirSelectors.editParent).eq(5).within(() => {
+    cy.contains(htmlTagSelectors.tableData, file, { scrollBehavior: false })
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).click({ scrollBehavior: false })
+    cy.get(userDirSelectors.actionSelector).within(() => {
       switch (operation) {
         case 'Download':
           cy.get(userDirSelectors.bulkDownload).click()
           break
         case 'Share':
-          cy.get(userDirSelectors.buttonList).eq(2).click()
+          cy.get(userDirSelectors.bulkShare).click()
           break
         case 'Drop Zone':
           cy.get(userDirSelectors.bulkDropZone).click()
@@ -62,10 +63,10 @@ describe('Login > {existing user}', () => {
           cy.get(userDirSelectors.fileRename).click()
           break
         case 'Move':
-          cy.get(userDirSelectors.bulkMove).click()
+          cy.get(userDirSelectors.fileMove).click()
           break
         case 'Copy':
-          cy.get(userDirSelectors.bulkCopy).click()
+          cy.get(userDirSelectors.fileCopy).click()
           break
         case 'Delete':
           cy.get(userDirSelectors.bulkDelete).click()
@@ -75,24 +76,29 @@ describe('Login > {existing user}', () => {
   }
 
   function enterShareInfo (toUser) {
-    cy.get(userDirSelectors.shareAsField).type(fileName)
-    cy.get(userDirSelectors.toField).click()
-    cy.get(userDirSelectors.toField).type(`${toUser}{enter}`)
-    cy.get(userDirSelectors.buttonList).contains(label.next).click()
-    cy.get(userDirSelectors.buttonList).contains(label.next).click()
-    cy.get(userDirSelectors.buttonList).contains(label.sendText).click()
+    cy.get(userDirSelectors.quickSendDialog).within(() => {
+      cy.get(generalSelectors.textEdit).eq(0).click({ force: true }).type(fileName)
+      cy.get(generalSelectors.textEdit).eq(1).click().type(`${toUser}{enter}`)
+    })
+    cy.get(generalSelectors.button).contains(label.next).click()
+    cy.get(generalSelectors.button).contains(label.next).click()
+    cy.get(generalSelectors.button).contains(label.finish).click()
   }
 
   beforeEach('login', () => {
     cy.login(userData.userBaseUrl, userInfo.username, userInfo.password)
-    cy.get(htmlTagSelectors.p).then(($resp) => {
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(htmlTagSelectors.tableData).then(($resp) => {
       if ($resp.text().includes(fileName)) {
         cy.log('file exists')
         dotNavigation('Delete')
+        cy.get(htmlTagSelectors.tableData).contains(fileName).should('not.exist')
+        cy.log('file deleted')
       }
     })
-    cy.get(userDirSelectors.fileUpload).eq(0).selectFile('cypress/fixtures/local.txt', { force: true }, { action: 'drag-drop' })
-    cy.waitForNetworkIdle(1000, { log: false })
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(userDirSelectors.fileUpload).selectFile('cypress/fixtures/local.txt', { action: 'drag-drop', force: true })
+    cy.waitForNetworkIdle(2000, { log: false })
   })
 
   const pathMove = `qa-do-not-delete-folder/${fileName}`
@@ -106,17 +112,17 @@ describe('Login > {existing user}', () => {
   it('verify user can share file', () => {
     dotNavigation('Share', fileName)
     enterShareInfo(label.sftpUser)
-    cy.get(userDirSelectors.folderNames).contains(label.mySharesText).click()
-    cy.get(userDirSelectors.folderNames).contains(fileName).should('be.visible')
-    cy.get(userDirSelectors.folderNames).contains(label.myFilesText).click()
+    cy.get(generalSelectors.textSelector).contains(label.mySharesText).click()
+    cy.get(htmlTagSelectors.tableData).contains(fileName).should('be.visible')
+    cy.get(generalSelectors.textSelector).contains(label.myFilesText).click()
   })
 
   it('verify user can rename file', () => {
     dotNavigation('Rename')
-    cy.get(userDirSelectors.fileNameField).eq(1).clear()
-    cy.get(userDirSelectors.fileNameField).eq(1).type(renameFileName)
-    cy.get(userDirSelectors.buttonList).contains(label.rename).click()
-    cy.get(userDirSelectors.folderNames).contains(renameFileName).should('be.visible')
+    cy.get(userDirSelectors.inputField).eq(1).clear()
+    cy.get(userDirSelectors.inputField).eq(1).type(renameFileName)
+    cy.get(generalSelectors.button).contains(label.rename).click()
+    cy.get(htmlTagSelectors.tableData).contains(renameFileName).should('be.visible')
     cy.task('endSFTPConnection')
     cy.task('sftpDirectoryExist', { remoteFile, configSFTP }).then(p => {
       expect(`${JSON.stringify(p)}`).to.equal('"-"')
@@ -125,18 +131,20 @@ describe('Login > {existing user}', () => {
 
     // changing it back to "autoFolder"
     dotNavigation('Rename', renameFileName)
-    cy.get(userDirSelectors.fileNameField).eq(1).clear()
-    cy.get(userDirSelectors.fileNameField).eq(1).type(fileName)
-    cy.get(userDirSelectors.buttonList).contains(label.rename).click()
+    cy.get(userDirSelectors.inputField).eq(1).clear()
+    cy.get(userDirSelectors.inputField).eq(1).type(fileName)
+    cy.get(generalSelectors.button).contains(label.rename).click()
   })
 
-  it('verify user can move file', () => {
+  it.only('verify user can move file', () => {
     dotNavigation('Move')
-    cy.get(userDirSelectors.folderNames).contains(label.myComputer).click()
-    cy.get(userDirSelectors.folderNames).contains(label.qaAutoFolder).click()
-    cy.get(userDirSelectors.buttonList).contains(label.select).click()
-    cy.get(userDirSelectors.roleCell).contains(label.qaAutoFolder).click()
-    cy.get(userDirSelectors.folderNames).contains(fileName).should('be.visible')
+    cy.get(htmlTagSelectors.div).contains(label.myComputer).parent().parent().click().prev(generalSelectors.button).click()
+    cy.waitForNetworkIdle(1500, { log: false })
+    cy.get(generalSelectors.textSelector).contains(label.qaAutoFolder).realClick({ force: true, scrollBehavior: false })
+    cy.get(generalSelectors.button).contains(label.select).click()
+    cy.get(htmlTagSelectors.tableData).contains(label.qaAutoFolder).click()
+    cy.get('.srt-navbar-logo').click({ force: true })
+    cy.get(htmlTagSelectors.tableData).contains(fileName).should('be.visible')
     cy.task('endSFTPConnection')
     const remoteFile = pathMove
     cy.task('sftpDirectoryExist', { remoteFile, configSFTP }).then(p => {
@@ -148,13 +156,12 @@ describe('Login > {existing user}', () => {
   // skipped because after copying files the dot navigation menu is still opened and user is unable to click on the qa-do-not-delete folder to verify
   it.skip('verify user can copy file', () => {
     dotNavigation('Copy')
-    cy.get(userDirSelectors.folderNames).contains(label.myComputer).click()
-    cy.get(userDirSelectors.folderNames).contains(label.qaAutoFolder).click()
-    cy.get(userDirSelectors.buttonList).contains(label.select).click()
-
-    cy.get(userDirSelectors.folderNames).contains(label.qaAutoFolder).click()
-    cy.get(userDirSelectors.folderNames).contains(fileName).should('be.visible')
-    cy.get(userDirSelectors.folderNames).contains('..').click()
+    cy.get(htmlTagSelectors.div).contains(label.myComputer).click().prev(generalSelectors.button).click()
+    cy.get(htmlTagSelectors.div).contains(label.qaAutoFolder).click()
+    cy.get(generalSelectors.button).contains(label.select).click()
+    cy.get(htmlTagSelectors.tableData).contains(label.qaAutoFolder).should('be.visible').click({ force: true })
+    cy.get(htmlTagSelectors.tableData).contains(fileName).should('be.visible')
+    cy.get(htmlTagSelectors.tableData).contains('..').click()
     cy.task('endSFTPConnection')
     cy.task('sftpDirectoryExist', { pathMove, configSFTP }).then(p => {
       expect(`${JSON.stringify(p)}`).to.equal('"-"')

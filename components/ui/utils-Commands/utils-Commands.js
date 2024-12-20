@@ -1,7 +1,6 @@
 import userSelectors from '../../../selectors/user/user-selectors.json'
-import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
-import serverSelectors from '../../../selectors/server-selectors.json'
 import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
+import generalSelectors from '../../../selectors/general-selectors.json'
 
 /**
  * Common Utils Commands
@@ -16,10 +15,8 @@ import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
  * cy.enterText('User Name', userDetails.userName)
  */
 
-Cypress.Commands.add('enterText', (inputField, inputText) => {
-  cy.get(userSelectors.requiredLabel).contains(inputField).parent(htmlTagSelectors.div).within(() => {
-    cy.get(htmlTagSelectors.input).type(inputText)
-  })
+Cypress.Commands.add('enterText', (label, inputText) => {
+  cy.get(generalSelectors.textSelector).contains(label).next().type(inputText)
 })
 
 /**
@@ -32,7 +29,7 @@ Cypress.Commands.add('enterText', (inputField, inputText) => {
  */
 
 Cypress.Commands.add('clickButton', (buttonText) => {
-  cy.get(serverSelectors.nextButtonContainer).contains(buttonText).click()
+  cy.get(dashboardSelectors.dashboardButton).contains(buttonText).click()
 })
 
 /**
@@ -58,8 +55,9 @@ Cypress.Commands.add('checkTextVisibility', (selector, text) => {
 */
 
 Cypress.Commands.add('delete', (inputName) => {
-  cy.contains(inputName).scrollIntoView().parents(userSelectors.parentCell).click({ force: true })
-  cy.get(userSelectors.deleteButton).click()
+  cy.contains(inputName).scrollIntoView().next().next().within(() => {
+    cy.get(userSelectors.titleDelete).realClick()
+  })
 })
 
 /**
@@ -72,5 +70,5 @@ Cypress.Commands.add('delete', (inputName) => {
 */
 
 Cypress.Commands.add('selectLanguage', (language) => {
-  cy.get(dashboardSelectors.languageList).contains(language).click()
+  cy.get(dashboardSelectors.languageDropdown).contains(language).click()
 })

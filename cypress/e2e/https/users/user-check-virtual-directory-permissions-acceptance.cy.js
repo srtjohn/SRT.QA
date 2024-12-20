@@ -1,7 +1,5 @@
 import label from '../../../fixtures/label.json'
-import loginSelectors from '../../../../selectors/login-selectors.json'
 import htmlTagSelectors from '../../../../selectors/htlm-tag-selectors.json'
-import userDirSelectors from '../../../../selectors/user-dir-selectors.json'
 
 /**
  * @description
@@ -29,7 +27,7 @@ describe('login > add new virtual directory ', () => {
     username: adminData.adminUsername,
     password: adminData.adminPassword
   }
-  const CreateUserDetails = {
+  const createUserDetails = {
     username: `qa-auto-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: 'testing123',
     serverName: label.autoServerName
@@ -46,38 +44,37 @@ describe('login > add new virtual directory ', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
       expect($response.Response.SessionInfo.BearerToken).to.not.be.empty
       // initializing bearer token
-      CreateUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
+      createUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
     })
-    cy.postCreateUserApiRequest(CreateUserDetails).then(($response) => {
-      expect($response.Response.Username).to.equal(CreateUserDetails.username)
+    cy.postCreateUserApiRequest(createUserDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(createUserDetails.username)
       // initializing AuthGUID
-      CreateUserDetails.AuthGUID = $response.Response.AuthGUID
+      createUserDetails.AuthGUID = $response.Response.AuthGUID
     })
 
-    cy.postCreateUserVirtualDirectoryApiRequest(CreateUserDetails, virtualDirectoryDetails).then(($response) => {
-      expect($response.Response.UserGroupGUID).to.equal(CreateUserDetails.AuthGUID)
+    cy.postCreateUserVirtualDirectoryApiRequest(createUserDetails, virtualDirectoryDetails).then(($response) => {
+      expect($response.Response.UserGroupGUID).to.equal(createUserDetails.AuthGUID)
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 
   it('verifying permissions visibility', () => {
-  // checking permissions
+    cy.login('', createUserDetails.username, createUserDetails.password)
 
-    cy.visit(Cypress.env('baseUrl'))
-    cy.get(loginSelectors.inputUsername).type(CreateUserDetails.username)
-    cy.get(loginSelectors.inputPassword).type(CreateUserDetails.password)
-    cy.get(loginSelectors.loginButton).contains(label.login).click()
-    cy.contains(userDirSelectors.roleCell, virtualDirectoryDetails.Path)
-      .prev(htmlTagSelectors.div).click()
-    cy.get(userDirSelectors.permissionHead).should('be.visible')
-    cy.get(`${userDirSelectors.permissionHead} ${userDirSelectors.gridItem}`).eq(1).find(userDirSelectors.gridItem).eq(0).find(htmlTagSelectors.span).should('not.exist')
+    // actions button should not be visible
+    cy.get(htmlTagSelectors.tableData).contains(virtualDirectoryDetails.Path).parent()
+      .next().next().next().next().invoke('text')
+      .then((text) => {
+        expect(text.trim()).to.equal('')
+      })
   })
+
   afterEach('deleting new folder and user', () => {
     // calling delete user function
-    cy.deleteUserApiRequest(CreateUserDetails.bearerToken, CreateUserDetails.serverName, CreateUserDetails.username).then(($response) => {
+    cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

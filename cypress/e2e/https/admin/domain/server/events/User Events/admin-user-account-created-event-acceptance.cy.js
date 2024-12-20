@@ -58,7 +58,7 @@ describe('Login > {existing server} > events > create new event', () => {
     })
     // creating home directory
     cy.postUserLoginApiRequest(logFileUserDetails).then(($response) => {
-      expect($response.auth.ErrorStr).to.eq('Success')
+      expect($response.auth.ErrorStr).to.eq('_Error.SUCCESS')
     })
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
   })
@@ -107,12 +107,12 @@ describe('Login > {existing server} > events > create new event', () => {
     // calling delete user function
     cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
 
     cy.deleteUserApiRequest(createUserDetails.bearerToken, logFileUserDetails.serverName, logFileUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

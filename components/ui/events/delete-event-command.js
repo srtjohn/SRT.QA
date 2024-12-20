@@ -30,8 +30,11 @@ Cypress.Commands.add('deleteEvent', (eventName, home = false) => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
   }
-  cy.get(htmlSelectors.div).contains(eventName).should('be.visible').click()
-  cy.get(userSelectors.deleteButton).should('be.visible').click()
+  cy.get(htmlSelectors.tableData).contains(eventName).prev().should('be.visible').click({ force: true })
+  cy.waitForNetworkIdle(1000, { log: false })
+  cy.get(userSelectors.titleDelete).eq(0).should('be.visible').click()
+  cy.waitForNetworkIdle(1000, { log: false })
+  cy.get(userSelectors.button).contains(label.confirm).should('be.visible').realClick()
   // verify if event is deleted
-  cy.get(htmlSelectors.div).contains(eventName).should('not.exist')
+  cy.get(htmlSelectors.tableData).contains(eventName).should('not.exist')
 })

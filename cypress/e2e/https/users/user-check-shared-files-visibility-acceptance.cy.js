@@ -1,6 +1,8 @@
 import label from '../../../fixtures/label.json'
-import loginSelectors from '../../../../selectors/login-selectors.json'
+import generalSelectors from '../../../../selectors/general-selectors.json'
 import userDirSelectors from '../../../../selectors/user-dir-selectors.json'
+import navigationSelectors from '../../../../selectors/navigation/left-navigation-selectors.json'
+import htmlSelectors from '../../../../selectors/htlm-tag-selectors.json'
 
 /**
  * @description
@@ -41,13 +43,6 @@ describe('login', () => {
   const sharedDirName = 'NX-I1253'
   const fileName = 'local.txt'
 
-  function login (username) {
-    cy.visit(Cypress.env('baseUrl'))
-    cy.get(loginSelectors.inputUsername).type(username)
-    cy.get(loginSelectors.inputPassword).type(firstUserDetails.password)
-    cy.get(loginSelectors.loginButton).contains(label.login).click()
-  }
-
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
       expect($response.Response.SessionInfo.BearerToken).to.not.be.empty
@@ -64,33 +59,33 @@ describe('login', () => {
   })
 
   it('verify that shared files are visible in shared with me tab', () => {
-    login(firstUserDetails.username)
-    cy.get(userDirSelectors.quickSendQue).eq(0).selectFile(`cypress/fixtures/${fileName}`, { force: true }, { action: 'drag-drop' })
-    cy.get(userDirSelectors.quickSendDialog).eq(1).within(() => {
-      cy.get(userDirSelectors.shareAsField).click({ force: true }).type(sharedDirName)
-      cy.get(userDirSelectors.toField).click()
-      cy.get(userDirSelectors.toField).type(`${secondUserDetails.username}{enter}`)
-      cy.get(userDirSelectors.buttonList).contains(label.next).click({ force: true })
-      cy.get(userDirSelectors.buttonList).contains(label.next).click({ force: true })
-      cy.get(userDirSelectors.buttonList).contains(label.sendText).click({ force: true })
+    cy.login(' ', firstUserDetails.username, firstUserDetails.password)
+    cy.waitForNetworkIdle(1500, { log: false })
+    cy.get(userDirSelectors.quickSend).selectFile(`cypress/fixtures/${fileName}`, { action: 'drag-drop', force: true })
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(userDirSelectors.quickSendDialog).within(() => {
+      cy.get(generalSelectors.textEdit).eq(0).click({ force: true }).type(sharedDirName)
+      cy.get(generalSelectors.textEdit).eq(1).click().type(`${secondUserDetails.username}{enter}`)
     })
+    cy.get(generalSelectors.button).contains(label.next).click({ force: true })
+    cy.get(generalSelectors.button).contains(label.next).click({ force: true })
+    cy.get(generalSelectors.button).contains(label.finish).click({ force: true })
+
     // login as second user
-    login(secondUserDetails.username)
-    cy.get(userDirSelectors.buttonList).contains(label.sharedWithMe).click({ force: true })
-    cy.get(userDirSelectors.parentUsers).contains(sharedDirName).should('be.visible').parent(userDirSelectors.gridItem)
-      .prev(userDirSelectors.gridItem).click({ force: true })
-    cy.get(userDirSelectors.parentUsers).contains(fileName).should('be.visible')
+    cy.login('', secondUserDetails.username, firstUserDetails.password)
+    cy.get(navigationSelectors.textLabelSelector).contains(label.sharedWithMe).click({ force: true })
+    cy.get(htmlSelectors.tableData).contains(sharedDirName).should('be.visible')
   })
   afterEach('deleting users', () => {
     // calling delete user function
     cy.deleteUserApiRequest(secondUserDetails.bearerToken, firstUserDetails.serverName, firstUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
     // calling delete user function
     cy.deleteUserApiRequest(secondUserDetails.bearerToken, secondUserDetails.serverName, secondUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

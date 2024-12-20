@@ -39,7 +39,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -63,7 +63,7 @@ describe('GET /api/Servers', () => {
       // Check if virtual directory is created for new user
       expect($response.Response.UserGroupGUID).to.equal(createUserDetails.UserGUID)
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
       // initializing virtualFolderGUID
       createUserDetails.Id = $response.Response.Id
     })
@@ -74,7 +74,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api virtual directory folder response
       expect($response.ResponseType).to.equal('ApiVirtualFolderResponse')
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if virtual folder id  exist in virtual directory list or not
       const VirtualFolders = $response.Response.VirtualFolderList.map(VirtualFolders => label.Id in VirtualFolders)
       expect(VirtualFolders).to.include(true)
@@ -85,10 +85,10 @@ describe('GET /api/Servers', () => {
     // deleting virtual directory
     cy.deleteUserVirtualDirectoryApiRequest(createUserDetails).then(($response) => {
     // check if ErrorStr Is success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
       cy.deleteUserApiRequest(createUserDetails.bearerToken, serverDetails.serverName, createUserDetails.username).then(($response) => {
         // check if ErrorStr is Success
-        expect($response.Result.ErrorStr).to.eq('Success')
+        expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
       })
     })
   })

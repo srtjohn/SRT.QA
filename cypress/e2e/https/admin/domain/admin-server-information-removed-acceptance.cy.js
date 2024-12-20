@@ -39,37 +39,37 @@ describe('Login > Add New > Server > Database > Server Info', () => {
   })
 
   afterEach(() => {
-    cy.get(generalSelectors.closeModal).click()
+    cy.get(generalSelectors.close).click()
   })
 
   it('verify that server information is removed when user navigates back from services to database during server creation', () => {
-    cy.get(serverSelectors.addButtonContainer).contains(label.addNew).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.waitUntil(() => cy.get(serverSelectors.spinner).should('not.be.visible'))
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
-      cy.get(htmlTagSelectors.input).type(serverName)
-    })
-    cy.contains(htmlTagSelectors.span, label.StartServerAutomatically)
-      .prev(htmlTagSelectors.span).click()
+    cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
+    cy.waitForNetworkIdle(3000, { log: false })
+    cy.get(serverSelectors.titleAddNew).click()
 
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverDescriptionText).parent(htmlTagSelectors.div).within(() => {
-      cy.get(htmlTagSelectors.input).type(label.serverDescription)
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+
+    cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).type(serverName)
+
+    cy.get(serverSelectors.serviceCheckboxContainer).first().within(() => {
+      cy.get(htmlTagSelectors.div).realClick()
     })
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
+    cy.get(generalSelectors.textSelector).contains(label.serverDescriptionText).next(htmlTagSelectors.div).type(label.serverDescription)
+
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+
     cy.get(serverSelectors.serverPageHeading).contains(label.selectServices).should('be.visible')
-    cy.get(serverSelectors.nextButtonContainer).should('be.visible').contains(label.back).click()
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
+    cy.get(generalSelectors.button).should('be.visible').contains(label.back).realClick()
+    cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).within(() => {
       cy.get(htmlTagSelectors.input).invoke('val').should('equal', serverName)
     })
     // Select Database
-    cy.get(serverSelectors.nextButtonContainer).should('be.visible').contains(label.back).click()
-    cy.get(serverSelectors.serverPageHeading).contains('Select Database').should('be.visible')
-    cy.get(serverSelectors.nextButtonContainer).should('be.visible').contains(label.next).click()
-    cy.waitUntil(() => cy.get(serverSelectors.spinner).should('not.be.visible'))
-    cy.get(serverSelectors.serverPageHeading).contains('Enter Server Information').should('be.visible')
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
-      cy.get(htmlTagSelectors.input).should('not.contain', serverName)
-    })
+    cy.get(generalSelectors.button).should('be.visible').contains(label.back).realClick()
+    cy.get(serverSelectors.serverPageHeading).contains(label.selectDatabase).should('be.visible')
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(serverSelectors.serverPageHeading).contains(label.enterServerInfo).should('be.visible')
+    cy.get(htmlTagSelectors.tableData).should('not.contain', serverName)
   })
 })

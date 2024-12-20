@@ -28,7 +28,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -43,7 +43,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api server list response
       expect($response.ResponseType).to.equal('ApiServerListResponse')
       // Check if Errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       serverDetails.ServerGUID = $response.Response.ServerNodeGUID
       serverDetails.ServerGUID = $response.Response.ServerNodeGUID
     })
@@ -52,7 +52,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is Api Event Handlers condition meta
       expect($response.ResponseType).to.equal('ApiEventHandlerConditionMeta')
       // Check if errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 
@@ -61,7 +61,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is Api Event Handler Condition Tree
       expect($response.ResponseType).to.equal('ApiEventHandlerConditionMeta')
       // Check if ErrorStr is equal to success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       //
       expect($response.Response).to.include.keys('Commands', 'ConnectionTypes')
     })
@@ -70,7 +70,7 @@ describe('GET /api/Servers', () => {
     // calling delete function
     cy.deleteServerApiRequest(serverDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

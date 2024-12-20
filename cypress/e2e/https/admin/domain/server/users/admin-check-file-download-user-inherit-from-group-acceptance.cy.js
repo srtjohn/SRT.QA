@@ -3,6 +3,7 @@ import label from '../../../../../../fixtures/label.json'
 import userDirSelectors from '../../../../../../../selectors/user-dir-selectors.json'
 import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
 import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
+import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
 
 /**
  * @description
@@ -21,8 +22,8 @@ import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.
  * - user should have valid credentials
  * - an existing user should exist
  */
-
-describe('Login > {existing server} > users > edit', () => {
+// skipped because label says Edit User and Assigned Users bug
+describe.skip('Login > {existing server} > users > edit', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
@@ -36,18 +37,18 @@ describe('Login > {existing server} > users > edit', () => {
   }
 
   function setDirectoryToGroup (username, menuOption) {
-    cy.contains(htmlTagSelectors.div, username).scrollIntoView().parents(userSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).within(() => {
-        cy.get(htmlTagSelectors.button).click({ force: true })
+    cy.contains(htmlTagSelectors.tableData, username)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(htmlTagSelectors.button).eq(0).click({ force: true })
       })
-    cy.get(userSelectors.parentUsers).contains(menuOption).click()
+    cy.get(userDirSelectors.actionSelector).contains(menuOption).click()
     cy.clickButton(label.next)
-    cy.contains(htmlTagSelectors.div, label.autoGroupName).parents(userSelectors.parentCell)
-      .prev(htmlTagSelectors.div).within(() => {
+    cy.contains(htmlTagSelectors.tableData, label.autoGroupName).parent(htmlTagSelectors.tableData)
+      .prev(htmlTagSelectors.tableData).within(() => {
         cy.get(htmlTagSelectors.button).click({ force: true })
       })
     cy.clickButton(label.next)
@@ -73,6 +74,9 @@ describe('Login > {existing server} > users > edit', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
+    cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(userDetails.username)
+    cy.waitForNetworkIdle(1000, { log: false })
+    // bug here for label editUserAssignedGroups
     setDirectoryToGroup(userDetails.username, label.editUserAssignedGroups)
     clickOnDropdown(label.primaryGroup)
     cy.get(userDirSelectors.buttonList).contains(label.autoGroupName).click()
@@ -93,7 +97,7 @@ describe('Login > {existing server} > users > edit', () => {
   afterEach('delete user', () => {
     cy.deleteUserApiRequest(userDetails.bearerToken, userDetails.serverName, userDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

@@ -34,7 +34,7 @@ describe('get filtered user information', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -48,7 +48,7 @@ describe('get filtered user information', () => {
       // Check if response type is api server list response
       expect($response.ResponseType).to.equal('ApiServerListResponse')
       // Check if errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       createUserDetails.bearerToken = serverDetails.bearerToken
     })
 
@@ -65,7 +65,7 @@ describe('get filtered user information', () => {
       // Check if response type is Api Cloud Folder List
       expect($response.ResponseType).to.equal('ApiCloudFolderList')
       // Check if Errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
 
       const cloud = $response.Response.CloudFolderList.map(name => name.CloudName)
       expect(cloud).to.include(cloudFolderDetails.cloudName)
@@ -80,7 +80,7 @@ describe('get filtered user information', () => {
       // Check if response type is Api Cloud Folder List
       expect($response.ResponseType).to.equal('ApiCloudFolderList')
       // check if errorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if username is present in response
       const cloudFolderName = $response.Response.CloudFolderList.map(name => name.CloudName)
       expect(cloudFolderName).to.include(cloudFolderDetails.cloudName)
@@ -91,7 +91,7 @@ describe('get filtered user information', () => {
     // calling delete user function
     cy.deleteUserCloudFolderApiRequest(serverDetails, createUserDetails, cloudFolderDetails).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
 
       expect($response.Response.CloudFolderList).to.be.empty
       serverDetails.bearerToken = createUserDetails.bearerToken
@@ -99,7 +99,7 @@ describe('get filtered user information', () => {
     // calling delete function
     cy.deleteServerApiRequest(serverDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })
