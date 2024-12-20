@@ -36,17 +36,16 @@ Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false, ho
   }
   cy.waitForNetworkIdle(1000, { log: false })
   cy.get(userSelectors.addButton).eq(0).should('be.visible').click()
-  cy.get(dashboardSelectors.contentModal).within(()=>{
+  cy.get(dashboardSelectors.contentModal).within(() => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.events).realClick()
     cy.waitForNetworkIdle(2000, { log: false })
-    cy.get(dashboardSelectors.dashboardButton).contains(label.addEvent).realClick({force : true})
+    cy.get(dashboardSelectors.dashboardButton).contains(label.addEvent).realClick({ force: true })
     cy.waitForNetworkIdle(1000, { log: false })
-    cy.get(htmlSelectors.span).then((resp)=>{
+    cy.get(htmlSelectors.span).then((resp) => {
       console.log(resp.text())
-      if(!resp.text().includes(label.addEvent)){
-        cy.get(dashboardSelectors.dashboardButton).contains(label.addEvent).realClick({force : true})
-      }
-      else{
+      if (!resp.text().includes(label.addEvent)) {
+        cy.get(dashboardSelectors.dashboardButton).contains(label.addEvent).realClick({ force: true })
+      } else {
         cy.log('open')
       }
     })
@@ -59,7 +58,4 @@ Cypress.Commands.add('createEvent', (eventType, subEvent, finalEvent = false, ho
     }
     cy.get(generalSelectors.button).contains(label.okay).click()
   })
-  
-  
-  
 })

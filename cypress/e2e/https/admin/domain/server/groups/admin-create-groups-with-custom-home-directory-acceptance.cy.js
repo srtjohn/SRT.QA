@@ -2,7 +2,7 @@ import label from '../../../../../../fixtures/label.json'
 import groupSelectors from '../../../../../../../selectors/groups/groups-selectors.json'
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import { slowCypressDown } from 'cypress-slow-down'
-import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.json' 
+import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
 
 /**
  * @description

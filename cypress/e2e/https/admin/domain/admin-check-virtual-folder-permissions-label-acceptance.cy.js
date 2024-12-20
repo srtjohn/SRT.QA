@@ -2,7 +2,6 @@ import navigationSelectors from '../../../../../selectors/navigation/left-naviga
 import label from '../../../../fixtures/label.json'
 import generalSelectors from '../../../../../selectors/general-selectors.json'
 import htmlSelectors from '../../../../../selectors/htlm-tag-selectors.json'
-import dashboardSelectors from '../../../../../selectors/dashboard-selectors.json'
 
 /**
  * @description

@@ -40,7 +40,7 @@ describe('login', () => {
   const date = Cypress.dayjs().add(Math.floor(Math.random() * 30), 'days').format('MM/DD/YYYY')
 
   function navigateToAdvancedTab () {
-      cy.contains(htmlSelectors.tableData, createUserDetails.username)
+    cy.contains(htmlSelectors.tableData, createUserDetails.username)
       .next(htmlSelectors.tableData).should('exist')
       .next(htmlSelectors.tableData).should('exist')
       .next(htmlSelectors.tableData).should('exist')
@@ -74,7 +74,7 @@ describe('login', () => {
     cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(createUserDetails.username)
     navigateToAdvancedTab()
     cy.get(navigationSelectors.textLabelSelector).contains(label.passwordExpiration).should('be.visible')
-    .prev(htmlSelectors.div).click()
+      .prev(htmlSelectors.div).click()
     cy.waitForNetworkIdle(1000, { log: false })
     // selecting interval as date
     cy.get(userDirSelectors.toField).realClick()
@@ -90,7 +90,6 @@ describe('login', () => {
     navigateToAdvancedTab()
     cy.get(htmlSelectors.label).should('contain.text', label.expireDate)
     cy.get(dashboardSelectors.textInput).eq(2).should('have.value', date)
-    
   })
   afterEach('deleting user', () => {
     // calling delete user function

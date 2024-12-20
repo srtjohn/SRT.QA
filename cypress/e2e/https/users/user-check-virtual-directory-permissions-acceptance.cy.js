@@ -1,7 +1,5 @@
 import label from '../../../fixtures/label.json'
-import loginSelectors from '../../../../selectors/login-selectors.json'
 import htmlTagSelectors from '../../../../selectors/htlm-tag-selectors.json'
-import userDirSelectors from '../../../../selectors/user-dir-selectors.json'
 
 /**
  * @description
@@ -62,14 +60,14 @@ describe('login > add new virtual directory ', () => {
   })
 
   it('verifying permissions visibility', () => {
-    cy.login('',createUserDetails.username,createUserDetails.password)
+    cy.login('', createUserDetails.username, createUserDetails.password)
 
     // actions button should not be visible
-    cy.get(htmlTagSelectors.tableData).contains( virtualDirectoryDetails.Path).parent()
-    .next().next().next().next().invoke('text')
-    .then((text) => {
-      expect(text.trim()).to.equal('')
-    })
+    cy.get(htmlTagSelectors.tableData).contains(virtualDirectoryDetails.Path).parent()
+      .next().next().next().next().invoke('text')
+      .then((text) => {
+        expect(text.trim()).to.equal('')
+      })
   })
 
   afterEach('deleting new folder and user', () => {

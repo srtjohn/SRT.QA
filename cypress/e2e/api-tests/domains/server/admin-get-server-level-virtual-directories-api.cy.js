@@ -47,13 +47,13 @@ describe('GET /api/Servers', () => {
     })
     cy.postCreateServerLevelVirtualDirectoryApiRequest(virtualDirectoryDetails, serverDetails).then(($response) => {
       // Check if response type is Api Virtual Folder Poco
-        expect($response.ResponseType).to.equal('ApiVirtualFolderPoco')
-        // Check if ErrorStr is Success
-        expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
-        virtualDirectoryDetails.Id = $response.Response.Id
-        virtualDirectoryDetails.LinkId = $response.Response.LinkId
-        serverDetails.bearerToken = virtualDirectoryDetails.bearerToken
-      })
+      expect($response.ResponseType).to.equal('ApiVirtualFolderPoco')
+      // Check if ErrorStr is Success
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
+      virtualDirectoryDetails.Id = $response.Response.Id
+      virtualDirectoryDetails.LinkId = $response.Response.LinkId
+      serverDetails.bearerToken = virtualDirectoryDetails.bearerToken
+    })
   })
 
   it('verify that admin can get the list of virtual directories through API', () => {

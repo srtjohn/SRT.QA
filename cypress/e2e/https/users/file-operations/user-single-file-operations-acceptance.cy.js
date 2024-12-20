@@ -43,7 +43,7 @@ describe('Login > {existing user}', () => {
   const fileName = 'local.txt'
   const renameFileName = 'local-new.txt'
   function dotNavigation (operation, file = fileName) {
-    cy.contains(htmlTagSelectors.tableData, file,{ scrollBehavior: false })
+    cy.contains(htmlTagSelectors.tableData, file, { scrollBehavior: false })
       .next(htmlTagSelectors.tableData).should('exist')
       .next(htmlTagSelectors.tableData).should('exist')
       .next(htmlTagSelectors.tableData).should('exist')
@@ -136,13 +136,14 @@ describe('Login > {existing user}', () => {
     cy.get(generalSelectors.button).contains(label.rename).click()
   })
 
-  it.skip('verify user can move file', () => {
+  it.only('verify user can move file', () => {
     dotNavigation('Move')
     cy.get(htmlTagSelectors.div).contains(label.myComputer).parent().parent().click().prev(generalSelectors.button).click()
     cy.waitForNetworkIdle(1500, { log: false })
-    cy.get(generalSelectors.textSelector).contains(label.qaAutoFolder).realClick({force: true, scrollBehavior: false })
+    cy.get(generalSelectors.textSelector).contains(label.qaAutoFolder).realClick({ force: true, scrollBehavior: false })
     cy.get(generalSelectors.button).contains(label.select).click()
     cy.get(htmlTagSelectors.tableData).contains(label.qaAutoFolder).click()
+    cy.get('.srt-navbar-logo').click({ force: true })
     cy.get(htmlTagSelectors.tableData).contains(fileName).should('be.visible')
     cy.task('endSFTPConnection')
     const remoteFile = pathMove
@@ -158,7 +159,7 @@ describe('Login > {existing user}', () => {
     cy.get(htmlTagSelectors.div).contains(label.myComputer).click().prev(generalSelectors.button).click()
     cy.get(htmlTagSelectors.div).contains(label.qaAutoFolder).click()
     cy.get(generalSelectors.button).contains(label.select).click()
-    cy.get(htmlTagSelectors.tableData).contains(label.qaAutoFolder).should('be.visible').click({force: true})
+    cy.get(htmlTagSelectors.tableData).contains(label.qaAutoFolder).should('be.visible').click({ force: true })
     cy.get(htmlTagSelectors.tableData).contains(fileName).should('be.visible')
     cy.get(htmlTagSelectors.tableData).contains('..').click()
     cy.task('endSFTPConnection')

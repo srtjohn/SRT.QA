@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - migration
   schedule:
     - cron: '0 12-16 * * *'  #every hour from 12AM to 4:59PM EST
 jobs:

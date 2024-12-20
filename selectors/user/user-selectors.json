@@ -23,6 +23,6 @@
     "userInfoDialog" : "[aria-labelledby='User-dialog-title']",
     "selectGroupOptionsDialog" : ".MuiStep-root",
     "validationMessage":".validation-message",
-    "titleDelete":"[title='Delete']"
-    
+    "titleDelete":"[title='Delete']",
+    "button":".dxbl-btn"
 }

@@ -55,7 +55,7 @@ Cypress.Commands.add('checkTextVisibility', (selector, text) => {
 */
 
 Cypress.Commands.add('delete', (inputName) => {
-  cy.contains(inputName).scrollIntoView().next().next().within(()=>{
+  cy.contains(inputName).scrollIntoView().next().next().within(() => {
     cy.get(userSelectors.titleDelete).realClick()
   })
 })

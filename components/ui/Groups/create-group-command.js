@@ -35,9 +35,9 @@ Cypress.Commands.add('createGroup', (groupDetails) => {
   if (groupDetails.groupDirectoryOption) {
     cy.get(userDirSelectors.toField).realClick()
     cy.get(groupSelectors.dropDownOptions).contains(groupDetails.groupDirectoryOption).click({ force: true })
-    cy.get(generalSelectors.textSelector).contains(label.subDir).next().within(()=>{
+    cy.get(generalSelectors.textSelector).contains(label.subDir).next().within(() => {
       cy.get(generalSelectors.textEdit).type(groupDetails.groupDirPath.replace(/\//g, '\\'))
-     })
+    })
   }
   cy.get(groupSelectors.parentGroup).eq(2).within(() => {
     cy.clickButton(label.next)

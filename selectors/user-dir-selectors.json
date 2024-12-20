@@ -31,5 +31,6 @@
     "gridItem":".MuiGrid-item",
     "quickSendDialog":".dxbl-group-body-content",
     "actionSelector":".dxbl-dropdown-body",
-    "inputField":".dxbl-text-edit-input"
+    "inputField":".dxbl-text-edit-input",
+    "toolbar":".dxbl-btn-toolbar"
 }

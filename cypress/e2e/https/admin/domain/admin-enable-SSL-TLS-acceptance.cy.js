@@ -47,7 +47,7 @@ describe('Login > Add New > Server > Database > Server Info > > FTPS Configurati
       .find(serverSelectors.serviceCheckboxContainer)
       .get(generalSelectors.inputTypeCheckbox).eq(0).realClick()
       .get(generalSelectors.inputTypeCheckbox).eq(1).realClick()
-      cy.waitForNetworkIdle(2000, { log: false })
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.get(generalSelectors.button).contains(label.next).realClick()
     cy.get(generalSelectors.button).contains(label.next).realClick()
 

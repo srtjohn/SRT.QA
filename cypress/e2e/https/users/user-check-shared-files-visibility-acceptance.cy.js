@@ -65,7 +65,6 @@ describe('login', () => {
     cy.waitForNetworkIdle(2000, { log: false })
     cy.get(userDirSelectors.quickSendDialog).within(() => {
       cy.get(generalSelectors.textEdit).eq(0).click({ force: true }).type(sharedDirName)
-      
       cy.get(generalSelectors.textEdit).eq(1).click().type(`${secondUserDetails.username}{enter}`)
     })
     cy.get(generalSelectors.button).contains(label.next).click({ force: true })

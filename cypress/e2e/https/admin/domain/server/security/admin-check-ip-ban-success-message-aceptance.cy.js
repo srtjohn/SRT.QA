@@ -22,7 +22,7 @@ import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.jso
  * - user should have valid credentials
  *
  */
-// skipped because no success message 
+// skipped because no success message
 describe.skip('Login > New Server > Security > IP Bans', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
