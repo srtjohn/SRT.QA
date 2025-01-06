@@ -1,10 +1,10 @@
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
-import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
 import label from '../../../../../../fixtures/label.json'
 import { slowCypressDown } from 'cypress-slow-down'
 import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
 import generalSelectors from '../../../../../../../selectors/general-selectors.json'
 import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
+import userDirSelectors from '../../../../../../../selectors/user-dir-selectors.json'
 
 /**
  * @description
@@ -36,9 +36,9 @@ describe('Login > {existing server} > create new user > create virtual directory
   }
 
   const userDetails = {
-    userName: `qa-auto-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
+    username: `qa-auto-user-${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: 'testing123',
-    groupName: label.autoGroupName
+    serverName: label.autoServerName
   }
   const virtualDirectoryDetails = {
     actualPath: 'C:/gpdirone',
@@ -46,57 +46,62 @@ describe('Login > {existing server} > create new user > create virtual directory
   }
 
   beforeEach('login and create user', () => {
+    cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
+      userDetails.bearerToken = $response.Response.SessionInfo.BearerToken
+    })
+    cy.postCreateUserApiRequest(userDetails).then(($response) => {
+      expect($response.Response.Username).to.equal(userDetails.username)
+    })
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    // navigate to users
+  })
+
+  function createVirtualDirectory () {
+    cy.get(dashboardSelectors.addNew).eq(0).click()
+    cy.get(dashboardSelectors.textInput).eq(2).type(virtualDirectoryDetails.actualPath, { scrollBehavior: false })
+    cy.get(dashboardSelectors.textInput).eq(3).type(virtualDirectoryDetails.virtualFolderName, { scrollBehavior: false })
+    cy.get(dashboardSelectors.dashboardButton).contains(label.save).click({ scrollBehavior: false })
+  }
+
+  function searchAndNavigate (username) {
+    cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(username)
+    cy.contains(htmlTagSelectors.tableData, userDetails.username)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(htmlTagSelectors.button).eq(0).click({ force: true })
+      })
+  }
+
+  it('verify that admin user can create a virtual directory on user level with same name after deleting', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
-    cy.get(userSelectors.addButton).should('be.visible').click()
-    // creating a new user
-    cy.createUser(userDetails)
-    cy.get(userSelectors.successMessage).should('be.visible')
-    cy.get(htmlTagSelectors.div).then(resp => {
-      if (!resp.text().includes(userDetails.userName)) {
-        cy.get(dashboardSelectors.usersPage).eq(1).scrollTo('bottom')
-      }
-    })
-    cy.get(userSelectors.parentCell).contains(userDetails.userName).scrollIntoView().should('be.visible')
-  })
-
-  it('verify that admin user can create a virtual directory on user level with same name after deleting', () => {
-    cy.editUser(userDetails.userName, label.editUserFileDirectories, userDetails.password)
+    searchAndNavigate(userDetails.username)
+    cy.get(userDirSelectors.actionSelector).contains(label.editUserFileDirectories).click()
     cy.get(generalSelectors.roleTab).contains(label.virtualDirectoryAccess).click()
-    cy.get(dashboardSelectors.domainDropDown).contains(label.virtualDirectoryAccess).parent().parent().parent(dashboardSelectors.gridRoot).next(htmlTagSelectors.div).click()
     // creating virtual directory
-    cy.createVirtualDirectory(virtualDirectoryDetails)
-    cy.get(userSelectors.successMessage).should('exist')
-    // Clicking on edit button
-    cy.contains(htmlTagSelectors.div, virtualDirectoryDetails.virtualFolderName).parents(userSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).within(() => {
-        cy.get(htmlTagSelectors.button).click()
+    createVirtualDirectory()
+    // deleting virtual directory
+    cy.contains(htmlTagSelectors.tableData, virtualDirectoryDetails.virtualFolderName)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(htmlTagSelectors.button).eq(1).click()
       })
-    // Deleting virtual directory created
-    cy.deleteVirtualDirectory()
+    cy.get(dashboardSelectors.dashboardButton).contains(label.confirm).click()
     cy.wait(5000)
-    cy.get(generalSelectors.close).should('be.visible').click()
-    // Clicking on edit button
-    cy.editUser(userDetails.userName, label.editUserFileDirectories, userDetails.password)
     cy.get(generalSelectors.roleTab).contains(label.virtualDirectoryAccess).click()
-    cy.get(dashboardSelectors.domainDropDown).contains(label.virtualDirectoryAccess).parent().parent().parent(dashboardSelectors.gridRoot).next(htmlTagSelectors.div).click()
     // Creating virtual directory with same name again
-    cy.createVirtualDirectory(virtualDirectoryDetails)
-    cy.get(userSelectors.successMessage).should('exist')
-    // Again adding virtual directory with same name
-    cy.get(userSelectors.successMessage).should('exist')
+    createVirtualDirectory()
     cy.wait(5000)
-    cy.get(generalSelectors.close).should('be.visible').click()
   })
 
   afterEach('deleting a user', () => {
-    cy.delete(userDetails.userName)
-    cy.get(userSelectors.parentCell).contains(userDetails.userName).should('not.exist')
+    cy.deleteUserApiRequest(userDetails.bearerToken, userDetails.serverName, userDetails.username).then(($response) => {
+      // check if ErrorStr is Success
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
+    })
   })
 })

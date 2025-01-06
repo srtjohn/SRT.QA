@@ -37,7 +37,7 @@ describe('login', () => {
     serverName: label.ApiTestingAutomation
   }
 
-  const date = Cypress.dayjs().add(Math.floor(Math.random() * 30), 'days').format('MM/DD/YYYY')
+  const date = '12/12/2012'
 
   function navigateToAdvancedTab () {
     cy.contains(htmlSelectors.tableData, createUserDetails.username)

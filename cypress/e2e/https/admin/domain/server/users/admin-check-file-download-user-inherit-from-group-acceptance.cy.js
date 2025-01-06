@@ -23,7 +23,7 @@ import dashboardSelectors from '../../../../../../../selectors/dashboard-selecto
  * - an existing user should exist
  */
 // skipped because label says Edit User and Assigned Users bug
-describe.skip('Login > {existing server} > users > edit', () => {
+describe('Login > {existing server} > users > edit', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
@@ -35,6 +35,7 @@ describe.skip('Login > {existing server} > users > edit', () => {
     password: 'testing123',
     serverName: label.autoServerName
   }
+  const groupName = 'TestAPIGroup'
 
   function setDirectoryToGroup (username, menuOption) {
     cy.contains(htmlTagSelectors.tableData, username)
@@ -47,20 +48,13 @@ describe.skip('Login > {existing server} > users > edit', () => {
       })
     cy.get(userDirSelectors.actionSelector).contains(menuOption).click()
     cy.clickButton(label.next)
-    cy.contains(htmlTagSelectors.tableData, label.autoGroupName).parent(htmlTagSelectors.tableData)
-      .prev(htmlTagSelectors.tableData).within(() => {
+    cy.contains(htmlTagSelectors.tableData, groupName).prev(htmlTagSelectors.tableData)
+      .within(() => {
         cy.get(htmlTagSelectors.button).click({ force: true })
       })
     cy.clickButton(label.next)
   }
 
-  function clickOnDropdown (tabLabel) {
-    cy.get(userSelectors.userInfoDialog).within(() => {
-      cy.get(userSelectors.selectGroupOptionsDialog).eq(2).within(() => {
-        cy.get(userDirSelectors.gridItem).contains(tabLabel).next().click()
-      })
-    })
-  }
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
       userDetails.bearerToken = $response.Response.SessionInfo.BearerToken
@@ -76,22 +70,25 @@ describe.skip('Login > {existing server} > users > edit', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
     cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(userDetails.username)
     cy.waitForNetworkIdle(1000, { log: false })
-    // bug here for label editUserAssignedGroups
     setDirectoryToGroup(userDetails.username, label.editUserAssignedGroups)
-    clickOnDropdown(label.primaryGroup)
-    cy.get(userDirSelectors.buttonList).contains(label.autoGroupName).click()
-    clickOnDropdown(label.homeDir)
-    cy.get(userDirSelectors.buttonList).contains(label.inheritFromGroup).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(dashboardSelectors.textInput).eq(1).realClick()
+    cy.get(userSelectors.dropDownOptions).contains(groupName).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(dashboardSelectors.textInput).eq(2).realClick()
+    cy.get(userSelectors.dropDownOptions).contains(label.inheritFromGroup).click()
     cy.clickButton(label.finish)
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.login('', userDetails.username, userDetails.password)
-    cy.contains(htmlTagSelectors.div, fileName).parents(userDirSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).click()
-    cy.get(userDirSelectors.editParent).eq(5).within(() => {
+    cy.contains(htmlTagSelectors.tableData, fileName)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).click()
+    cy.get(userDirSelectors.editParent).within(() => {
       cy.get(userDirSelectors.bulkDownload).click()
     })
+    cy.verifyDownload(fileName)
   })
 
   afterEach('delete user', () => {
