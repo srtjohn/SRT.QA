@@ -1,7 +1,7 @@
 {
     "fieldSelector": ".MuiOutlinedInput-notchedOutline",
     "requiredLabel": "label.Mui-required",
-    "addButton": "[title='Add New']",
+    "addButton": "[title='Add']",
     "usernameRequiredMessage" :"p[id='User Name-helper-text']",
     "passwordRequiredMessage" : "p[id='Password-helper-text']",
     "confirmPasswordRequiredMessage" : "p[id='Confirm Password-helper-text']",
@@ -13,7 +13,7 @@
     "parentUsers" : ".MuiListItemText-root",
     "assignedGroupParent" : ".ReactVirtualized__Grid__innerScrollContainer",
     "successMessage"  : ".toast",
-    "userPageHeading": ".MuiTypography-colorSecondary",
+    "userPageHeading": ".dxbl-group-header",
     "emailAddressField" : "[id='Email Address']",
     "homeDirInputField" : "[id='Custom Home Directory']",
     "btnLabel" : ".MuiButton-label",

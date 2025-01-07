@@ -1,7 +1,8 @@
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import label from '../../../../../../fixtures/label.json'
 import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
-import { slowCypressDown } from 'cypress-slow-down'
+import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
+import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
 /**
  * @description
  * This spec file contains test to verify that admin user can edit users for an existing server
@@ -22,13 +23,42 @@ import { slowCypressDown } from 'cypress-slow-down'
  * - an existing user should exist
  */
 
-slowCypressDown(300)
-
 describe('Login > {existing server} > users > edit', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
     password: adminData.adminPassword
+  }
+
+  function manageGroupMembership (isAdded) {
+    cy.contains(htmlTagSelectors.tableData, label.autoUserName).scrollIntoView()
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(userSelectors.button).eq(0).click({ force: true })
+      })
+    cy.get(dashboardSelectors.languageDropdown).contains(label.editUserAssignedGroups).click()
+    cy.clickButton(label.next)
+    if (isAdded) {
+      cy.get(dashboardSelectors.contentModal).within(() => {
+        cy.get(htmlTagSelectors.tableData).contains(label.autoGroupName).scrollIntoView().prev(htmlTagSelectors.tableData)
+          .within(() => {
+            cy.get(htmlTagSelectors.button).contains(label.add).should('be.visible').click({ force: true })
+          })
+      })
+    } else if (!isAdded) {
+      cy.get(dashboardSelectors.contentModal).within(() => {
+        cy.get(htmlTagSelectors.tableData).contains(label.autoGroupName).scrollIntoView().next(htmlTagSelectors.tableData)
+          .within(() => {
+            cy.get(htmlTagSelectors.button).contains(label.remove).should('be.visible').click({ force: true })
+          })
+      })
+    }
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.clickButton(label.next)
+    cy.clickButton(label.finish)
   }
 
   beforeEach('login', () => {
@@ -39,12 +69,11 @@ describe('Login > {existing server} > users > edit', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
-    cy.editUser(label.autoUserName, label.editUserAssignedGroups, true)
-    cy.get(userSelectors.successMessage).should('be.visible')
+    cy.waitForNetworkIdle(1000, { log: false })
+    manageGroupMembership(true)
   })
 
   afterEach('verify that user can Remove Assigned group', () => {
-    cy.editUser(label.autoUserName, label.editUserAssignedGroups, false)
-    cy.get(userSelectors.successMessage).should('be.visible')
+    manageGroupMembership(false)
   })
 })

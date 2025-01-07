@@ -1,7 +1,8 @@
 import label from '../../../../../../fixtures/label.json'
-import loginSelectors from '../../../../../../../selectors/login-selectors.json'
 import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
 import userDirSelectors from '../../../../../../../selectors/user-dir-selectors.json'
+import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
+import serverSelectors from '../../../../../../../selectors/server-selectors.json'
 
 /**
  * @description
@@ -32,15 +33,21 @@ describe('login > add new virtual directory ', () => {
     password: 'testing123',
     serverName: label.autoServerName
   }
+  const configSFTP = {
+    host: 'beta.southrivertech.com',
+    port: '2200',
+    username: CreateUserDetails.username,
+    password: CreateUserDetails.password
+  }
 
   const virtualDirectoryDetails = {
-    ActualPath: 'C://customefolder//dkjbfvdfkg',
-    Path: 'gpdirone',
+    ActualPath: 'C://gpdirone',
+    Path: 'PermissionsTest',
     AllowAce: 'RWADNMVLIGSXU',
     DenyAce: '-------------'
   }
-
-  const folder = 'autoFolder'
+  const folder = 'testAutoFolder'
+  const remoteDirPath = `./${virtualDirectoryDetails.Path}/${folder}`
   beforeEach('login and new virtual directory', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
       expect($response.Response.SessionInfo.BearerToken).to.not.be.empty
@@ -49,12 +56,12 @@ describe('login > add new virtual directory ', () => {
     })
     cy.postCreateUserApiRequest(CreateUserDetails).then(($response) => {
       expect($response.Response.Username).to.equal(CreateUserDetails.username)
-      // initializing AuthGUID
-      CreateUserDetails.AuthGUID = $response.Response.AuthGUID
+      // initializing UserGUID
+      CreateUserDetails.UserGUID = $response.Response.UserGUID
     })
 
     cy.postCreateUserVirtualDirectoryApiRequest(CreateUserDetails, virtualDirectoryDetails).then(($response) => {
-      expect($response.Response.UserGroupGUID).to.equal(CreateUserDetails.AuthGUID)
+      expect($response.Response.UserGroupGUID).to.equal(CreateUserDetails.UserGUID)
       // check if ErrorStr is Success
       expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
@@ -62,53 +69,39 @@ describe('login > add new virtual directory ', () => {
 
   it('verifying permissions visibility', () => {
   // checking permissions
-
-    cy.visit(Cypress.env('baseUrl'))
-    cy.get(loginSelectors.inputUsername).type(CreateUserDetails.username)
-    cy.get(loginSelectors.inputPassword).type(CreateUserDetails.password)
-    cy.get(loginSelectors.loginButton).contains(label.login).click()
-    cy.get(userDirSelectors.roleCell).contains(virtualDirectoryDetails.Path).click()
+    cy.login('', CreateUserDetails.username, CreateUserDetails.password)
+    cy.get(htmlTagSelectors.tableData).contains(virtualDirectoryDetails.Path).click()
 
     // creating new folder
-
-    cy.get(userDirSelectors.addFolderIcon).click()
-    cy.get(userDirSelectors.folderNameField).type(folder)
-    cy.get(userDirSelectors.buttonList).contains(label.add).click()
-    cy.contains(userDirSelectors.roleCell, folder)
-      .prev(htmlTagSelectors.div).click()
+    cy.get(dashboardSelectors.addNew).eq(0).click()
+    cy.get(dashboardSelectors.contentModal).within(() => {
+      cy.get(dashboardSelectors.textInput).type(folder)
+    })
+    cy.get(dashboardSelectors.dashboardButton).contains(label.add).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.contains(htmlTagSelectors.tableData, folder).prev(htmlTagSelectors.tableData).within(() => {
+      cy.get(serverSelectors.serviceCheckboxContainer).realClick()
+    })
 
     // checking permissions
-
     // delete permission
-    cy.contains(userDirSelectors.parentUsers, label.oneItem).next(htmlTagSelectors.div).within(() => {
-      cy.get(userDirSelectors.bulkDelete).should('be.visible')
-    })
-    // copy permission
-    cy.contains(userDirSelectors.parentUsers, label.oneItem).next(htmlTagSelectors.div).within(() => {
-      cy.get(userDirSelectors.bulkCopy).should('be.visible')
-    })
-    // move permission
-    cy.get(userDirSelectors.buttonList).eq(3).should('be.visible')
-    // share permission
-    cy.get(userDirSelectors.buttonList).eq(2).should('be.visible')
-    // download permission
-    cy.contains(userDirSelectors.parentUsers, label.oneItem).next(htmlTagSelectors.div).within(() => {
-      cy.get(userDirSelectors.bulkDownload).should('be.visible')
+    cy.get(`${dashboardSelectors.userFileView} ${userDirSelectors.toolbar}`).within(() => {
+      cy.get(userDirSelectors.bulkDownload).should('exist')
+      cy.get(userDirSelectors.titleMove).should('exist')
+      cy.get(userDirSelectors.titleCopy).should('exist')
+      cy.get(userDirSelectors.bulkDelete).should('exist')
     })
   })
+
   afterEach('deleting new folder and user', () => {
-    // deleting new folder
-    cy.contains(userDirSelectors.roleCell, folder)
-      .prev(htmlTagSelectors.div).click()
-    cy.contains(htmlTagSelectors.div, folder).parents(userDirSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).click()
-    cy.get(userDirSelectors.editParent).eq(5).within(() => { cy.get(userDirSelectors.bulkDelete).click() })
+  // deleting new folder
+    cy.task('sftpRemoveDirectory', { configSFTP, remoteDirPath }).then(p => {
+      expect(`${JSON.stringify(p)}`).to.equal('"Successfully removed directory"')
+      cy.task('endSFTPConnection')
+    })
     // calling delete user function
     cy.deleteUserApiRequest(CreateUserDetails.bearerToken, CreateUserDetails.serverName, CreateUserDetails.username).then(($response) => {
-      // check if ErrorStr is Success
+    // check if ErrorStr is Success
       expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })

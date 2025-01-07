@@ -1,10 +1,9 @@
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import label from '../../../../../../fixtures/label.json'
-import iconSelectors from '../../../../../../../selectors/icon-selectors.json'
-import modalSelectors from '../../../../../../../selectors/modal-selectors.json'
 import { slowCypressDown } from 'cypress-slow-down'
 import htmlSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
 import generalSelectors from '../../../../../../../selectors/general-selectors.json'
+import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
 
 /**
  * @description
@@ -39,27 +38,25 @@ describe('Login > {existing server} > events > show system events > SE-10117 (co
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.events).should('be.visible').click()
     // show system events
-    cy.get(iconSelectors.filterIcon).should('be.visible').click()
-    cy.get(modalSelectors.modalHeader).should('be.visible')
-    cy.get(modalSelectors.modalContainer).should('be.visible').within(() => {
-      cy.get(htmlSelectors.input).click()
-    })
-    cy.get(modalSelectors.modalFooter).should('be.visible').within(() => {
-      cy.get(generalSelectors.typeButton).get(htmlSelectors.span).contains(label.add).click()
+    cy.get(dashboardSelectors.filterIcon).eq(0).should('be.visible').click()
+    cy.get(dashboardSelectors.modalTitle).contains(label.eventHandlersFilter).should('be.visible')
+    cy.get(dashboardSelectors.dialog).within(() => {
+      cy.get(generalSelectors.checkbox).realClick()
+      cy.get(generalSelectors.button).contains(label.add).realClick()
     })
     // click on edit icon for event SE-10117
-    cy.contains(htmlSelectors.div, label.backupEventName).parents(generalSelectors.roleCell)
-      .next(htmlSelectors.div)
-      .next(htmlSelectors.div)
-      .next(htmlSelectors.div)
+    cy.contains(htmlSelectors.tableData, label.backupEventName).should('be.visible')
+      .next(htmlSelectors.tableData).should('be.visible')
+      .next(htmlSelectors.tableData).should('be.visible')
+      .next(htmlSelectors.tableData).should('be.visible')
       .within(() => {
-        cy.get(iconSelectors.editIcon).click()
+        cy.get(generalSelectors.button).click()
       })
   })
   // the it block code will be written once the issue is resolved
   it('admin can trigger SE-10117 system event to configure backup', () => {
-    cy.get(generalSelectors.labelSelector).contains(label.next).click()
-    cy.get(generalSelectors.labelSelector).contains(label.next).click()
-    cy.get(generalSelectors.labelSelector).contains(label.okay).click()
+    cy.get(generalSelectors.button).contains(label.next).click()
+    cy.get(generalSelectors.button).contains(label.next).click()
+    cy.get(generalSelectors.button).contains(label.finish).click()
   })
 })

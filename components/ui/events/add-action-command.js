@@ -31,6 +31,7 @@ Cypress.Commands.add('createAction', (actionType, customText, filePath, eventNam
   cy.waitForNetworkIdle(1000, { log: false })
   cy.get(dashboardSelectors.dashboardButton).contains(label.addAction).realClick().wait(2000).realClick({ force: true })
   cy.get(navigationSelectors.textContainer).contains(actionType).realClick()
+  cy.waitForNetworkIdle(1000, { log: false })
   cy.get(dashboardSelectors.messageBox).type(customText)
   cy.get(dashboardSelectors.textInput).eq(1).type(filePath)
   cy.get(generalSelectors.button).contains(label.okay).realClick()

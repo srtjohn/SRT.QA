@@ -35,7 +35,13 @@ describe('Login > {existing server} > users > add new user', () => {
     userName: `qa-auto-user${Cypress.dayjs().format('ssmmhhMMYY')}`,
     password: 'testing123',
     homeDirectoryOption: `${label.customDir}`,
-    customDirPath: `C:/qa-auto user ${Cypress.dayjs().format('ssmmhhMMYY')}`
+    customDirPath: `C:/qa-auto-user${Cypress.dayjs().format('ssmmhhMMYY')}`
+  }
+  const configSFTP = {
+    host: 'beta.southrivertech.com',
+    port: '2200',
+    username: userDetails.userName,
+    password: userDetails.password
   }
 
   beforeEach('login', () => {
@@ -43,24 +49,40 @@ describe('Login > {existing server} > users > add new user', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
-    cy.get(userSelectors.addButton).should('be.visible').click()
+    cy.get(userSelectors.addButton).eq(0).should('be.visible').click()
   })
 
   it('verify that admin can enter home directory while creating a new users', () => {
     cy.createUser(userDetails)
-    cy.get(userSelectors.successMessage).should('be.visible')
-    cy.get(htmlTagSelectors.div).then(resp => {
-      if (!resp.text().includes(userDetails.userName)) {
-        cy.get(dashboardSelectors.usersPage).eq(1).scrollTo('bottom')
-      }
+    cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(userDetails.userName)
+    cy.contains(htmlTagSelectors.tableData, userDetails.userName)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(dashboardSelectors.dashboardButton).eq(0).click({ force: true })
+      })
+    cy.task('sftpCurrentWorkingDirectory', configSFTP).then(p => {
+      expect(`${JSON.stringify(p)}`).to.equal('"/"')
+      cy.task('endSFTPConnection')
     })
-    cy.editUser(userDetails.userName, label.editUserFileDirectories, false)
-    cy.contains(htmlTagSelectors.div, userDetails.customDirPath.replace(/\//g, '\\')).should('exist')
-    cy.get(userSelectors.btnLabel).contains(label.closeText).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(dashboardSelectors.languageDropdown).contains(label.editUserFileDirectories).click()
+    cy.contains(htmlTagSelectors.tableData, userDetails.customDirPath.replace(/\//g, '\\')).should('exist')
   })
 
   afterEach('deleting a user', () => {
-    cy.delete(userDetails.userName)
-    cy.get(userSelectors.parentCell).contains(userDetails.userName).should('not.exist')
+    cy.contains(htmlTagSelectors.tableData, userDetails.userName)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(dashboardSelectors.dashboardButton).eq(1).click({ force: true })
+      })
+    cy.get(dashboardSelectors.dashboardButton).contains(label.confirm).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(htmlTagSelectors.tableData).contains(userDetails.userName).should('not.exist')
   })
 })

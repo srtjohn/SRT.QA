@@ -34,11 +34,14 @@
     "datePicker":".MuiPickersBasePicker-pickerView",
     "calenderWeek":".MuiPickersCalendar-week",
     "search":"[placeholder='Filter...']",
+    "filterIcon":"[title='Filter']",
     "permissionsTable": "[aria-label='permissions table']",
     "rowSelect":".dxbl-row",
     "ipAccessInput":"[id='IP Address']",
     "messageBox":".dxbl-v-resize",
     "contentModal":".dxbl-modal-content",
     "eventSelector":"[role='treeitem']",
-    "filterBox":".srt-filter-text"
+    "filterBox":".srt-filter-text",
+    "modalTitle": ".dxbl-modal-title",
+    "userFileView":".srt-card-body"
 }
