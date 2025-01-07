@@ -1,7 +1,9 @@
 import navigationSelectors from '../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import label from '../../../../../../fixtures/label.json'
 import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
-import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
+import loginSelectors from '../../../../../../../selectors/login-selectors.json'
+import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
+import userDirSelectors from '../../../../../../../selectors/user-dir-selectors.json'
 
 /**
  * @description
@@ -51,13 +53,32 @@ describe('Login > {existing server} > users > edit', () => {
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoServerName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.users).should('be.visible').click()
-    cy.editUser(userDetails.username, label.editUserAssignedGroups, true)
+    cy.get(dashboardSelectors.filterBox).realClick().wait(2000).type(userDetails.username)
+    cy.contains(htmlTagSelectors.tableData, userDetails.username)
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
+        cy.get(htmlTagSelectors.button).eq(0).click({ force: true })
+      })
+    cy.get(userDirSelectors.actionSelector).contains(label.editUserAssignedGroups).click()
+    cy.clickButton(label.next)
+    cy.contains(htmlTagSelectors.tableData, label.autoGroupName).prev(htmlTagSelectors.tableData)
+      .within(() => {
+        cy.get(htmlTagSelectors.button).click({ force: true })
+      })
+    cy.clickButton(label.next)
+    cy.clickButton(label.finish)
     // login to user url
     cy.login('', userDetails.username, userDetails.password)
-    cy.get(dashboardSelectors.profileIcon).click()
-    cy.get(dashboardSelectors.dashBoardList).contains(label.myProfile).should('be.visible').click()
-    cy.get(userSelectors.usernameField).type(`updated ${userDetails.username}`)
-    cy.get(dashboardSelectors.dashBoardList).contains(label.save).click()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(loginSelectors.profileIcon).eq(0).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(dashboardSelectors.dashboardButton).contains(label.myProfile).should('be.visible').click()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(dashboardSelectors.textInput).eq(0).type(`updated ${userDetails.username}`)
+    cy.get(dashboardSelectors.titleApply).eq(0).click()
     // verify if user group membership is not affected
     cy.getGroupsInfoApiRequest(userDetails, groupDetails).then(($response) => {
       expect($response.Response.GroupName).to.equal(groupDetails.groupName)
@@ -68,7 +89,7 @@ describe('Login > {existing server} > users > edit', () => {
   afterEach('delete user', () => {
     cy.deleteUserApiRequest(userDetails.bearerToken, userDetails.serverName, userDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

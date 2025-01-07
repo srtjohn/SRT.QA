@@ -26,7 +26,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -40,7 +40,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api server list response
       expect($response.ResponseType).to.equal('ApiServerListResponse')
       // Check if error str is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 
@@ -51,7 +51,7 @@ describe('GET /api/Servers', () => {
       // check if auth desc is ADSI Authentication
       expect($response.Response.AuthDesc).to.equal(label.adsiAuth)
       // Check if error str is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       authGuid = $response.Response.AdsiPoco.AuthGUID
       console.log(authGuid)
     })
@@ -60,12 +60,12 @@ describe('GET /api/Servers', () => {
   afterEach('delete server through API', () => {
     cy.deleteAuthConnectorApiRequest(serverDetails, authGuid).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
     // calling delete function
     cy.deleteServerApiRequest(serverDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

@@ -2,8 +2,6 @@ import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
 import generalSelectors from '../../../selectors/general-selectors.json'
 import label from '../../../cypress/fixtures/label.json'
 import serverSelectors from '../../../selectors/server-selectors.json'
-import navigationSelectors from '../../../selectors/navigation/left-navigation-selectors.json'
-import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
 
 /**
 * @description
@@ -18,25 +16,23 @@ Cypress.Commands.add('addServerKey', (hostKeyDetails) => {
     name: 'addServerKey'
   })
   // clicking on new button to add a new key
-  cy.get(generalSelectors.typeButton).contains(label.new).should('be.visible').click()
+  cy.get(generalSelectors.button).contains(label.new).should('be.visible').click()
   // clicking on key type dropdown
-  cy.get(generalSelectors.inputLabel).contains(label.keyType).parent(htmlTagSelectors.div).within(() => {
-    cy.get(generalSelectors.roleButton).click()
+  cy.get(generalSelectors.textSelector).contains(label.keyType).next().within(() => {
+    cy.get(serverSelectors.serverTypeDropdown).click()
   })
   // choosing key type from dropdown options
-  cy.get(`[data-value='${hostKeyDetails.keyType}']`).click()
+  cy.get(generalSelectors.roleOption).contains(hostKeyDetails.keyType).click()
   // clicking on key size dropdown
-  cy.get(generalSelectors.inputLabel).contains(label.keySize).parent(htmlTagSelectors.div).within(() => {
-    cy.get(generalSelectors.roleButton).click()
+  cy.get(generalSelectors.textSelector).contains(label.keySize).next().within(() => {
+    cy.get(serverSelectors.serverTypeDropdown).click()
   })
   // choosing key size from dropdown options
-  cy.get(generalSelectors.roleListBox).contains(hostKeyDetails.keySize).click()
+  cy.get(generalSelectors.roleOption).contains(hostKeyDetails.keySize).click()
   // entering key name
-  cy.get(serverSelectors.hostKeyNameInput).type(hostKeyDetails.keyName)
+  cy.get(generalSelectors.textSelector).contains(label.hostKeyname).next().within(() => {
+    cy.get(htmlTagSelectors.input).click().type(hostKeyDetails.keyName)
+  })
   // clicking add button
-  cy.get(dashboardSelectors.muiDialogPaperWidthXs).within(() => cy.get(htmlTagSelectors.span).contains(label.add).click())
-  // click to close the SSH host key management modal
-  cy.get(generalSelectors.labelSelector).contains(label.closeText).click()
-  // navigating back to domain name
-  cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
+  cy.get(generalSelectors.button).contains(label.save).click()
 })

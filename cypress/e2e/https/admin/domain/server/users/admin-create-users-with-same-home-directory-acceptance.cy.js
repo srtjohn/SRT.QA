@@ -4,6 +4,7 @@ import generalSelectors from '../../../../../../../selectors/general-selectors.j
 import userSelectors from '../../../../../../../selectors/user/user-selectors.json'
 import dashboardSelectors from '../../../../../../../selectors/dashboard-selectors.json'
 import htmlTagSelectors from '../../../../../../../selectors/htlm-tag-selectors.json'
+import userDirSelectors from '../../../../../../../selectors/user-dir-selectors.json'
 
 /**
  * @description
@@ -50,31 +51,32 @@ describe('login', () => {
   }
 
   function editUserHomeDir (username) {
-    cy.get(dashboardSelectors.search).clear().type(username)
     cy.wait(1000)
-    cy.contains(htmlTagSelectors.div, username).parents(userSelectors.parentCell)
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).should('exist')
-      .next(htmlTagSelectors.div).within(() => {
+    cy.contains(htmlTagSelectors.tableData, username).scrollIntoView()
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).should('exist')
+      .next(htmlTagSelectors.tableData).within(() => {
         cy.waitForNetworkIdle(500, { log: false })
-        cy.get(htmlTagSelectors.button).click({ force: true })
+        cy.get(htmlTagSelectors.button).eq(0).click({ force: true })
       })
-    cy.get(dashboardSelectors.dashBoardList).contains(label.editUserAssignedGroups).click({ force: true })
-    cy.get(generalSelectors.labelSelector).contains(label.next).click()
-    cy.get(generalSelectors.labelSelector).contains(label.next).click()
-    cy.get(userSelectors.roleBtn).contains(label.defaultHomeDir).click({ force: true })
-    cy.get(dashboardSelectors.dashBoardList).contains(label.customDir).click({ force: true })
-    cy.get(userSelectors.homeDirInputField).clear().type(homeDirectory)
-    cy.get(dashboardSelectors.dashboardButtonLabel).contains(label.finish).click()
+    cy.get(userDirSelectors.actionSelector).contains(label.editUserAssignedGroups).click()
+    cy.get(generalSelectors.button).contains(label.next).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(generalSelectors.button).contains(label.next).click()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(dashboardSelectors.textInput).eq(2).realClick()
+    cy.get(userSelectors.dropDownOptions).contains(label.customDir).click()
+    cy.contains(htmlTagSelectors.label, label.customDirectoryInput).next().clear().type(homeDirectory.replace(/\//g, '\\'))
+    cy.clickButton(label.finish)
     cy.waitForNetworkIdle(1000, { log: false })
   }
 
   beforeEach('login', () => {
     cy.postLoginAuthenticateApiRequest(userInfo).then(($response) => {
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       firstUserDetails.bearerToken = $response.Response.SessionInfo.BearerToken
     })
     cy.postCreateUserApiRequest(firstUserDetails).then(($response) => {
@@ -95,8 +97,6 @@ describe('login', () => {
     editUserHomeDir(firstUserDetails.username)
     editUserHomeDir(secondUserDetails.username)
 
-    // verify home directory is same or not
-
     // uploading file from first user
     cy.task('sftpUploadFile', { localPath, remoteDirFile: `./${remoteDirFileName}`, configSFTP: { ...configSFTP, username: userNames[0] } }).then(p => {
       expect(`${JSON.stringify(p)}`).to.include(`"Uploaded data stream to ./${remoteDirFileName}"`)
@@ -115,11 +115,11 @@ describe('login', () => {
     // calling delete user function
     cy.deleteUserApiRequest(secondUserDetails.bearerToken, firstUserDetails.serverName, firstUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
     cy.deleteUserApiRequest(secondUserDetails.bearerToken, secondUserDetails.serverName, secondUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

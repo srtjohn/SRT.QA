@@ -1,5 +1,6 @@
 import label from '../../../../fixtures/label.json'
 import dashboardSelectors from '../../../../../selectors/dashboard-selectors.json'
+import loginSelectors from '../../../../../selectors/login-selectors.json'
 /**
  * @description
  * This spec file contains test to verify that profile menu on dashboard has three options
@@ -30,9 +31,10 @@ describe('Login > {existing server} > profile', () => {
   })
 
   it('verify that profile menu should have options', () => {
-    cy.get(dashboardSelectors.profileIcon).click()
-    cy.checkTextVisibility(dashboardSelectors.dashBoardList, label.myProfile)
-    cy.checkTextVisibility(dashboardSelectors.dashBoardList, label.changePassword)
-    cy.checkTextVisibility(dashboardSelectors.dashBoardList, label.signOut)
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(loginSelectors.profileIcon).first().click({ force: true })
+    cy.checkTextVisibility(dashboardSelectors.dashboardButton, label.myProfile)
+    cy.checkTextVisibility(dashboardSelectors.dashboardButton, label.changePassword)
+    cy.checkTextVisibility(dashboardSelectors.dashboardButton, label.signOut)
   })
 })

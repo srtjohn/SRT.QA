@@ -1,5 +1,6 @@
 import serverSelectors from '../../../selectors/server-selectors.json'
 import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
+import generalSelectors from '../../../selectors/general-selectors.json'
 import label from '../../../cypress/fixtures/label.json'
 /**
  * Server Creation Command
@@ -76,24 +77,25 @@ Cypress.Commands.add('createServer', (serverDetails) => {
   Cypress.log({
     name: 'createServerCommand'
   })
-  cy.get(serverSelectors.addButtonContainer).contains(label.addNew).click()
-  cy.get(serverSelectors.serviceRootLabelContainer).contains(serverDetails.serverType).parent(htmlTagSelectors.label).within(() => {
-    cy.get(htmlTagSelectors.input).click()
+  // cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
+  // cy.waitForNetworkIdle(3000, { log: false })
+
+  cy.get(serverSelectors.titleAddNew).first().click()
+  cy.get(serverSelectors.serviceCheckboxContainer).contains(serverDetails.serverType).prev().within(() => {
+    cy.get(htmlTagSelectors.input).realClick()
   })
-  cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-  cy.get(serverSelectors.serverNameInputContainer).contains(label.databaseText).parent(htmlTagSelectors.div).within(() => {
-    cy.get(serverSelectors.selectDatabaseDropdown).click()
+  cy.waitForNetworkIdle(1000, { log: false })
+  cy.get(generalSelectors.button).contains(label.next).realClick()
+  cy.waitForNetworkIdle(1000, { log: false })
+  cy.get(serverSelectors.serverTypeDropdown).realClick()
+  cy.get(serverSelectors.listbox).eq(3).within(() => {
+    cy.get(htmlTagSelectors.li).contains(serverDetails.selectDatabase).realClick()
   })
-  cy.get(serverSelectors.sqlLite).click()
-  cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-  cy.waitUntil(() => cy.get(serverSelectors.spinner).should('not.be.visible'))
-  cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
-    cy.get(htmlTagSelectors.input).type(serverDetails.serverName)
-  })
-  cy.contains(htmlTagSelectors.span, label.StartServerAutomatically)
-    .prev(htmlTagSelectors.span).click()
-  cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-  cy.waitUntil(() => cy.get(serverSelectors.spinner).should('not.be.visible'))
-  cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-  cy.get(serverSelectors.nextButtonContainer).contains(label.finish).click()
+  cy.get(generalSelectors.button).contains(label.next).realClick()
+  cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).type(serverDetails.serverName)
+  cy.contains(htmlTagSelectors.label, label.StartServerAutomatically)
+    .prev(htmlTagSelectors.div).realClick()
+  cy.get(generalSelectors.button).contains(label.next).realClick()
+  cy.get(generalSelectors.button).contains(label.next).realClick()
+  cy.get(generalSelectors.button).contains(label.finish).realClick()
 })

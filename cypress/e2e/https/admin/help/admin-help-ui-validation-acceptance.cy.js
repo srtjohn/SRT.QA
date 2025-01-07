@@ -31,9 +31,9 @@ describe('Login > help', () => {
   })
 
   it('verify that help menu should have options', () => {
-    cy.get(dashboardSelectors.dashboardButtonLabel).contains(label.helpEnglish).click()
-    cy.checkTextVisibility(dashboardSelectors.dashBoardList, label.contents)
-    cy.checkTextVisibility(dashboardSelectors.dashBoardList, label.releaseNotes)
-    cy.checkTextVisibility(dashboardSelectors.dashBoardList, label.versionHistory)
+    cy.get(dashboardSelectors.helpIcon).click()
+    cy.checkTextVisibility(dashboardSelectors.dashboardButton, label.contents)
+    cy.checkTextVisibility(dashboardSelectors.dashboardButton, label.releaseNotes)
+    cy.checkTextVisibility(dashboardSelectors.dashboardButton, label.versionHistory)
   })
 })

@@ -15,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "cy-verify-downloads": "^0.2.0",
-    "cypress": "^13.1.0",
+    "cypress": "^13.16.0",
     "cypress-downloadfile": "^1.2.3",
     "cypress-multi-reporters": "^1.6.3",
     "cypress-network-idle": "^1.14.2",
@@ -34,6 +34,7 @@
     "cypress-iframe": "^1.0.1",
     "cypress-localstorage-commands": "2.2.2",
     "cypress-plugin-api": "^2.11.1",
+    "cypress-real-events": "^1.13.0",
     "cypress-slow-down": "^1.2.1",
     "cypress-wait-until": "1.7.2",
     "dayjs": "^1.11.7",

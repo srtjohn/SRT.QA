@@ -1,5 +1,7 @@
 import serverSelectors from '../../../selectors/server-selectors.json'
 import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
+import generalSelectors from '../../../selectors/general-selectors.json'
+import label from '../../../cypress/fixtures/label.json'
 
 /**
  * Server Deletion Command
@@ -19,10 +21,13 @@ import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
  */
 
 Cypress.Commands.add('deleteServer', (serverName) => {
-  cy.contains(htmlTagSelectors.div, serverName).parents(serverSelectors.parent)
-    .next(htmlTagSelectors.div).should('exist')
-    .next(htmlTagSelectors.div).should('exist')
-    .next(htmlTagSelectors.div).should('exist')
-    .next(htmlTagSelectors.div).click()
-  cy.get(serverSelectors.serverDeleteButton).click()
+  cy.contains(htmlTagSelectors.tableData, serverName)
+    .next(htmlTagSelectors.tableData).should('exist')
+    .next(htmlTagSelectors.tableData).should('exist')
+    .next(htmlTagSelectors.tableData).should('exist')
+    .next(htmlTagSelectors.tableData).within(() => {
+      cy.get(generalSelectors.button).realClick()
+    })
+  cy.get(serverSelectors.serverDeleteButton).realClick()
+  cy.get(generalSelectors.button).contains(label.confirm).realClick()
 })

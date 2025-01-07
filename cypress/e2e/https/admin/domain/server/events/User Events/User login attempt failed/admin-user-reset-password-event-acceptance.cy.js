@@ -159,7 +159,7 @@ describe.skip('Login > {existing server} > events > create new event', () => {
     // calling delete user function
     cy.deleteUserApiRequest(createUserDetails.bearerToken, createUserDetails.serverName, createUserDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

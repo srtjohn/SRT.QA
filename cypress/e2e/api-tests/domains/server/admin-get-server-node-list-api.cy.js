@@ -29,7 +29,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -43,7 +43,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is Api Server Params Nodes Poco
       expect($response.ResponseType).to.equal('ApiServerParamsNodesPoco')
       // Check if errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // check server node name
       expect($response.Response.ServerNodeName).to.equal(serverDetails.serverNodeName)
       // initializing serverNodeGUID
@@ -56,7 +56,7 @@ describe('GET /api/Servers', () => {
       // Check if response type is Api Server Node List
       expect($response.ResponseType).to.equal('ApiServerNodeList')
       // Check if errorstr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // check server node name
       const nodeName = $response.Response.Nodes.map(node => node.ServerNodeName)
       expect(nodeName).to.include(serverDetails.serverNodeName)
@@ -67,7 +67,7 @@ describe('GET /api/Servers', () => {
     // calling delete function
     cy.deleteServerNodeApiRequest(serverDetails).then(($response) => {
       // check if request is successful or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
     })
   })
 })

@@ -31,7 +31,7 @@ describe('get User information', () => {
       // Check if response type is api auth response
       expect($response.ResponseType).to.equal('ApiAuthResponse')
       // Check if ErrorStr is success
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // Check if IsAdmin is true
       expect($response.Response.AuthInfo.IsAdmin).to.equal(true)
       // Check if BearerToken exists in SessionInfo
@@ -58,7 +58,7 @@ describe('get User information', () => {
       // Check if response type is ApiUserParamsPoco
       expect($response.ResponseType).to.equal('ApiUserParamsPoco')
       // Check if new user  exist in Everyone User or not
-      expect($response.Result.ErrorStr).to.equal('Success')
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
       // check if new user is present in response or not
       expect($response.Response.Username).to.equal(userDetails.username)
       // check if new user exists in everyone group
@@ -70,7 +70,7 @@ describe('get User information', () => {
     // calling delete user function
     cy.deleteUserApiRequest(userDetails.bearerToken, userDetails.serverName, userDetails.username).then(($response) => {
       // check if ErrorStr is Success
-      expect($response.Result.ErrorStr).to.eq('Success')
+      expect($response.Result.ErrorStr).to.eq('_Error.SUCCESS')
     })
   })
 })

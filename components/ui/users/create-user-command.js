@@ -1,6 +1,7 @@
 import userSelectors from '../../../selectors/user/user-selectors.json'
 import label from '../../../cypress/fixtures/label.json'
 import htmlTagSelectors from '../../../selectors/htlm-tag-selectors.json'
+import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
 /**
  * User creation command
  *
@@ -45,7 +46,7 @@ Cypress.Commands.add('createUser', (userDetails) => {
   cy.enterText(label.password, userDetails.password)
   cy.enterText(label.confirmPassword, userDetails.password)
   cy.clickButton(label.next)
-  cy.checkTextVisibility(userSelectors.userPageHeading, label.assignToGroups)
+  cy.checkTextVisibility(userSelectors.userPageHeading, label.assignMembers)
   if (userDetails.groupName) {
     cy.contains(htmlTagSelectors.div, userDetails.groupName).parents(userSelectors.parentCell)
       .prev(htmlTagSelectors.div).click({ force: true })
@@ -53,12 +54,10 @@ Cypress.Commands.add('createUser', (userDetails) => {
   cy.clickButton(label.next)
   cy.checkTextVisibility(userSelectors.userPageHeading, label.configureUserOptions)
   if (userDetails.homeDirectoryOption) {
-    cy.get(userSelectors.roleBtn).contains(label.defaultHomeDir).click({ force: true })
-    cy.get(userSelectors.dataValue2).contains(label.customDir).click({ force: true })
-    cy.get(userSelectors.homeDirInputField).clear()
-    cy.get(userSelectors.homeDirInputField).type(userDetails.customDirPath.replace(/\//g, '\\'))
-    cy.contains(htmlTagSelectors.span, label.createHomeDir)
-      .prev(htmlTagSelectors.span).click()
+    cy.get(dashboardSelectors.textInput).eq(2).realClick()
+    cy.get(userSelectors.dropDownOptions).contains(label.customDir).click()
+    cy.contains(htmlTagSelectors.label, label.customDirectoryInput).next().clear().type(userDetails.customDirPath.replace(/\//g, '\\'))
+    cy.contains(htmlTagSelectors.label, label.createHomeDir).prev(htmlTagSelectors.div).realClick()
   }
   cy.clickButton(label.finish)
 })

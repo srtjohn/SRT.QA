@@ -1,4 +1,5 @@
-import dashboardSelectors from '../../../selectors/dashboard-selectors.json'
+import userSelectors from '../../../selectors/user/user-selectors.json'
+import generalSelectors from '../../../selectors/general-selectors.json'
 import label from '../../../cypress/fixtures/label.json'
 
 /**
@@ -16,6 +17,6 @@ Cypress.Commands.add('deleteVirtualDirectory', () => {
   cy.log({
     name: 'deleteVirtualDirectory'
   })
-  cy.get(dashboardSelectors.dashBoardList).contains(label.delete).should('be.visible').click()
-  cy.get(dashboardSelectors.dashBoardList).contains(label.confirmDelete).should('be.visible').click()
+  cy.get(userSelectors.titleDelete).should('be.visible').click({ force: true })
+  cy.get(generalSelectors.button).contains(label.confirm).should('be.visible').click()
 })

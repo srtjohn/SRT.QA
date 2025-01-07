@@ -1,9 +1,8 @@
-import serverSelectors from '../../../../../../../../selectors/server-selectors.json'
 import { slowCypressDown } from 'cypress-slow-down'
 import navigationSelectors from '../../../../../../../../selectors/navigation/left-navigation-selectors.json'
 import label from '../../../../../../../fixtures/label.json'
 import generalSelectors from '../../../../../../../../selectors/general-selectors.json'
-import userSelectors from '../../../../../../../../selectors/user/user-selectors.json'
+import htmlSelectors from '../../../../../../../../selectors/htlm-tag-selectors.json'
 
 /**
  * @description
@@ -47,24 +46,24 @@ describe('login > create new server > services > SSH > Add DSA Key', () => {
     })
     cy.postCreateServerApiRequest(serverDetails)
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    cy.get(serverSelectors.serverName).contains(serverDetails.serverName).should('be.visible')
     // navigate to services
     cy.get(navigationSelectors.textLabelSelector).contains(label.autoDomainName).click()
     cy.get(navigationSelectors.textLabelSelector).contains(serverDetails.serverName).should('be.visible').click()
     cy.get(navigationSelectors.textLabelSelector).contains(label.services).should('be.visible').click()
     // clicking on SSH/SFTP tab
     cy.get(generalSelectors.roleTab).contains(label.sshSftpText).should('be.visible').click()
-    cy.get(generalSelectors.typeButton).contains(label.manageHostKeys).should('be.visible').click()
+    cy.get(generalSelectors.button).contains(label.manageHostKeys).should('be.visible').click()
   })
 
   it('verify that user can add DSA 1024 key', () => {
     cy.addServerKey(hostKeyDetails)
-    cy.get(userSelectors.successMessage).should('be.visible')
+    cy.get(htmlSelectors.tableData).contains(hostKeyDetails.keyName).should('be.visible')
   })
 
   afterEach('deleting a server', () => {
     // deleting the created server
-    cy.deleteServerApiRequest(serverDetails)
-    cy.get(serverSelectors.serverName).contains(serverDetails.serverName).should('not.exist')
+    cy.deleteServerApiRequest(serverDetails).then(($response) => {
+      expect($response.Result.ErrorStr).to.equal('_Error.SUCCESS')
+    })
   })
 })

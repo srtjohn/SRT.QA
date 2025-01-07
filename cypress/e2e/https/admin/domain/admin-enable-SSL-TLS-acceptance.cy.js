@@ -20,43 +20,39 @@ import htmlTagSelectors from '../../../../../selectors/htlm-tag-selectors.json'
  * - user should have valid credentials
  */
 
-// skip due to an existing bug NX-I1134
 describe('Login > Add New > Server > Database > Server Info > > FTPS Configuration', () => {
   const adminData = Cypress.env('admin')
   const userInfo = {
     username: adminData.adminUsername,
     password: adminData.adminPassword
   }
-  const serverName = `qa-auto server ${Cypress.dayjs().format('ssmmhhMMYY')}`
+  let serverName = `qa-auto server ${Cypress.dayjs().format('ssmmhhMMYY')}`
 
   function checkBoxSelector (optionText) {
-    cy.get(serverSelectors.addButtonContainer).contains(label.addNew).click()
-
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
-      cy.get(htmlTagSelectors.input).type(serverName)
+    cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(serverSelectors.titleAddNew).first().click()
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).type(serverName)
+    cy.get(serverSelectors.serviceCheckboxContainer).first().within(() => {
+      cy.get(htmlTagSelectors.div).realClick()
     })
-
-    cy.contains(htmlTagSelectors.span, label.StartServerAutomatically)
-      .prev(htmlTagSelectors.span).click()
-
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.waitForNetworkIdle(2000, { log: false })
     cy.get(serverSelectors.serviceRootContainer)
       .find(serverSelectors.serviceCheckboxContainer)
-      .find(serverSelectors.serviceButtonLabelContainer)
-      .get(generalSelectors.inputTypeCheckbox).click({ multiple: true })
+      .get(generalSelectors.inputTypeCheckbox).eq(0).realClick()
+      .get(generalSelectors.inputTypeCheckbox).eq(1).realClick()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(generalSelectors.button).contains(label.next).realClick()
 
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-
-    cy.get(serverSelectors.serviceRootLabelContainer)
-      .contains(optionText).parent().within(() => {
-        cy.get(htmlTagSelectors.input).click()
-        cy.get(htmlTagSelectors.input).click()
-      })
+    cy.get(generalSelectors.textSelector)
+      .contains(optionText).prev().click()
   }
 
   beforeEach(() => {
@@ -64,11 +60,12 @@ describe('Login > Add New > Server > Database > Server Info > > FTPS Configurati
   })
 
   afterEach(() => {
-    cy.get(generalSelectors.closeModal).click()
+    cy.get(generalSelectors.close).click()
   })
 
   it('verify that admin user can Enable Explicit SSL/TLS Access checkboxes on (Setup FTPS Access for this Server) page after disabling it', () => {
     checkBoxSelector(label.enableExSSLTLSAccess)
+    serverName = `qa-auto-server-${Cypress.dayjs().format('ssmmhhMMYY')}`
   })
 
   it('verify that admin user can Enable Implicit SSL/TLS Access checkboxes on (Setup FTPS Access for this Server) page after disabling it', () => {

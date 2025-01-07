@@ -45,13 +45,13 @@ module.exports = async (on, config) => {
     createFile () {
       const filePath = path.join('../fixtures/1GB.txt')
       if (fs.existsSync(filePath)) {
-        return '1GB file already exists at ' + filePath
+        return `1GB file already exists at ${filePath.replace(/\\/g, '/')}`
       }
       const fileSizeInMB = 30
       const fileSizeInBytes = fileSizeInMB * 1024 * 1024
       const buffer = Buffer.alloc(fileSizeInBytes, '0')
       fs.writeFileSync(filePath, buffer)
-      return '1GB file created at ' + filePath
+      return `1GB file created at ${filePath.replace(/\\/g, '/')}`
     }
   })
   // sftp connection task which will return current remote working directory using cwd() command

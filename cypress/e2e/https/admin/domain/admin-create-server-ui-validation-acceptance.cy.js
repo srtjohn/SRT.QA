@@ -35,44 +35,41 @@ describe('login > add new server ', () => {
   }
   beforeEach('login', () => {
     cy.login(adminData.adminBaseUrl, userInfo.username, userInfo.password)
-    cy.get(serverSelectors.addButtonContainer).contains(label.addNew).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.waitUntil(() => cy.get(serverSelectors.spinner).should('not.be.visible'))
-    cy.contains(htmlTagSelectors.span, label.StartServerAutomatically)
-      .prev(htmlTagSelectors.span).click()
+    cy.get(generalSelectors.textSelector).contains(label.autoDomainName).click()
+    cy.waitForNetworkIdle(2000, { log: false })
+    cy.get(serverSelectors.titleAddNew).first().click()
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(generalSelectors.textSelector).contains(label.databaseText).should('be.visible')
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.contains(generalSelectors.textSelector, label.StartServerAutomatically)
+      .prev(htmlTagSelectors.div).click()
   })
 
   afterEach(() => {
-    cy.get(generalSelectors.closeModal).click()
+    cy.get(generalSelectors.close).click()
   })
 
   it('verify ui validation for creating new server', () => {
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.serverNameReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.serverDataDirReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.serverLogDirReqMessage).should('have.text', label.required)
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(serverSelectors.serverNameReqMessage).should('contain.text', label.required)
   })
 
   it('verify ui validation for Manual Directory Configuration', () => {
-    cy.get(serverSelectors.serverNameInputContainer).contains(label.serverNameText).parent(htmlTagSelectors.div).within(() => {
-      cy.get(htmlTagSelectors.input).type(serverDetails.serverName)
+    cy.get(generalSelectors.textSelector).contains(label.serverNameText).next(htmlTagSelectors.div).type(serverDetails.serverName)
+    cy.get(serverSelectors.serviceCheckboxContainer).first().within(() => {
+      cy.get(htmlTagSelectors.div).click()
     })
-    cy.contains(htmlTagSelectors.span, label.manuallyConfigDirLocations)
-      .prev(htmlTagSelectors.span).click()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.serverBackDir).clear()
-    cy.get(serverSelectors.systemDatabaseCacheDirectory).clear()
-    cy.get(serverSelectors.reportsDirectory).clear()
-    cy.get(serverSelectors.temporaryCacheDirectory).clear()
-    cy.get(serverSelectors.quickSendCacheDirectory).clear()
-    cy.get(serverSelectors.aVQuarantineDirectory).clear()
-    cy.get(serverSelectors.nextButtonContainer).contains(label.next).click()
-    cy.get(serverSelectors.serverBackDirReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.systemDatabaseCacheDirectoryReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.reportsDirectoryReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.temporaryCacheDirectoryReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.quickSendCacheDirectoryReqMessage).should('have.text', label.required)
-    cy.get(serverSelectors.aVQuarantineDirectoryReqMessage).should('have.text', label.required)
+    cy.get(serverSelectors.serviceCheckboxContainer).eq(1).within(() => {
+      cy.get(htmlTagSelectors.div).click()
+    })
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.waitForNetworkIdle(1000, { log: false })
+    cy.get(serverSelectors.serverTypeDropdown).each($el => {
+      cy.wrap($el).clear()
+    })
+    cy.get(generalSelectors.button).contains(label.next).realClick()
+    cy.get(serverSelectors.serverNameReqMessage).each($el => {
+      cy.wrap($el).should('contain.text', label.required)
+    })
   })
 })

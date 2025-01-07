@@ -27,7 +27,8 @@ Cypress.Commands.add('postCreateUserApiRequest', (opts) => {
     url: `${Cypress.env('apiBaseUrl')}/api/Servers/${opts.serverName}/AuthConnectors/native/Users`,
     body: {
       UserName: opts.username,
-      PassWord: opts.password
+      PassWord: opts.password,
+      ConfirmPassword: opts.password
     },
     headers: {
       Authorization: `Bearer ${opts.bearerToken}`
